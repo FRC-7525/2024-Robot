@@ -28,24 +28,34 @@ public class Drive {
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
+    //SET TO FALSE FOR FALCON
+    boolean isNeo = true;
     final int WHEEL_DIAMETER = 4;
-    final double DRIVE_GEAR_RATIO = 6.12;
+    final double NEO_DRIVE_GEAR_RATIO = 6.12;
     final double ANGLE_GEAR_RATIO = 21.4286;
     final double ENCODER_RESOLUTION = 42;
 
+    final double FALCON_DRIVE_GEAR_RATIO = 6.75;
 
     public Drive(Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
-
-        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), DRIVE_GEAR_RATIO, 1);
+        double driveConversionFactor;
+        String path;
+        if (isNeo) {
+            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), NEO_DRIVE_GEAR_RATIO, 1);
+            path = "swerve/neo";
+        } else {
+            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), FALCON_DRIVE_GEAR_RATIO, 1);
+            path = "swerve/falcon";
+        }
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(ANGLE_GEAR_RATIO, 1);
         
         System.out.println(driveConversionFactor);
         System.out.println(angleConversionFactor);
 
         try {
-            swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
+            swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
             drive = swerveParser.createSwerveDrive(Units.feetToMeters(1), angleConversionFactor, driveConversionFactor);
             drive.setHeadingCorrection(true, 0.01);
         } catch (IOException e) {
@@ -77,7 +87,7 @@ public class Drive {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
             }
         }
-        
+
         drive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
     }
