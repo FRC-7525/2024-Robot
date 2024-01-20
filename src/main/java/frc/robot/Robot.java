@@ -101,15 +101,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    try {
-      drive.csvBackLeft.flush();
-      drive.csvBackRight.flush();
-      drive.csvFrontLeft.flush();
-      drive.csvFrontRight.flush();
-    } catch (IOException e) {
-      System.out.println("Error");
-      e.printStackTrace();
-    }
+
   }
 
   @Override

@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,11 +9,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import swervelib.SwerveDrive;
-import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -34,17 +27,12 @@ public class Drive {
     SwerveDrive drive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
+    boolean fieldRelative = false;
     final int WHEEL_DIAMETER = 4;
     final double DRIVE_GEAR_RATIO = 6.12;
     final double ANGLE_GEAR_RATIO = 21.4286;
     final double ENCODER_RESOLUTION = 42;
-    double lastHeadingRadians = 0;
-    boolean correctionEnabled = false;
 
-    public BufferedWriter csvBackLeft;
-    public BufferedWriter csvBackRight;
-    public BufferedWriter csvFrontLeft;
-    public BufferedWriter csvFrontRight;
 
     public Drive(Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
@@ -63,21 +51,6 @@ public class Drive {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        try {
-            csvBackLeft = new BufferedWriter(new FileWriter("/tmp/backleft.csv"));
-            csvBackRight = new BufferedWriter(new FileWriter("/tmp/backright.csv"));
-            csvFrontLeft = new BufferedWriter(new FileWriter("/tmp/frontleft.csv"));
-            csvFrontRight = new BufferedWriter(new FileWriter("/tmp/frontright.csv"));
-
-            csvBackLeft.write("\"Timestamp\",\"Input Voltage\",\"Velocity\"\n");
-            csvBackRight.write("\"Timestamp\",\"Input Voltage\",\"Velocity\"\n");
-            csvFrontLeft.write("\"Timestamp\",\"Input Voltage\",\"Velocity\"\n");
-            csvFrontRight.write("\"Timestamp\",\"Input Voltage\",\"Velocity\"\n");
-        } catch (IOException e) {
-            System.out.println("Error");
-            e.printStackTrace();
-        }
     }
 
     public void periodic() {
@@ -86,17 +59,11 @@ public class Drive {
         double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), DEADBAND);
         double rotation = MathUtil.applyDeadband(robot.controller.getRightX(), DEADBAND);
 
+        
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
-            Translation2d translation = new Translation2d(xMovement, yMovement);
-            ChassisSpeeds velocity = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
-            SmartDashboard.putNumber("Rad per Sec", Math.abs(velocity.omegaRadiansPerSecond));
+            fieldRelative = false;
 
-            drive.drive(
-                    velocity,
-                    false,
-                    new Translation2d());
-            
             if (robot.controller.getBButtonPressed()) {
                 driveStates = DriveStates.FIELD_RELATIVE;
                 System.out.println("FIELDS relative changed");
@@ -104,48 +71,15 @@ public class Drive {
 
         } else if (driveStates == DriveStates.FIELD_RELATIVE) {
             state = "Field Relative";
-            if (robot.controller.getAButtonPressed()) {
-                lastHeadingRadians = 0;
-                drive.zeroGyro();
-            }
-
-            Translation2d translation = new Translation2d(xMovement, yMovement);
-            ChassisSpeeds velocity2 = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, drive.getYaw());
-
-            drive.drive(
-                    velocity2,
-                    false,
-                    new Translation2d());
+            fieldRelative = true;
             
             if (robot.controller.getBButtonPressed()) {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
             }
-        } 
-
-        SmartDashboard.putString("Drive State", state);
-        double timestamp = Timer.getFPGATimestamp();
-
-        for (SwerveModule m : drive.getModules()) {
-            //CANSparkMax steeringMotor = (CANSparkMax)m.configuration.angleMotor.getMotor();
-            CANSparkMax driveMotor = (CANSparkMax)m.configuration.driveMotor.getMotor();
-            
-            RelativeEncoder relativeEncoder = driveMotor.getEncoder();
-
-            try {
-                if (m.configuration.name.equals("backleft")) {
-                    csvBackLeft.write(timestamp + "," + driveMotor.getBusVoltage() + "," + relativeEncoder.getVelocity() + "\n");
-                } else if (m.configuration.name.equals("backright")) {
-                    csvBackRight.write(timestamp + "," + driveMotor.getBusVoltage() + "," + relativeEncoder.getVelocity() + "\n");
-                } else if (m.configuration.name.equals("frontleft")) {
-                    csvFrontLeft.write(timestamp + "," + driveMotor.getBusVoltage() + "," + relativeEncoder.getVelocity() + "\n");
-                } else if (m.configuration.name.equals("frontright")) {
-                    csvFrontRight.write(timestamp + "," + driveMotor.getBusVoltage() + "," + relativeEncoder.getVelocity() + "\n");
-                }
-            } catch (IOException e) {
-                System.out.println("Error");
-                e.printStackTrace();
-            }
         }
+        
+        drive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
+        SmartDashboard.putString("Drive State", state);
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
