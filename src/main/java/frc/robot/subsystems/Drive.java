@@ -25,8 +25,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
-    FIELD_RELATIVE,
-    FORWARD
+    FIELD_RELATIVE
 }
 
 public class Drive {
@@ -57,11 +56,10 @@ public class Drive {
         System.out.println(driveConversionFactor);
         System.out.println(angleConversionFactor);
 
-
         try {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
             drive = swerveParser.createSwerveDrive(Units.feetToMeters(1), angleConversionFactor, driveConversionFactor);
-            drive.setHeadingCorrection(false);
+            drive.setHeadingCorrection(true, 0.01);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,18 +90,7 @@ public class Drive {
             state = "Field Absolute";
             Translation2d translation = new Translation2d(xMovement, yMovement);
             ChassisSpeeds velocity = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
-
             SmartDashboard.putNumber("Rad per Sec", Math.abs(velocity.omegaRadiansPerSecond));
-            if (Math.abs(velocity.omegaRadiansPerSecond) < 0.01 && (Math.abs(velocity.vxMetersPerSecond) > 0.01 || Math.abs(velocity.vyMetersPerSecond) > 0.01)) {
-                if (!correctionEnabled) {
-                    lastHeadingRadians = drive.getYaw().getRadians();
-                    correctionEnabled = true;
-                }
-
-                velocity.omegaRadiansPerSecond = drive.getSwerveController().headingCalculate(lastHeadingRadians, drive.getYaw().getRadians());
-            } else {
-                correctionEnabled = false;
-            }
 
             drive.drive(
                     velocity,
@@ -115,9 +102,6 @@ public class Drive {
                 System.out.println("FIELDS relative changed");
             }
 
-            if (robot.controller.getYButtonPressed()) {
-                driveStates = DriveStates.FORWARD;
-            }
         } else if (driveStates == DriveStates.FIELD_RELATIVE) {
             state = "Field Relative";
             if (robot.controller.getAButtonPressed()) {
@@ -127,17 +111,6 @@ public class Drive {
 
             Translation2d translation = new Translation2d(xMovement, yMovement);
             ChassisSpeeds velocity2 = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, drive.getYaw());
-            
-            if (Math.abs(velocity2.omegaRadiansPerSecond) < 0.01 && (Math.abs(velocity2.vxMetersPerSecond) > 0.01 || Math.abs(velocity2.vyMetersPerSecond) > 0.01)) {
-                if (!correctionEnabled) {
-                    lastHeadingRadians = drive.getYaw().getRadians();
-                    correctionEnabled = true;
-                }
-
-                velocity2.omegaRadiansPerSecond = drive.getSwerveController().headingCalculate(lastHeadingRadians, drive.getYaw().getRadians());
-            } else {
-                correctionEnabled = false;
-            }
 
             drive.drive(
                     velocity2,
@@ -147,18 +120,7 @@ public class Drive {
             if (robot.controller.getBButtonPressed()) {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
             }
-        } else {
-            state = "Forward Test";
-            drive.drive(
-                new Translation2d(-1, 0),
-                0,
-                false,
-                false);
-
-            if (robot.controller.getYButtonPressed()) {
-                driveStates = DriveStates.FIELD_ABSOLUTE;
-            }
-        }
+        } 
 
         SmartDashboard.putString("Drive State", state);
         double timestamp = Timer.getFPGATimestamp();
