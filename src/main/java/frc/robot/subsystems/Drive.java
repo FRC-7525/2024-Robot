@@ -29,13 +29,15 @@ public class Drive {
     Robot robot = null;
     boolean fieldRelative = false;
     //SET TO FALSE FOR FALCON
-    boolean isNeo = true;
+    boolean isNeo = false;
     final int WHEEL_DIAMETER = 4;
     final double NEO_DRIVE_GEAR_RATIO = 6.12;
     final double ANGLE_GEAR_RATIO = 21.4286;
     final double ENCODER_RESOLUTION = 42;
 
     final double FALCON_DRIVE_GEAR_RATIO = 6.75;
+    double yMovement;
+
 
     public Drive(Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
@@ -56,8 +58,8 @@ public class Drive {
 
         try {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
-            drive = swerveParser.createSwerveDrive(Units.feetToMeters(1), angleConversionFactor, driveConversionFactor);
-            drive.setHeadingCorrection(true, 0.01);
+            drive = swerveParser.createSwerveDrive(Units.feetToMeters(15), angleConversionFactor, driveConversionFactor);
+            // drive.setHeadingCorrection(true, 0.01);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,8 +67,14 @@ public class Drive {
 
     public void periodic() {
         String state = "";
+
+        if (isNeo) {
+            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), DEADBAND);
+
+        } else {
+            yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), DEADBAND);
+        }
         double xMovement = MathUtil.applyDeadband(robot.controller.getLeftY(), DEADBAND);
-        double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), DEADBAND);
         double rotation = MathUtil.applyDeadband(robot.controller.getRightX(), DEADBAND);
 
         

@@ -71,6 +71,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    System.out.println("blah blah blah");
 
   }
 
