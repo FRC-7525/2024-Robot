@@ -1,10 +1,10 @@
 {
   "imu": {
     "type": "navx_usb",
-    "id": 13,
+    "id": null,
     "canbus": null
   },
-  "invertedIMU": false,
+  "invertedIMU": true,
   "modules": [
     "frontleft.json",
     "frontright.json",

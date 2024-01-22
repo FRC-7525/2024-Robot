@@ -22,6 +22,7 @@ import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 
 import java.lang.ModuleLayer.Controller;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,11 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 //import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -53,7 +59,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
   public XboxController controller = new XboxController(0);
@@ -68,19 +77,37 @@ public class Robot extends TimedRobot {
 
   SlewRateLimiter filter = new SlewRateLimiter(0.5);
   double previous_distance;
+  private final SendableChooser<String> chooser = new SendableChooser<>();
 
+  public Command getAutonomousCommand(String autoName) {
+    return new PathPlannerAuto(autoName);
+  }
+  public Command getAutoPath(String pathName) {
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    return AutoBuilder.followPath(path);
+  }
+  
   @Override
   public void robotInit() {
-    System.out.println("blah blah blah");
+    chooser.addOption("Drive Forwards", "Drive Forwards");
+    chooser.addOption("Drive Backwards", "Drive Backwards");
 
+    SmartDashboard.putData("Path Chooser", chooser);
   }
 
   @Override
   public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+
   }
 
   @Override
   public void autonomousInit() {
+    System.out.println("Scheduling Auto");
+    //getAutonomousCommand("Random Auto").schedule();
+    getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Drive Forwards").schedule();
+    SmartDashboard.putString("Selection optionb", chooser.getSelected());
+
   }
 
   @Override
