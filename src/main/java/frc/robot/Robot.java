@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Commands.driveForwards;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 import swervelib.SwerveDrive;
@@ -66,7 +67,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
   public XboxController controller = new XboxController(0);
-  Drive drive = new Drive(this);
+  public Drive drive = new Drive(this);
   // Vision vision = new Vision();
 
   PIDController forwardController = new PIDController(0.9, 0, 0.0);
@@ -91,7 +92,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     chooser.addOption("Drive Forwards", "Drive Forwards");
     chooser.addOption("Drive Backwards", "Drive Backwards");
-
     SmartDashboard.putData("Path Chooser", chooser);
   }
 
@@ -101,12 +101,13 @@ public class Robot extends TimedRobot {
 
   }
 
-  @Override
+  @Overrid
   public void autonomousInit() {
     System.out.println("Scheduling Auto");
     //getAutonomousCommand("Random Auto").schedule();
-    getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Drive Forwards").schedule();
-    SmartDashboard.putString("Selection optionb", chooser.getSelected());
+    //getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Drive Forwards").schedule();
+    // SmartDashboard.putString("Selection optionb", chooser.getSelected());
+    CommandScheduler.getInstance().schedule(new driveForwards(this));
 
   }
 

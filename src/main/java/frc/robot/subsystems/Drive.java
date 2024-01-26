@@ -66,13 +66,21 @@ public class Drive extends SubsystemBase{
 
         try {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
-            drive = swerveParser.createSwerveDrive(Units.feetToMeters(1), angleConversionFactor, driveConversionFactor);
+            drive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor);
             pathPlannerStuff();
             drive.setHeadingCorrection(true, 0.01);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void driveForwards() {
+        drive.drive(
+               new Translation2d(-1, 0),
+                0,
+                false,
+                false);
     }
 
     public void pathPlannerStuff() {
@@ -82,9 +90,9 @@ public class Drive extends SubsystemBase{
             drive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             drive::setChassisSpeeds, // Metho that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                            new PIDConstants(10, 0, 0),
+                                            new PIDConstants(0.2, 0, 0),
                                             // Translation PID constants
-                                            new PIDConstants(0, 0, 0),
+                                            new PIDConstants(0.01, 0, 0),
                                             // Rotation PID constants
                                             4.5,
                                             // Max module speed, in m/s
@@ -102,6 +110,7 @@ public class Drive extends SubsystemBase{
             },
             this // Reference to this subsystem to set requirements
                                   );
+        drive.invertOdometry = true;
     }
 
     public void periodic() {
