@@ -83,6 +83,7 @@ public class Drive extends SubsystemBase{
                 false);
     }
 
+
     public void pathPlannerStuff() {
         AutoBuilder.configureHolonomic(
             drive::getPose, // Robot pose supplier
@@ -90,9 +91,9 @@ public class Drive extends SubsystemBase{
             drive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             drive::setChassisSpeeds, // Metho that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                            new PIDConstants(0.2, 0, 0),
+                                            new PIDConstants(5, 0, 0),
                                             // Translation PID constants
-                                            new PIDConstants(0.01, 0, 0),
+                                            new PIDConstants(5, 0, 0),
                                             // Rotation PID constants
                                             4.5,
                                             // Max module speed, in m/s
@@ -111,6 +112,10 @@ public class Drive extends SubsystemBase{
             this // Reference to this subsystem to set requirements
                                   );
         drive.invertOdometry = true;
+    }
+
+    public void drivePlease(ChassisSpeeds chassisSpeeds) {
+        drive.drive(ChassisSpeeds.discretize(chassisSpeeds, 1),false, new Translation2d());
     }
 
     public void periodic() {
@@ -144,6 +149,7 @@ public class Drive extends SubsystemBase{
             }
             if (robot.controller.getXButtonPressed()) {
                 drive.zeroGyro();
+                System.out.println("Zero Gyro");
             }
         }
 

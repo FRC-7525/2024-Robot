@@ -61,10 +61,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Vision {
     private Optional<EstimatedRobotPose> _optLastKnowPose;
     PhotonCamera camera = new PhotonCamera("OV5647");
-  Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.0, 0), new Rotation3d(0, 0, 0));
-  // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
-  //     .loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-  List<AprilTag> aprilTags = Arrays.asList(
+    Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.0, 0), new Rotation3d(0, 0, 0));
+    // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
+    //     .loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+    List<AprilTag> aprilTags = Arrays.asList(
             new AprilTag(7, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0))),
             new AprilTag(8, new Pose3d(0, 2, 0, new Rotation3d(0, 0, 0))));
     AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags, 3.0, 3.0);

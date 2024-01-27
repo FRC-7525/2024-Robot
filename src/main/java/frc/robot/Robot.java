@@ -104,10 +104,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     System.out.println("Scheduling Auto");
-    //getAutonomousCommand("Random Auto").schedule();
+    CommandScheduler.getInstance().schedule(getAutonomousCommand("Drive Forwards"));
     //getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Drive Forwards").schedule();
     // SmartDashboard.putString("Selection optionb", chooser.getSelected());
-    CommandScheduler.getInstance().schedule(new driveForwards(this));
+    //CommandScheduler.getInstance().schedule(new driveForwards(this));
 
   }
 
