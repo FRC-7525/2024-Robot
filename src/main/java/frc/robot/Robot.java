@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
 
   }
 
-  @Overrid
+  @Override
   public void autonomousInit() {
     System.out.println("Scheduling Auto");
     //getAutonomousCommand("Random Auto").schedule();
