@@ -37,7 +37,7 @@ public class Drive extends SubsystemBase{
     Robot robot = null;
     boolean fieldRelative = false;
     //SET TO FALSE FOR FALCON
-    boolean isNeo = false;
+    boolean isNeo = true;
     final int WHEEL_DIAMETER = 4;
     final double NEO_DRIVE_GEAR_RATIO = 6.12;
     final double ANGLE_GEAR_RATIO = 21.4286;
