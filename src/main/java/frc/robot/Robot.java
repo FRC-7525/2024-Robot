@@ -58,7 +58,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   public XboxController controller = new XboxController(0);
   Drive drive = new Drive(this);
-  // Vision vision = new Vision();
+  Vision vision = new Vision();
 
   PIDController forwardController = new PIDController(0.9, 0, 0.0);
 
@@ -77,6 +77,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    vision.updateVision();
+    if (vision.getPose2d().isPresent()) {
+    drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
+    }
   }
 
   @Override
@@ -93,10 +97,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-
-    // if (vision.getPose2d().isPresent()) {
-    // drive.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
-    // }
+    Optional<Pose2d> pose2d = vision.getPose2d();
+    if (pose2d.isPresent()) {
+    Rotation2d rotation2d = pose2d.get().getRotation();
+    double angle = rotation2d.getDegrees();
+    System.out.println(angle);
+    SmartDashboard.putNumber("SILLY GOOFY PID", angle);
+    }
     drive.periodic();
   }
 
