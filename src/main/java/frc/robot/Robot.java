@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
-    public Drive drive = new Drive(this);
+    Drive drive = new Drive(this);
     Vision vision = new Vision();
     private final SendableChooser<String> chooser = new SendableChooser<>();
 

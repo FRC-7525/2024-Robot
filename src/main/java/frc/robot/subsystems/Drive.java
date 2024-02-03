@@ -29,7 +29,7 @@ enum DriveStates {
     FIELD_RELATIVE
 }
 
-public class Drive extends SubsystemBase{
+public class Drive extends SubsystemBase {
     static final double DEADBAND = 0.1;
     SwerveParser swerveParser;
     SwerveDrive swerveDrive;
