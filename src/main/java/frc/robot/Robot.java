@@ -10,19 +10,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     Drive drive = new Drive(this);
     Vision vision = new Vision();
-
-    SmartDashboard smartDashboard;
 
     PIDController forwardController = new PIDController(0.9, 0, 0.0);
 

@@ -57,6 +57,7 @@ public class Drive {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
             swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(15), angleConversionFactor,
                     driveConversionFactor);
+            swerveDrive.setHeadingCorrection(true, 0.01);
         } catch (IOException e) {
             e.printStackTrace();
         }
