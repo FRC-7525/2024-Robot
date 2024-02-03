@@ -144,7 +144,9 @@ public class Drive extends SubsystemBase {
                 System.out.println("FIELD Relative OFF");
             }
             
-        } else if (robot.controller.getXButtonPressed()) {
+        } 
+        
+        if (robot.controller.getXButtonPressed()) {
             swerveDrive.zeroGyro();
             System.out.println("Gyro Zeroed");
         }
