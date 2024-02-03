@@ -64,11 +64,11 @@ public class Vision {
     Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.0, 0), new Rotation3d(0, 0, 0));
     // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
     // .loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-    List<AprilTag> aprilTags = Arrays.asList(
-            new AprilTag(1, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0))),
-            new AprilTag(2, new Pose3d(0, 2, 0, new Rotation3d(0, 0, 0))));
-    AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags, 3.0, 3.0);
-    PhotonPoseEstimator estimator = new PhotonPoseEstimator(layout, PoseStrategy.AVERAGE_BEST_TARGETS, camera,
+    // List<AprilTag> aprilTags = Arrays.asList(
+    //         new AprilTag(1, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0))),
+    //         new AprilTag(2, new Pose3d(0, 2, 0, new Rotation3d(0, 0, 0))));
+    // AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags, 3.0, 3.0);
+    PhotonPoseEstimator estimator = new PhotonPoseEstimator(AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(), PoseStrategy.AVERAGE_BEST_TARGETS, camera,
             robotToCam);
     final Pose3d targetPose = new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
 

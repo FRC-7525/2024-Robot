@@ -60,6 +60,8 @@ public class Robot extends TimedRobot {
   Drive drive = new Drive(this);
   Vision vision = new Vision();
 
+  SmartDashboard smartDashboard;
+
   PIDController forwardController = new PIDController(0.9, 0, 0.0);
 
   final double ANGULAR_P = 0.025;
