@@ -79,10 +79,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     vision.updateVision();
     if (vision.getPose2d().isPresent()) {
-      drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
-      System.out.print(vision.getPose2d());
-    } else {
-      //System.out.println("No pose loser");
+      drive.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
     }
   }
 
@@ -100,13 +97,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Optional<Pose2d> pose2d = vision.getPose2d();
-    if (pose2d.isPresent()) {
-    Rotation2d rotation2d = pose2d.get().getRotation();
-    double angle = rotation2d.getDegrees();
-    System.out.println(angle);
-    SmartDashboard.putNumber("SILLY GOOFY PID", angle);
-    }
     drive.periodic();
   }
 

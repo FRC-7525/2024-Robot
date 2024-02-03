@@ -59,39 +59,33 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision {
-    private Optional<EstimatedRobotPose> optLastKnowPose;
-    // PhotonCamera camera = new PhotonCamera("ArduCam");
-    PhotonCamera camera1 = new PhotonCamera("ArduCam1");
-  Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.0, 0), new Rotation3d(0, 0, 0));
-  // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
-  //     .loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-  List<AprilTag> aprilTags = Arrays.asList(
-            new AprilTag(11, new Pose3d(3, 3, 0, new Rotation3d(0, 0, 0))),
-            new AprilTag(12, new Pose3d(2.5, 3, 0, new Rotation3d(0, 0, 0))));
+    private Optional<EstimatedRobotPose> _optLastKnowPose;
+    PhotonCamera camera = new PhotonCamera("ArduCam1");
+    Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.0, 0), new Rotation3d(0, 0, 0));
+    // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
+    // .loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+    List<AprilTag> aprilTags = Arrays.asList(
+            new AprilTag(1, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0))),
+            new AprilTag(2, new Pose3d(0, 2, 0, new Rotation3d(0, 0, 0))));
     AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags, 3.0, 3.0);
-    PhotonPoseEstimator estimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam);
-    // PhotonPoseEstimator rightEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
-
+    PhotonPoseEstimator estimator = new PhotonPoseEstimator(layout, PoseStrategy.AVERAGE_BEST_TARGETS, camera,
+            robotToCam);
     final Pose3d targetPose = new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
 
     public void updateVision() {
         Optional<EstimatedRobotPose> Botpose3d = estimator.update();
         System.out.println(Botpose3d);
         if (Botpose3d.isPresent()) {
-
-          optLastKnowPose = Botpose3d;
-        } else {
-            optLastKnowPose = Optional.empty();
+            _optLastKnowPose = Botpose3d;
         }
     }
 
     public Optional<Pose2d> getPose2d() {
-        if (optLastKnowPose.isPresent()) {
-            return Optional.of(optLastKnowPose.get().estimatedPose.toPose2d());
-        } 
+        if (_optLastKnowPose == null) {
+            return Optional.empty();
+        } else if (_optLastKnowPose.isPresent()) {
+            return Optional.of(_optLastKnowPose.get().estimatedPose.toPose2d());
+        }
         return Optional.empty();
     }
 }
-
-
-

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -100,7 +101,10 @@ public class Drive {
         SmartDashboard.putString("Drive State", state);
     }
 
-    public void addVisionMeasurement(Pose2d pose, double timestamp) {
-        drive.addVisionMeasurement(pose, timestamp);
+    public void addVisionMeasurement(Optional<Pose2d> pose, double timestamp) {
+        
+        if (pose.isPresent()) {
+            drive.addVisionMeasurement(pose.get(), timestamp);
+        }
     }
 }
