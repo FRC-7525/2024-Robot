@@ -98,7 +98,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
   }
 
   @Override
@@ -107,10 +106,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     drive.zeroGyro();
     drive.resetOdometry();
-    CommandScheduler.getInstance().schedule(getAutonomousCommand("Drive Forwards"));
-    //getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Drive Forwards").schedule();
-    // SmartDashboard.putString("Selection optionb", chooser.getSelected());
-    //CommandScheduler.getInstance().schedule(new driveForwards(this));
+    //CommandScheduler.getInstance().schedule(getAutonomousCommand("Drive Forwards"));
+    getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Drive Forwards").schedule();
 
   }
 

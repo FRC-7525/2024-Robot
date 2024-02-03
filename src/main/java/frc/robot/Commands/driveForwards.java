@@ -14,6 +14,5 @@ public class driveForwards extends Command {
     @Override
     public void execute() {
         robot.drive.driveForwards();
-        System.out.println("Driving Forwards????????????");
     }
 }
