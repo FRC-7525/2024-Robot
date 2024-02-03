@@ -16,7 +16,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTagFields;
 
 public class Vision {
-    private Optional<EstimatedRobotPose> Botpose3d;
+    Optional<EstimatedRobotPose> botpose3d;
     PhotonCamera camera = new PhotonCamera("ArduCam1");
     Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.0, 0), new Rotation3d(0, 0, 0));
     PhotonPoseEstimator estimator = new PhotonPoseEstimator(AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
@@ -24,12 +24,12 @@ public class Vision {
             robotToCam);
 
     public void periodic() {
-        Botpose3d = estimator.update();
+        botpose3d = estimator.update();
     }
 
     public Optional<Pose2d> getPose2d() {
-        if (Botpose3d.isPresent()) {
-            return Optional.of(Botpose3d.get().estimatedPose.toPose2d());
+        if (botpose3d.isPresent()) {
+            return Optional.of(botpose3d.get().estimatedPose.toPose2d());
         }
         return Optional.empty();
     }
