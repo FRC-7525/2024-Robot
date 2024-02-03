@@ -79,7 +79,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     vision.updateVision();
     if (vision.getPose2d().isPresent()) {
-    drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
+      drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
+      System.out.print(vision.getPose2d());
+    } else {
+      //System.out.println("No pose loser");
     }
   }
 
