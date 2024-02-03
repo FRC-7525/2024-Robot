@@ -33,8 +33,6 @@ public class Robot extends TimedRobot {
     SlewRateLimiter filter = new SlewRateLimiter(0.5);
     double previous_distance;
 
-    Optional<Pose2d> pose2d;
-
     @Override
     public void robotInit() {
     }
