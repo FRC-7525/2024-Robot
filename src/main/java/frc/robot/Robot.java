@@ -4,15 +4,6 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.io.IOException;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -94,11 +85,21 @@ public class Robot extends TimedRobot {
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Drive Backwards", "Drive Backwards");
         SmartDashboard.putData("Path Chooser", chooser);
+
+public class Robot extends TimedRobot {
+    Vision vision = new Vision();
+
+    @Override
+    public void robotInit() {
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        vision.periodic();
+        if (vision.getPose2d().isPresent()) {
+            drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
+        }
     }
 
     @Override
@@ -110,7 +111,6 @@ public class Robot extends TimedRobot {
         // CommandScheduler.getInstance().schedule(getAutonomousCommand("Drive
         // Forwards"));
         getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Drive Forwards").schedule();
-
     }
 
     @Override
@@ -123,10 +123,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-
-        // if (vision.getPose2d().isPresent()) {
-        // drive.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
-        // }
         drive.periodic();
     }
 

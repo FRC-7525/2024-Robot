@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -31,7 +32,7 @@ enum DriveStates {
 public class Drive extends SubsystemBase{
     static final double DEADBAND = 0.1;
     SwerveParser swerveParser;
-    SwerveDrive drive;
+    SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
@@ -52,10 +53,12 @@ public class Drive extends SubsystemBase{
         double driveConversionFactor;
         String path;
         if (isNeo) {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), NEO_DRIVE_GEAR_RATIO, 1);
+            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
+                    NEO_DRIVE_GEAR_RATIO, 1);
             path = "swerve/neo";
         } else {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), FALCON_DRIVE_GEAR_RATIO, 1);
+            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
+                    FALCON_DRIVE_GEAR_RATIO, 1);
             path = "swerve/falcon";
         }
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(ANGLE_GEAR_RATIO, 1);
@@ -132,7 +135,6 @@ public class Drive extends SubsystemBase{
         double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), DEADBAND);
         double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), DEADBAND);
 
-        
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
             fieldRelative = false;
@@ -145,7 +147,7 @@ public class Drive extends SubsystemBase{
         } else if (driveStates == DriveStates.FIELD_RELATIVE) {
             state = "Field Relative";
             fieldRelative = true;
-            
+
             if (robot.controller.getBButtonPressed()) {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
                 System.out.println("FIELD Relative OFF");
@@ -156,11 +158,11 @@ public class Drive extends SubsystemBase{
             }
         }
 
-        drive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
+        swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
-        drive.addVisionMeasurement(pose, timestamp);
+        swerveDrive.addVisionMeasurement(pose, timestamp);
     }
 }
