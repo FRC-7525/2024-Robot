@@ -10,23 +10,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-
-
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     Drive drive = new Drive(this);
     Vision vision = new Vision();
-
-    PIDController forwardController = new PIDController(0.9, 0, 0.0);
-
-    final double ANGULAR_P = 0.025;
-    final double ANGULAR_D = 0.0;
-    PIDController angleController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
-
-    SlewRateLimiter filter = new SlewRateLimiter(0.5);
-    double previous_distance;
 
     @Override
     public void robotInit() {
