@@ -47,7 +47,7 @@ public class Drive extends SubsystemBase{
     double yMovement;
     ReplanningConfig replanningConfig = new ReplanningConfig(true, true);
 
-    public Drive(Robot robot) {
+    public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
         double driveConversionFactor;
@@ -66,10 +66,10 @@ public class Drive extends SubsystemBase{
         try {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
             // Change "Units.feetToMeters(x)" to have a smaller x for faster robot"
-            drive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor);
+            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor);
             pathPlannerInit();
-            //Untested as of yet (with changes)
-            drive.setHeadingCorrection(true, 0.01);
+            // Untested as of yet (with changes)
+            swerveDrive.setHeadingCorrection(true, 0.01);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,28 +77,19 @@ public class Drive extends SubsystemBase{
     }
 
     public void zeroGyro() {
-        drive.zeroGyro();
+        swerveDrive.zeroGyro();
     }
     
     public void resetOdometry() {
-        drive.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d()));
-    }
-
-    //Used For Simple Drive Forwards Command
-    public void driveForwards() {
-        drive.drive(
-               new Translation2d(-1, 0),
-                0,
-                false,
-                false);
+        swerveDrive.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d()));
     }
 
     public void pathPlannerInit() {
         AutoBuilder.configureHolonomic(
-            drive::getPose, // Robot pose supplier
-            drive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-            drive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            drive::drive, // Metho that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            swerveDrive::getPose, // Robot pose supplier
+            swerveDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            swerveDrive::drive, // Metho that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                                             //More PID Tuning Would be Nice
                                             new PIDConstants(5, 0, 0),
@@ -107,7 +98,7 @@ public class Drive extends SubsystemBase{
                                             // Rotation PID constants
                                             4.5,
                                             // Max module speed, in m/s
-                                            drive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+                                            swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
                                             replanningConfig
                                             // Drive base radius in meters. Distance from robot center to furthest module.
                                             // Default path replanning config. See the API for the options here
@@ -153,7 +144,7 @@ public class Drive extends SubsystemBase{
                 System.out.println("FIELD Relative OFF");
             }
             if (robot.controller.getXButtonPressed()) {
-                drive.zeroGyro();
+                swerveDrive.zeroGyro();
                 System.out.println("Gyro Zeroed");
             }
         }
