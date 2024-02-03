@@ -10,77 +10,82 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
-  public XboxController controller = new XboxController(0);
-  Drive drive = new Drive(this);
-  Vision vision = new Vision();
+    public XboxController controller = new XboxController(0);
+    Drive drive = new Drive(this);
+    Vision vision = new Vision();
 
-  SmartDashboard smartDashboard;
+    SmartDashboard smartDashboard;
 
-  PIDController forwardController = new PIDController(0.9, 0, 0.0);
+    PIDController forwardController = new PIDController(0.9, 0, 0.0);
 
-  final double ANGULAR_P = 0.025;
-  final double ANGULAR_D = 0.0;
-  PIDController angleController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
+    final double ANGULAR_P = 0.025;
+    final double ANGULAR_D = 0.0;
+    PIDController angleController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
-  SlewRateLimiter filter = new SlewRateLimiter(0.5);
-  double previous_distance;
+    SlewRateLimiter filter = new SlewRateLimiter(0.5);
+    double previous_distance;
 
-  @Override
-  public void robotInit() {
-  }
+    Optional<Pose2d> pose2d;
 
-  @Override
-  public void robotPeriodic() {
-    vision.updateVision();
-    if (vision.getPose2d().isPresent()) {
-      drive.addVisionMeasurement(vision.getPose2d(), Timer.getFPGATimestamp());
+    @Override
+    public void robotInit() {
     }
-  }
 
-  @Override
-  public void autonomousInit() {
-  }
+    @Override
+    public void robotPeriodic() {
+        vision.periodic();
+        if (vision.getPose2d().isPresent()) {
+            drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
+        }
+    }
 
-  @Override
-  public void autonomousPeriodic() {
-  }
+    @Override
+    public void autonomousInit() {
+    }
 
-  @Override
-  public void teleopInit() {
-  }
+    @Override
+    public void autonomousPeriodic() {
+    }
 
-  @Override
-  public void teleopPeriodic() {
-    drive.periodic();
-  }
+    @Override
+    public void teleopInit() {
+    }
 
-  @Override
-  public void disabledInit() {
+    @Override
+    public void teleopPeriodic() {
+        drive.periodic();
+    }
 
-  }
+    @Override
+    public void disabledInit() {
 
-  @Override
-  public void disabledPeriodic() {
-  }
+    }
 
-  @Override
-  public void testInit() {
-  }
+    @Override
+    public void disabledPeriodic() {
+    }
 
-  @Override
-  public void testPeriodic() {
-  }
+    @Override
+    public void testInit() {
+    }
 
-  @Override
-  public void simulationInit() {
-  }
+    @Override
+    public void testPeriodic() {
+    }
 
-  @Override
-  public void simulationPeriodic() {
-  }
+    @Override
+    public void simulationInit() {
+    }
+
+    @Override
+    public void simulationPeriodic() {
+    }
 }

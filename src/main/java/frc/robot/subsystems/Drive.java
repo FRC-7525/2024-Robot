@@ -24,7 +24,7 @@ enum DriveStates {
 public class Drive {
     static final double DEADBAND = 0.1;
     SwerveParser swerveParser;
-    SwerveDrive drive;
+    SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
@@ -55,7 +55,7 @@ public class Drive {
 
         try {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
-            drive = swerveParser.createSwerveDrive(Units.feetToMeters(15), angleConversionFactor,
+            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(15), angleConversionFactor,
                     driveConversionFactor);
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,13 +91,11 @@ public class Drive {
             }
         }
 
-        drive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
+        swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
     }
 
-    public void addVisionMeasurement(Optional<Pose2d> pose, double timestamp) {
-        if (pose.isPresent()) {
-            drive.addVisionMeasurement(pose.get(), timestamp);
-        }
+    public void addVisionMeasurement(Pose2d pose, double timestamp) {
+        swerveDrive.addVisionMeasurement(pose, timestamp);
     }
 }
