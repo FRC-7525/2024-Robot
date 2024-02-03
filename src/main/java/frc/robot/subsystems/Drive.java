@@ -2,11 +2,11 @@ package frc.robot.subsystems;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,12 +24,11 @@ enum DriveStates {
 public class Drive {
     static final double DEADBAND = 0.1;
     SwerveParser swerveParser;
-    SwerveDrive drive;
+    SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
-    //SET TO FALSE FOR FALCON
-    boolean isNeo = false;
+    boolean isNeo = true;
     final int WHEEL_DIAMETER = 4;
     final double NEO_DRIVE_GEAR_RATIO = 6.12;
     final double ANGLE_GEAR_RATIO = 21.4286;
@@ -38,28 +37,27 @@ public class Drive {
     final double FALCON_DRIVE_GEAR_RATIO = 6.75;
     double yMovement;
 
-
     public Drive(Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
         double driveConversionFactor;
         String path;
         if (isNeo) {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), NEO_DRIVE_GEAR_RATIO, 1);
+            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
+                    NEO_DRIVE_GEAR_RATIO, 1);
             path = "swerve/neo";
         } else {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), FALCON_DRIVE_GEAR_RATIO, 1);
+            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
+                    FALCON_DRIVE_GEAR_RATIO, 1);
             path = "swerve/falcon";
         }
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(ANGLE_GEAR_RATIO, 1);
-        
-        System.out.println(driveConversionFactor);
-        System.out.println(angleConversionFactor);
 
         try {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
-            drive = swerveParser.createSwerveDrive(Units.feetToMeters(15), angleConversionFactor, driveConversionFactor);
-            // drive.setHeadingCorrection(true, 0.01);
+            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(15), angleConversionFactor,
+                    driveConversionFactor);
+            swerveDrive.setHeadingCorrection(true, 0.01);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,30 +75,28 @@ public class Drive {
         double xMovement = MathUtil.applyDeadband(robot.controller.getLeftY(), DEADBAND);
         double rotation = MathUtil.applyDeadband(robot.controller.getRightX(), DEADBAND);
 
-        
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
             fieldRelative = false;
 
             if (robot.controller.getBButtonPressed()) {
                 driveStates = DriveStates.FIELD_RELATIVE;
-                System.out.println("FIELDS relative changed");
             }
 
         } else if (driveStates == DriveStates.FIELD_RELATIVE) {
             state = "Field Relative";
             fieldRelative = true;
-            
+
             if (robot.controller.getBButtonPressed()) {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
             }
         }
 
-        drive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
+        swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
-        drive.addVisionMeasurement(pose, timestamp);
+        swerveDrive.addVisionMeasurement(pose, timestamp);
     }
 }
