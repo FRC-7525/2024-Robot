@@ -104,14 +104,14 @@ public class Drive extends SubsystemBase {
                                             // Default path replanning config. See the API for the options here
             ),
             () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                 var alliance = DriverStation.getAlliance();
                 return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false; 
             },
             this // Reference to this subsystem to set requirements
-                                  );
+        );
     }
 
     public void periodic() {
@@ -143,10 +143,10 @@ public class Drive extends SubsystemBase {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
                 System.out.println("FIELD Relative OFF");
             }
-            if (robot.controller.getXButtonPressed()) {
-                swerveDrive.zeroGyro();
-                System.out.println("Gyro Zeroed");
-            }
+            
+        } else if (robot.controller.getXButtonPressed()) {
+            swerveDrive.zeroGyro();
+            System.out.println("Gyro Zeroed");
         }
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
