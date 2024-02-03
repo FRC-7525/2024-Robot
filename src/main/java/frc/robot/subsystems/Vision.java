@@ -16,6 +16,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTagFields;
 
 public class Vision {
+
     Optional<EstimatedRobotPose> botpose3d;
     PhotonCamera camera = new PhotonCamera("ArduCam1");
     Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.0, 0), new Rotation3d(0, 0, 0));
