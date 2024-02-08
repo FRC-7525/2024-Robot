@@ -17,6 +17,7 @@ public class Shooter extends SubsystemBase {
     private TalonFX shooterMotor1 = new TalonFX(1);
     private TalonFX shooterMotor2 = new TalonFX(2);
     PIDController shootingController = new PIDController(1.5, 0, 0); // tune p
+    PIDController shootingController1 = new PIDController(1.5, 0, 0); // tune p
 
     public Shooter(Robot robot) {
         this.robot = robot;
@@ -28,7 +29,7 @@ public class Shooter extends SubsystemBase {
             shooterMotor2.set(0);
         } else if (states == ShootingStates.SHOOTING) {
             shooterMotor1.set(shootingController.calculate(shooterMotor1.getVelocity().getValue(), 400));
-            shooterMotor2.set(shootingController.calculate(shooterMotor2.getVelocity().getValue(), 400));
+            shooterMotor2.set(shootingController1.calculate(shooterMotor2.getVelocity().getValue(), 400));
         }
 
     }
