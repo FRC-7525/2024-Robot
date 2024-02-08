@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-// import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -25,13 +23,12 @@ public class Shooter extends SubsystemBase {
     }
 
     public void periodic() {
-        if (states == states.OFF) {
+        if (states == ShootingStates.OFF) {
             shooterMotor1.set(0);
             shooterMotor2.set(0);
-        } else if (states == states.SHOOTING) {
+        } else if (states == ShootingStates.SHOOTING) {
             shooterMotor1.set(shootingController.calculate(shooterMotor1.getVelocity().getValue(), 400));
             shooterMotor2.set(shootingController.calculate(shooterMotor2.getVelocity().getValue(), 400));
-
         }
 
     }
