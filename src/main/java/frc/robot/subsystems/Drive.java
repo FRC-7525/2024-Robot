@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
