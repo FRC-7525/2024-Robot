@@ -43,7 +43,7 @@ public class Drive extends SubsystemBase {
     final double ENCODER_RESOLUTION = 42;
 
     final double FALCON_DRIVE_GEAR_RATIO = 6.75;
-    double yMovement;
+    
     ReplanningConfig replanningConfig = new ReplanningConfig(true, true);
 
     public Drive (Robot robot) {
@@ -110,15 +110,17 @@ public class Drive extends SubsystemBase {
 
     public void periodic() {
         String state = "";
-
+        
+        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), DEADBAND);
+        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), DEADBAND);
+        double yMovement;
+        
         if (isNeo) {
             yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), DEADBAND);
-
         } else {
             yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), DEADBAND);
         }
-        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), DEADBAND);
-        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), DEADBAND);
+
 
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
