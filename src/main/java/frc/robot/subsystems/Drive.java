@@ -47,17 +47,21 @@ public class Drive extends SubsystemBase {
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
-        double driveConversionFactor;
+
         String path;
+
+        double driveGearRatio;
+        
         if (IS_NEO) {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
-                    NEO_DRIVE_GEAR_RATIO, 1);
+            driveGearRatio = NEO_DRIVE_GEAR_RATIO;
             path = "swerve/neo";
         } else {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
-                    FALCON_DRIVE_GEAR_RATIO, 1);
+            driveGearRatio = FALCON_DRIVE_GEAR_RATIO;
             path = "swerve/falcon";
         }
+
+        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
+            driveGearRatio, 1);
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(ANGLE_GEAR_RATIO, 1);
 
         try {
