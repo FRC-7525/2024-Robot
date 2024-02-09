@@ -40,24 +40,12 @@ public class Drive extends SubsystemBase {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
 
-        String path;
-
-        double driveGearRatio;
-        
-        if (Constants.Drive.isNeo) {
-            driveGearRatio = Constants.Drive.neoDriveGearRatio;
-            path = "swerve/neo";
-        } else {
-            driveGearRatio = Constants.Drive.falconDriveGearRatio;
-            path = "swerve/falcon";
-        }
-
         double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
-            driveGearRatio, 1);
+            Constants.Drive.driveGearRatio, 1);
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.Drive.angleGearRatio, 1);
 
         try {
-            SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
+            SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
             swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor); // Change Units.feetToMeters(x) to have a smaller x for faster robot
             pathPlannerInit();
 
