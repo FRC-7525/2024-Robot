@@ -30,18 +30,18 @@ enum DriveStates {
 
 public class Drive extends SubsystemBase {
     static final double DEADBAND = 0.1;
+    final int WHEEL_DIAMETER = 4;
+    final double NEO_DRIVE_GEAR_RATIO = 6.12;
+    final double ANGLE_GEAR_RATIO = 21.4286;
+    final double ENCODER_RESOLUTION = 42;
+    final double FALCON_DRIVE_GEAR_RATIO = 6.75;
+    
     SwerveParser swerveParser;
     SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
     boolean isNeo = true; // SET TO FALSE FOR FALCON
-    final int WHEEL_DIAMETER = 4;
-    final double NEO_DRIVE_GEAR_RATIO = 6.12;
-    final double ANGLE_GEAR_RATIO = 21.4286;
-    final double ENCODER_RESOLUTION = 42;
-
-    final double FALCON_DRIVE_GEAR_RATIO = 6.75;
     
     ReplanningConfig replanningConfig = new ReplanningConfig(true, true);
 
