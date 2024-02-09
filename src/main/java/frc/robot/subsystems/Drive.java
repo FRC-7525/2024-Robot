@@ -92,12 +92,12 @@ public class Drive extends SubsystemBase {
             swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                            // More PID tuning would be nice
-                                            new PIDConstants(5, 0, 0), // Translation PID constants
-                                            new PIDConstants(4, 0, 0.1), // Rotation PID constants
-                                            4.5, // Max module speed, in m/s
-                                            swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot center to furthest module.
-                                            replanningConfig // Default path replanning config.                         
+                // More PID tuning would be nice
+                new PIDConstants(5, 0, 0), // Translation PID constants
+                new PIDConstants(4, 0, 0.1), // Rotation PID constants
+                4.5, // Max module speed, in m/s
+                swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot center to furthest module.
+                replanningConfig // Default path replanning config.
             ),
             () -> {
                 // Boolean supplier that controls when the path will be mirrored for the red alliance
