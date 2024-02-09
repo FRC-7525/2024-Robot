@@ -107,13 +107,7 @@ public class Drive extends SubsystemBase {
         
         double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.stickDeadband);
         double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.stickDeadband);
-        double yMovement;
-        
-        if (Constants.Drive.isNeo) {
-            yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), Constants.stickDeadband);
-        } else {
-            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), Constants.stickDeadband);
-        }
+        double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.stickDeadband);
 
 
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
