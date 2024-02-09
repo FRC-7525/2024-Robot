@@ -85,7 +85,7 @@ public class Drive extends SubsystemBase {
         swerveDrive.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d()));
     }
 
-    public void pathPlannerInit() {
+    private void pathPlannerInit() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose, // Robot pose supplier
             swerveDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
