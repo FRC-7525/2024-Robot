@@ -29,7 +29,7 @@ enum DriveStates {
 }
 
 public class Drive extends SubsystemBase {
-    static final double DEADBAND = 0.1;
+    final double DEADBAND = 0.1;
     final int WHEEL_DIAMETER = 4;
     final double NEO_DRIVE_GEAR_RATIO = 6.12;
     final double ANGLE_GEAR_RATIO = 21.4286;
