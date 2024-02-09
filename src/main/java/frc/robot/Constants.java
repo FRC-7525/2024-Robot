@@ -10,5 +10,6 @@ public final class Constants {
     public static final double encoderResolution = 42;
     public static final double falconDriveGearRatio = 6.75;
     public static final boolean isNeo = true; // SET TO FALSE FOR FALCON
+    public static final int leftXSign = isNeo ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
   }
 }
