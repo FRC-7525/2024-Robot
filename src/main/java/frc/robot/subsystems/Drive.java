@@ -37,7 +37,6 @@ public class Drive extends SubsystemBase {
     final double FALCON_DRIVE_GEAR_RATIO = 6.75;
     final boolean IS_NEO = true; // SET TO FALSE FOR FALCON
 
-    SwerveParser swerveParser;
     SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
@@ -62,7 +61,7 @@ public class Drive extends SubsystemBase {
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(ANGLE_GEAR_RATIO, 1);
 
         try {
-            swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
+            SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
             swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor); // Change Units.feetToMeters(x) to have a smaller x for faster robot
             pathPlannerInit();
 
