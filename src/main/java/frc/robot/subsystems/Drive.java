@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -29,14 +31,6 @@ enum DriveStates {
 }
 
 public class Drive extends SubsystemBase {
-    final double DEADBAND = 0.1;
-    final int WHEEL_DIAMETER = 4;
-    final double NEO_DRIVE_GEAR_RATIO = 6.12;
-    final double ANGLE_GEAR_RATIO = 21.4286;
-    final double ENCODER_RESOLUTION = 42;
-    final double FALCON_DRIVE_GEAR_RATIO = 6.75;
-    final boolean IS_NEO = true; // SET TO FALSE FOR FALCON
-
     SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
@@ -52,17 +46,17 @@ public class Drive extends SubsystemBase {
 
         double driveGearRatio;
         
-        if (IS_NEO) {
-            driveGearRatio = NEO_DRIVE_GEAR_RATIO;
+        if (Constants.isNeo) {
+            driveGearRatio = Constants.neoDriveGearRatio;
             path = "swerve/neo";
         } else {
-            driveGearRatio = FALCON_DRIVE_GEAR_RATIO;
+            driveGearRatio = Constants.falconDriveGearRatio;
             path = "swerve/falcon";
         }
 
-        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
+        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.wheelDiameter),
             driveGearRatio, 1);
-        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(ANGLE_GEAR_RATIO, 1);
+        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.angleGearRatio, 1);
 
         try {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
@@ -113,14 +107,14 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         String state = "";
         
-        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), DEADBAND);
-        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), DEADBAND);
+        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.stickDeadband);
+        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.stickDeadband);
         double yMovement;
         
-        if (IS_NEO) {
-            yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), DEADBAND);
+        if (Constants.isNeo) {
+            yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), Constants.stickDeadband);
         } else {
-            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), DEADBAND);
+            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), Constants.stickDeadband);
         }
 
 
