@@ -36,8 +36,7 @@ public class Drive extends SubsystemBase {
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
-    //SET TO FALSE FOR FALCON
-    boolean isNeo = true;
+    boolean isNeo = true; // SET TO FALSE FOR FALCON
     final int WHEEL_DIAMETER = 4;
     final double NEO_DRIVE_GEAR_RATIO = 6.12;
     final double ANGLE_GEAR_RATIO = 21.4286;
@@ -65,10 +64,10 @@ public class Drive extends SubsystemBase {
 
         try {
             swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
-            // Change "Units.feetToMeters(x)" to have a smaller x for faster robot"
-            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor);
+            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor); // Change Units.feetToMeters(x) to have a smaller x for faster robot
             pathPlannerInit();
-            // Untested as of yet (with changes)
+
+            // UNTESTED (with changes)
             swerveDrive.setHeadingCorrection(true, 0.01);
 
         } catch (IOException e) {
@@ -89,19 +88,14 @@ public class Drive extends SubsystemBase {
             swerveDrive::getPose, // Robot pose supplier
             swerveDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            swerveDrive::drive, // Metho that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                            //More PID Tuning Would be Nice
-                                            new PIDConstants(5, 0, 0),
-                                            // Translation PID constants
-                                            new PIDConstants(4, 0, 0.1),
-                                            // Rotation PID constants
-                                            4.5,
-                                            // Max module speed, in m/s
-                                            swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-                                            replanningConfig
-                                            // Drive base radius in meters. Distance from robot center to furthest module.
-                                            // Default path replanning config. See the API for the options here
+                                            // More PID tuning would be nice
+                                            new PIDConstants(5, 0, 0), // Translation PID constants
+                                            new PIDConstants(4, 0, 0.1), // Rotation PID constants
+                                            4.5, // Max module speed, in m/s
+                                            swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot center to furthest module.
+                                            replanningConfig // Default path replanning config.                         
             ),
             () -> {
                 // Boolean supplier that controls when the path will be mirrored for the red alliance
