@@ -35,13 +35,13 @@ public class Drive extends SubsystemBase {
     final double ANGLE_GEAR_RATIO = 21.4286;
     final double ENCODER_RESOLUTION = 42;
     final double FALCON_DRIVE_GEAR_RATIO = 6.75;
-    
+    final boolean IS_NEO = true; // SET TO FALSE FOR FALCON
+
     SwerveParser swerveParser;
     SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
-    boolean isNeo = true; // SET TO FALSE FOR FALCON
     
     ReplanningConfig replanningConfig = new ReplanningConfig(true, true);
 
@@ -50,7 +50,7 @@ public class Drive extends SubsystemBase {
         this.robot = robot;
         double driveConversionFactor;
         String path;
-        if (isNeo) {
+        if (IS_NEO) {
             driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
                     NEO_DRIVE_GEAR_RATIO, 1);
             path = "swerve/neo";
@@ -114,7 +114,7 @@ public class Drive extends SubsystemBase {
         double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), DEADBAND);
         double yMovement;
         
-        if (isNeo) {
+        if (IS_NEO) {
             yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), DEADBAND);
         } else {
             yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), DEADBAND);
