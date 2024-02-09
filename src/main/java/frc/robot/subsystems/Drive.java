@@ -44,17 +44,17 @@ public class Drive extends SubsystemBase {
 
         double driveGearRatio;
         
-        if (Constants.isNeo) {
-            driveGearRatio = Constants.neoDriveGearRatio;
+        if (Constants.Drive.isNeo) {
+            driveGearRatio = Constants.Drive.neoDriveGearRatio;
             path = "swerve/neo";
         } else {
-            driveGearRatio = Constants.falconDriveGearRatio;
+            driveGearRatio = Constants.Drive.falconDriveGearRatio;
             path = "swerve/falcon";
         }
 
-        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.wheelDiameter),
+        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
             driveGearRatio, 1);
-        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.angleGearRatio, 1);
+        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.Drive.angleGearRatio, 1);
 
         try {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
@@ -109,7 +109,7 @@ public class Drive extends SubsystemBase {
         double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.stickDeadband);
         double yMovement;
         
-        if (Constants.isNeo) {
+        if (Constants.Drive.isNeo) {
             yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), Constants.stickDeadband);
         } else {
             yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), Constants.stickDeadband);
