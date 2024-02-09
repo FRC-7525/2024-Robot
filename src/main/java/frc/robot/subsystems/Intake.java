@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -19,8 +20,9 @@ enum IntakeStates {
 public class Intake extends SubsystemBase {
     IntakeStates states = IntakeStates.OFF;
     Robot robot = null;
-    CANSparkMax pivotMotor = new CANSparkMax(1, MotorType.kBrushless);
-    
+    private CANSparkMax pivotMotor = new CANSparkMax(1, MotorType.kBrushless);
+    private TalonFX intakeMotor = new TalonFX(2);
+
     PIDController pivotController = new PIDController(1.5, 0, 0);
     PIDController intakeController = new PIDController(1.5, 0, 0);
 
@@ -33,27 +35,28 @@ public class Intake extends SubsystemBase {
     public Intake(Robot robot) {
         this.robot = robot;
         pivotMotor.restoreFactoryDefaults();
-        intakeMotor.restoreFactoryDefaults();
     }
-String currentState;
+
+    String currentState;
+
     public void periodic() {
-        if(states == IntakeStates.OFF){
+        if (states == IntakeStates.OFF) {
             pivotMotor.set(DOWN);
             intakeMotor.set(OFF);
             currentState = "The current state is OFF.";
             SmartDashboard.putString("Current state of INTAKE:", currentState);
-        } else if (states == IntakeStates.INTAKING){
+        } else if (states == IntakeStates.INTAKING) {
             pivotMotor.set(DOWN);
             intakeMotor.set(ON);
             currentState = "The current state is INTAKING.";
-         SmartDashboard.putString("Current state of INTAKE:", currentState);
-        } else if (states == IntakeStates.FEEDING){
+            SmartDashboard.putString("Current state of INTAKE:", currentState);
+        } else if (states == IntakeStates.FEEDING) {
             pivotMotor.set(IN);
             intakeMotor.set(ON);
             currentState = "The current state is FEEDING.";
             SmartDashboard.putString("Current state of INTAKE:", currentState);
-            
-        } else if (states == IntakeStates.OUTTAKING){
+
+        } else if (states == IntakeStates.OUTTAKING) {
             pivotMotor.set(DOWN);
             intakeMotor.set(REVERSED);
             currentState = "The current state is OUTTAKING.";
