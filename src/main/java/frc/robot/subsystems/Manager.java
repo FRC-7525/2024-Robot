@@ -8,7 +8,8 @@ enum ManagerStates {
     IDLE,
     INTAKING,
     OUTTAKING,
-    SHOOTING
+    SHOOTING,
+    SHOOTPREP
 }
 
 public class Manager {
@@ -33,7 +34,7 @@ public class Manager {
             if (robot.controller.getBButtonPressed()) {
                 state = ManagerStates.INTAKING;
             } else if (robot.controller.getAButtonPressed()) {
-                state = ManagerStates.SHOOTING;
+                state = ManagerStates.SHOOTPREP;
             }
         } else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
@@ -52,23 +53,26 @@ public class Manager {
             }
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
-            handoffTimer.start();
-            if (handoffTimer.get() > 1) {
-                handoffTimer.stop();
-                intake.setState(IntakeStates.FEEDING);
-                shooterTimer.start();
-                if (shooterTimer.get() > 1) {
-                    shooterTimer.stop();
-                    shooterTimer.reset();
-                    handoffTimer.reset();
-                    state = ManagerStates.IDLE;
-                }
+            intake.setState(IntakeStates.FEEDING);
+            shooterTimer.start();
+            if (shooterTimer.get() > 1) {
+                shooterTimer.stop();
+                shooterTimer.reset(); 
+                state = ManagerStates.IDLE;
             }
             stateString = "Shooting";
             
+        } else if (state == ManagerStates.SHOOTPREP) {
+            intake.setState(IntakeStates.OFF);
+            shooter.setState(ShootingStates.SHOOTING);
+            if (shooter.shooterMotor1.getVelocity().getValueAsDouble() > 60.0 && shooter.shooterMotor2.getVelocity().getValueAsDouble() > 60.0) {
+                state = ManagerStates.SHOOTING;
+            }
+            stateString = "Prepare to shoot";
         }
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
     }
 }
+
