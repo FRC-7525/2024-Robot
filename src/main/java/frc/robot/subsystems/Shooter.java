@@ -17,13 +17,14 @@ public class Shooter extends SubsystemBase {
     Robot robot = null;
     private TalonFX shooterMotor1 = new TalonFX(14);
     private TalonFX shooterMotor2 = new TalonFX(15);
-    PIDController shootingController = new PIDController(0.25, 0, 0); // tune p
-    PIDController shootingController1 = new PIDController(0.25, 0, 0); // tune p
+    PIDController shootingController = new PIDController(0.5, 0, 0); // tune p
+    PIDController shootingController1 = new PIDController(0.5, 0, 0); // tune p
     String stateString;
 
     public Shooter(Robot robot) {
         this.robot = robot;
-        shooterMotor1.setInverted(true);
+        shooterMotor2.setInverted(true);
+        shooterMotor1.setInverted(false);
     }
 
     public void setState(ShootingStates state) {
@@ -36,8 +37,8 @@ public class Shooter extends SubsystemBase {
             shooterMotor2.set(0);
             stateString = "Off";
         } else if (states == ShootingStates.SHOOTING) {
-            shooterMotor1.set(shootingController.calculate(shooterMotor1.getVelocity().getValueAsDouble(), 0.1));
-            shooterMotor2.set(shootingController1.calculate(shooterMotor2.getVelocity().getValueAsDouble(), 0.1));
+            shooterMotor1.set(shootingController.calculate(shooterMotor1.getVelocity().getValueAsDouble(), 200));
+            shooterMotor2.set(shootingController1.calculate(shooterMotor2.getVelocity().getValueAsDouble(), 200));
             stateString = "Shooting";
         }
     }

@@ -16,9 +16,10 @@ public class Manager {
     ManagerStates state = ManagerStates.IDLE;
     String stateString;
     Robot robot = null;
-    Shooter shooter = new Shooter(robot);
-    Intake intake = new Intake(robot);
+    public Shooter shooter = new Shooter(robot);
+    public Intake intake = new Intake(robot);
     Timer shooterTimer = new Timer();
+    Timer handoffTimer = new Timer();
 
     public Manager (Robot robot) {
         this.robot = robot;
@@ -50,15 +51,21 @@ public class Manager {
                 state = ManagerStates.INTAKING;
             }
         } else if (state == ManagerStates.SHOOTING) {
-            shooterTimer.start();
-            intake.setState(IntakeStates.FEEDING);
             shooter.setState(ShootingStates.SHOOTING);
-            stateString = "Shooting";
-            if (shooterTimer.get() > 1) {
-                shooterTimer.stop();
-                shooterTimer.reset();
-                state = ManagerStates.IDLE;
+            handoffTimer.start();
+            if (handoffTimer.get() > 1) {
+                handoffTimer.stop();
+                intake.setState(IntakeStates.FEEDING);
+                shooterTimer.start();
+                if (shooterTimer.get() > 1) {
+                    shooterTimer.stop();
+                    shooterTimer.reset();
+                    handoffTimer.reset();
+                    state = ManagerStates.IDLE;
+                }
             }
+            stateString = "Shooting";
+            
         }
         intake.putSmartDashValues();
         shooter.putSmartDashValues();

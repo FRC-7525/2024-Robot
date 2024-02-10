@@ -14,6 +14,7 @@ import frc.robot.subsystems.Manager;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -70,6 +71,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
+
     }
 
     @Override
@@ -80,11 +83,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-
+        manager.intake.pivotMotor.setIdleMode(IdleMode.kCoast);
     }
 
     @Override
     public void disabledPeriodic() {
+        manager.intake.putSmartDashValues();
+
     }
 
     @Override

@@ -14,4 +14,10 @@ public final class Constants {
         public static final String pathPlannerFile = isNeo ? "swerve/neo" : "swerve/falcon";
         public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
     }
+    public static final class Intake {
+        public static final double OFF = 0.0;
+        public static final double ON = 0.1;
+        public static final double REVERSE = -0.7;
+        public static final double DOWN = -37;
+    }
 }

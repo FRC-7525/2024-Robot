@@ -2,12 +2,14 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 enum IntakeStates {
@@ -21,45 +23,43 @@ enum IntakeStates {
 public class Intake extends SubsystemBase {
     IntakeStates states = IntakeStates.OFF;
     Robot robot = null;
-    private CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
-    private TalonFX intakeMotor = new TalonFX(20);
+    public CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
+    public TalonFX intakeMotor = new TalonFX(20);
     private RelativeEncoder pivotEncoder = pivotMotor.getEncoder();
 
-    PIDController pivotController = new PIDController(1.5, 0, 0);
-
-    final double OFF = 0.0;
-    final double ON = 1.0;
-    final double REVERSE = -1.0;
+    PIDController pivotController = new PIDController(0.05, 0, 0);
 
     double pivotMotorSetpoint = 0.0;
     double intakeMotorSetpoint = 0.0;
 
     public Intake(Robot robot) {
         this.robot = robot;
+        intakeMotor.setInverted(true);
         pivotEncoder.setPosition(0);
+        pivotMotor.setIdleMode(IdleMode.kBrake);
     }
     public void setState(IntakeStates state) {
         this.states = state;
     }
 
-    String currentState;
+    String currentState = "not null zzzzzzzz";
 
     public void periodic() {
         if (states == IntakeStates.OFF) {
-            pivotMotorSetpoint = OFF;
-            intakeMotorSetpoint = OFF;
+            pivotMotorSetpoint = Constants.Intake.OFF;
+            intakeMotorSetpoint = Constants.Intake.OFF;
             currentState = "OFF";
         } else if (states == IntakeStates.INTAKING) {
-            pivotMotorSetpoint = OFF;
-            intakeMotorSetpoint = ON;
+            pivotMotorSetpoint = Constants.Intake.DOWN;
+            intakeMotorSetpoint = Constants.Intake.ON;
             currentState = "INTAKING";
         } else if (states == IntakeStates.FEEDING) {
-            pivotMotorSetpoint = ON;
-            intakeMotorSetpoint = ON;
+            pivotMotorSetpoint = Constants.Intake.OFF;
+            intakeMotorSetpoint = Constants.Intake.REVERSE;
             currentState = "FEEDING";
         } else if (states == IntakeStates.OUTTAKING) {
-            pivotMotorSetpoint = OFF;
-            intakeMotorSetpoint = REVERSE;
+            pivotMotorSetpoint = Constants.Intake.DOWN;
+            intakeMotorSetpoint = Constants.Intake.REVERSE;
             currentState = "OUTTAKING";
         }
 
