@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -20,8 +21,9 @@ enum IntakeStates {
 public class Intake extends SubsystemBase {
     IntakeStates states = IntakeStates.OFF;
     Robot robot = null;
-    private CANSparkMax pivotMotor = new CANSparkMax(1, MotorType.kBrushless);
-    private TalonFX intakeMotor = new TalonFX(2);
+    private CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
+    private TalonFX intakeMotor = new TalonFX(20);
+    private RelativeEncoder pivotEncoder = pivotMotor.getEncoder();
 
     PIDController pivotController = new PIDController(1.5, 0, 0);
 
@@ -34,7 +36,7 @@ public class Intake extends SubsystemBase {
 
     public Intake(Robot robot) {
         this.robot = robot;
-        pivotMotor.restoreFactoryDefaults();
+        pivotEncoder.setPosition(0);
     }
 
     String currentState;
@@ -58,14 +60,14 @@ public class Intake extends SubsystemBase {
             currentState = "OUTTAKING";
         }
 
+        pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
+        intakeMotor.set(intakeMotorSetpoint);
+    }
+    public void putSmartDashValues() {
         SmartDashboard.putString("Current state of INTAKE:", currentState);
-
-        SmartDashboard.putNumber("pivot motor position", pivotMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("pivot motor position", pivotEncoder.getPosition());
         SmartDashboard.putNumber("intake motor position", intakeMotor.getPosition().getValue());
         SmartDashboard.putNumber("pivot motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
-
-        pivotMotor.set(pivotController.calculate(pivotMotor.getEncoder().getPosition(), pivotMotorSetpoint));
-        intakeMotor.set(intakeMotorSetpoint);
     }
 }
