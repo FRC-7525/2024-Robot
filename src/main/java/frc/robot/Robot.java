@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     Drive drive = new Drive(this);
     Vision vision = new Vision();
+    RGB rgb = new RGB(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
 
     public Command getAutonomousCommand(String autoName) {
@@ -71,11 +73,11 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         drive.periodic();
+        rgb.periodic();
     }
 
     @Override
     public void disabledInit() {
-
     }
 
     @Override
