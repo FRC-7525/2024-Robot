@@ -38,6 +38,9 @@ public class Intake extends SubsystemBase {
         this.robot = robot;
         pivotEncoder.setPosition(0);
     }
+    public void setState(IntakeStates state) {
+        this.states = state;
+    }
 
     String currentState;
 

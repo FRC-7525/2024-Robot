@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Vision;
+//import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Manager;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -23,10 +22,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
+    //Vision vision = new Vision();
     Drive drive = new Drive(this);
-    Shooter shooter = new Shooter(this);
-    Vision vision = new Vision();
-    Intake intake = new Intake(this);
+    Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
 
     public Command getAutonomousCommand(String autoName) {
@@ -48,11 +46,13 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        /* 
         vision.periodic();
         intake.putSmartDashValues();
         if (vision.getPose2d().isPresent()) {
             drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
-        }
+        } 
+        */
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         drive.periodic();
-        shooter.periodic();
+        manager.periodic();
     }
 
     @Override
