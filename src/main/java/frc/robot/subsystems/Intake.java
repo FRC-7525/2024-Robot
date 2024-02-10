@@ -24,13 +24,13 @@ public class Intake extends SubsystemBase {
     private TalonFX intakeMotor = new TalonFX(2);
 
     PIDController pivotController = new PIDController(1.5, 0, 0);
-    PIDController intakeController = new PIDController(1.5, 0, 0);
 
-    final double DOWN = 0;
-    final double IN = 1;
-    final double OFF = 0;
-    final double ON = 1;
-    final double REVERSED = -1;
+    final double OFF = 0.0;
+    final double ON = 1.0;
+    final double REVERSE = -1.0;
+
+    double pivotMotorSetpoint = 0.0;
+    double intakeMotorSetpoint = 0.0;
 
     public Intake(Robot robot) {
         this.robot = robot;
@@ -41,26 +41,31 @@ public class Intake extends SubsystemBase {
 
     public void periodic() {
         if (states == IntakeStates.OFF) {
-            pivotMotor.set(DOWN);
-            intakeMotor.set(OFF);
-            currentState = "The current state is OFF.";
-            SmartDashboard.putString("Current state of INTAKE:", currentState);
+            pivotMotorSetpoint = OFF;
+            intakeMotorSetpoint = OFF;
+            currentState = "OFF";
         } else if (states == IntakeStates.INTAKING) {
-            pivotMotor.set(DOWN);
-            intakeMotor.set(ON);
-            currentState = "The current state is INTAKING.";
-            SmartDashboard.putString("Current state of INTAKE:", currentState);
+            pivotMotorSetpoint = OFF;
+            intakeMotorSetpoint = ON;
+            currentState = "INTAKING";
         } else if (states == IntakeStates.FEEDING) {
-            pivotMotor.set(IN);
-            intakeMotor.set(ON);
-            currentState = "The current state is FEEDING.";
-            SmartDashboard.putString("Current state of INTAKE:", currentState);
-
+            pivotMotorSetpoint = ON;
+            intakeMotorSetpoint = ON;
+            currentState = "FEEDING";
         } else if (states == IntakeStates.OUTTAKING) {
-            pivotMotor.set(DOWN);
-            intakeMotor.set(REVERSED);
-            currentState = "The current state is OUTTAKING.";
-            SmartDashboard.putString("Current state of INTAKE:", currentState);
+            pivotMotorSetpoint = OFF;
+            intakeMotorSetpoint = REVERSE;
+            currentState = "OUTTAKING";
         }
+
+        SmartDashboard.putString("Current state of INTAKE:", currentState);
+
+        SmartDashboard.putNumber("pivot motor position", pivotMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("intake motor position", intakeMotor.getPosition().getValue());
+        SmartDashboard.putNumber("pivot moto setpoint", pivotMotorSetpoint);
+        SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
+
+        pivotMotor.set(pivotController.calculate(pivotMotor.getEncoder().getPosition(), pivotMotorSetpoint));
+        intakeMotor.set(intakeMotorSetpoint);
     }
 }
