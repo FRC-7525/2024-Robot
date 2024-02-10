@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -29,45 +31,25 @@ enum DriveStates {
 }
 
 public class Drive extends SubsystemBase {
-    static final double DEADBAND = 0.1;
-    SwerveParser swerveParser;
     SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
-    //SET TO FALSE FOR FALCON
-    boolean isNeo = true;
-    final int WHEEL_DIAMETER = 4;
-    final double NEO_DRIVE_GEAR_RATIO = 6.12;
-    final double ANGLE_GEAR_RATIO = 21.4286;
-    final double ENCODER_RESOLUTION = 42;
-
-    final double FALCON_DRIVE_GEAR_RATIO = 6.75;
-    double yMovement;
-    ReplanningConfig replanningConfig = new ReplanningConfig(true, true);
-
+    
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
-        double driveConversionFactor;
-        String path;
-        if (isNeo) {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
-                    NEO_DRIVE_GEAR_RATIO, 1);
-            path = "swerve/neo";
-        } else {
-            driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER),
-                    FALCON_DRIVE_GEAR_RATIO, 1);
-            path = "swerve/falcon";
-        }
-        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(ANGLE_GEAR_RATIO, 1);
+
+        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
+            Constants.Drive.driveGearRatio, 1);
+        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.Drive.angleGearRatio, 1);
 
         try {
-            swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), path));
-            // Change "Units.feetToMeters(x)" to have a smaller x for faster robot"
-            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor);
+            SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
+            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor); // Change Units.feetToMeters(x) to have a smaller x for faster robot
             pathPlannerInit();
-            // Untested as of yet (with changes)
+
+            // UNTESTED (with changes)
             swerveDrive.setHeadingCorrection(true, 0.01);
 
         } catch (IOException e) {
@@ -88,19 +70,14 @@ public class Drive extends SubsystemBase {
             swerveDrive::getPose, // Robot pose supplier
             swerveDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            swerveDrive::drive, // Metho that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                            //More PID Tuning Would be Nice
-                                            new PIDConstants(5, 0, 0),
-                                            // Translation PID constants
-                                            new PIDConstants(4, 0, 0.1),
-                                            // Rotation PID constants
-                                            4.5,
-                                            // Max module speed, in m/s
-                                            swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-                                            replanningConfig
-                                            // Drive base radius in meters. Distance from robot center to furthest module.
-                                            // Default path replanning config. See the API for the options here
+                // More PID tuning would be nice
+                new PIDConstants(5, 0, 0), // Translation PID constants
+                new PIDConstants(4, 0, 0.1), // Rotation PID constants
+                4.5, // Max module speed, in m/s
+                swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot center to furthest module.
+                new ReplanningConfig(true, true) // Default path replanning config.
             ),
             () -> {
                 // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -115,15 +92,11 @@ public class Drive extends SubsystemBase {
 
     public void periodic() {
         String state = "";
+        
+        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.stickDeadband);
+        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.stickDeadband);
+        double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.stickDeadband);
 
-        if (isNeo) {
-            yMovement = MathUtil.applyDeadband(-robot.controller.getLeftX(), DEADBAND);
-
-        } else {
-            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX(), DEADBAND);
-        }
-        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), DEADBAND);
-        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), DEADBAND);
 
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
