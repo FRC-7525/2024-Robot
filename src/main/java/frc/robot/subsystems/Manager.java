@@ -13,19 +13,20 @@ enum ManagerStates {
 }
 
 public class Manager {
-    
+
     ManagerStates state = ManagerStates.IDLE;
     String stateString;
     Robot robot = null;
     public Shooter shooter = new Shooter(robot);
     public Intake intake = new Intake(robot);
     Timer shooterTimer = new Timer();
-    Timer handoffTimer = new Timer();
+    // Timer handoffTimer = new Timer();
 
-    public Manager (Robot robot) {
+    public Manager(Robot robot) {
         this.robot = robot;
-        
+
     }
+
     public void periodic() {
         if (state == ManagerStates.IDLE) {
             intake.setState(IntakeStates.OFF);
@@ -34,7 +35,7 @@ public class Manager {
             if (robot.controller.getBButtonPressed()) {
                 state = ManagerStates.INTAKING;
             } else if (robot.controller.getAButtonPressed()) {
-                state = ManagerStates.SHOOTPREP;
+                state = ManagerStates.SHOOTING;
             }
         } else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
@@ -57,22 +58,38 @@ public class Manager {
             shooterTimer.start();
             if (shooterTimer.get() > 1) {
                 shooterTimer.stop();
-                shooterTimer.reset(); 
+                shooterTimer.reset();
                 state = ManagerStates.IDLE;
             }
             stateString = "Shooting";
-            
-        } else if (state == ManagerStates.SHOOTPREP) {
-            intake.setState(IntakeStates.OFF);
-            shooter.setState(ShootingStates.SHOOTING);
-            if (shooter.shooterMotor1.getVelocity().getValueAsDouble() > 60.0 && shooter.shooterMotor2.getVelocity().getValueAsDouble() > 60.0) {
-                state = ManagerStates.SHOOTING;
-            }
-            stateString = "Prepare to shoot";
+
         }
+        /*
+         * else if (state == ManagerStates.SHOOTPREP) {
+         * intake.setState(IntakeStates.OFF);
+         * shooter.setState(ShootingStates.SHOOTING);
+         * if (shooter.shooterMotor1.getVelocity().getValueAsDouble() > 60.0 &&
+         * shooter.shooterMotor2.getVelocity().getValueAsDouble() > 60.0) {
+         * state = ManagerStates.SHOOTING;
+         * }
+         * stateString = "Prepare to shoot";
+         * }
+         */
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
     }
-}
 
+    // Functions for Auto Commands
+    public void intaking() {
+        state = ManagerStates.INTAKING;
+    }
+
+    public void shooting() {
+        state = ManagerStates.SHOOTING;
+    }
+
+    public void returnToIdle() {
+        state = ManagerStates.IDLE;
+    }
+}

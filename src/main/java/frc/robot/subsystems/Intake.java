@@ -17,7 +17,7 @@ enum IntakeStates {
     INTAKING,
     FEEDING,
     OUTTAKING,
-
+    
 }
 
 public class Intake extends SubsystemBase {
