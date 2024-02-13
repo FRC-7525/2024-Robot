@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        vision.periodic();
         drive.periodic();
     }
 
