@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.Intaking;
 import frc.robot.commands.ReturnRobotToIdle;
 import frc.robot.commands.Shooting;
-import frc.robot.commands.intaking;
 import frc.robot.subsystems.Drive;
 //import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;

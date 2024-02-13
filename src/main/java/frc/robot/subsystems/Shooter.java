@@ -2,9 +2,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 enum ShootingStates {
@@ -17,8 +19,9 @@ public class Shooter extends SubsystemBase {
     Robot robot = null;
     public TalonFX shooterMotor1 = new TalonFX(14);
     public TalonFX shooterMotor2 = new TalonFX(15);
-    PIDController shootingController = new PIDController(0.5, 0, 0); // tune p
-    PIDController shootingController1 = new PIDController(0.5, 0, 0); // tune p
+    PIDController shootingController = new PIDController(4, 0, 0); // tune p
+    PIDController shootingController1 = new PIDController(4, 0, 0); // tune p
+    BangBangController bangThing = new BangBangController();
     String stateString;
 
     public Shooter(Robot robot) {
@@ -37,8 +40,11 @@ public class Shooter extends SubsystemBase {
             shooterMotor2.set(0);
             stateString = "Off";
         } else if (states == ShootingStates.SHOOTING) {
-            shooterMotor1.set(shootingController.calculate(shooterMotor1.getVelocity().getValueAsDouble(), 90));
-            shooterMotor2.set(shootingController1.calculate(shooterMotor2.getVelocity().getValueAsDouble(), 90));
+            // shooterMotor1.set(shootingController.calculate(shooterMotor1.getVelocity().getValueAsDouble(), 90));
+            // shooterMotor2.set(shootingController1.calculate(shooterMotor2.getVelocity().getValueAsDouble(), 90));
+
+            shooterMotor1.set(bangThing.calculate(shooterMotor1.getVelocity().getValueAsDouble(),Constants.Shooter.SPEED));
+            shooterMotor2.set(bangThing.calculate(shooterMotor2.getVelocity().getValueAsDouble(),Constants.Shooter.SPEED));
             stateString = "Shooting";
         }
     }

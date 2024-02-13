@@ -8,8 +8,7 @@ enum ManagerStates {
     IDLE,
     INTAKING,
     OUTTAKING,
-    SHOOTING,
-    SHOOTPREP
+    SHOOTING
 }
 
 public class Manager {
@@ -20,6 +19,7 @@ public class Manager {
     public Shooter shooter = new Shooter(robot);
     public Intake intake = new Intake(robot);
     Timer shooterTimer = new Timer();
+    Timer speedUpTimer = new Timer();
     // Timer handoffTimer = new Timer();
 
     public Manager(Robot robot) {
@@ -41,7 +41,7 @@ public class Manager {
             intake.setState(IntakeStates.INTAKING);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
-            if (robot.controller.getBButtonPressed()) {
+            if (intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > 30 || robot.controller.getBButtonPressed()) {
                 state = ManagerStates.IDLE;
             } else if (robot.controller.getRightBumper()) {
                 state = ManagerStates.OUTTAKING;
@@ -54,27 +54,23 @@ public class Manager {
             }
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
-            intake.setState(IntakeStates.FEEDING);
-            shooterTimer.start();
-            if (shooterTimer.get() > 1) {
-                shooterTimer.stop();
-                shooterTimer.reset();
-                state = ManagerStates.IDLE;
+            intake.setState(IntakeStates.OFF);
+            speedUpTimer.start();
+            if (speedUpTimer.get() > 1) {
+                speedUpTimer.stop();
+                shooterTimer.start();
+                intake.setState(IntakeStates.FEEDING);
+                if (shooterTimer.get() > 1) {
+                    shooterTimer.stop();
+                    shooterTimer.reset();
+                    speedUpTimer.reset();
+                    state = ManagerStates.IDLE;
+                }
             }
+            
             stateString = "Shooting";
 
         }
-        /*
-         * else if (state == ManagerStates.SHOOTPREP) {
-         * intake.setState(IntakeStates.OFF);
-         * shooter.setState(ShootingStates.SHOOTING);
-         * if (shooter.shooterMotor1.getVelocity().getValueAsDouble() > 60.0 &&
-         * shooter.shooterMotor2.getVelocity().getValueAsDouble() > 60.0) {
-         * state = ManagerStates.SHOOTING;
-         * }
-         * stateString = "Prepare to shoot";
-         * }
-         */
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);

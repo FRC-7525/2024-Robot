@@ -17,7 +17,7 @@ enum IntakeStates {
     INTAKING,
     FEEDING,
     OUTTAKING,
-    
+
 }
 
 public class Intake extends SubsystemBase {
@@ -72,5 +72,6 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("intake motor position", intakeMotor.getPosition().getValue());
         SmartDashboard.putNumber("pivot motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
+        SmartDashboard.putNumber("Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
     }
 }
