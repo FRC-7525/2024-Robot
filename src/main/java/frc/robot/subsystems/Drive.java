@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import monologue.Logged;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
@@ -30,7 +31,7 @@ enum DriveStates {
     FIELD_RELATIVE
 }
 
-public class Drive extends SubsystemBase {
+public class Drive extends SubsystemBase implements Logged {
     SwerveDrive swerveDrive;
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
@@ -125,6 +126,8 @@ public class Drive extends SubsystemBase {
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
+
+        this.log("Robot Pose", swerveDrive.field.getRobotPose());
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {

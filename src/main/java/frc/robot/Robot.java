@@ -19,7 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-public class Robot extends TimedRobot {
+import monologue.Monologue;
+import monologue.Logged;
+
+public class Robot extends TimedRobot implements Logged {
     public XboxController controller = new XboxController(0);
     Drive drive = new Drive(this);
     Vision vision = new Vision();
@@ -39,6 +42,8 @@ public class Robot extends TimedRobot {
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Drive Backwards", "Drive Backwards");
         SmartDashboard.putData("Path Chooser", chooser);
+
+        Monologue.setupMonologue(this, "Robot", true, true);
     }
 
     @Override
@@ -48,6 +53,7 @@ public class Robot extends TimedRobot {
         if (vision.getPose2d().isPresent()) {
             drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
         }
+        Monologue.updateAll();
     }
 
     @Override
