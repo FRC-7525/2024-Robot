@@ -27,7 +27,8 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
-    FIELD_RELATIVE
+    FIELD_RELATIVE,
+    LOCK_WHEELS
 }
 
 public class Drive extends SubsystemBase {
@@ -102,25 +103,38 @@ public class Drive extends SubsystemBase {
             state = "Field Absolute";
             fieldRelative = false;
 
-            if (robot.controller.getBButtonPressed()) {
+            if (robot.controller.getXButtonPressed()) {
                 driveStates = DriveStates.FIELD_RELATIVE;
                 System.out.println("FIELD relative ON");
+            } else if (robot.controller.getYButtonPressed()) {
+                driveStates = DriveStates.LOCK_WHEELS;
             }
 
         } else if (driveStates == DriveStates.FIELD_RELATIVE) {
             state = "Field Relative";
             fieldRelative = true;
 
-            if (robot.controller.getBButtonPressed()) {
+            if (robot.controller.getXButtonPressed()) {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
                 System.out.println("FIELD Relative OFF");
+            } else if (robot.controller.getYButtonPressed()) {
+                driveStates = DriveStates.LOCK_WHEELS;
             }
-            
-        } 
+        } else if (driveStates == DriveStates.LOCK_WHEELS) {
+            swerveDrive.lockPose();
+            if (robot.controller.getYButtonPressed()) {
+                driveStates = DriveStates.FIELD_ABSOLUTE;
+                swerveDrive.lockPose();
+            }
+        }
         
         if (robot.controller.getXButtonPressed()) {
             swerveDrive.zeroGyro();
             System.out.println("Gyro Zeroed");
+        } else if (robot.controller.getLeftBumper()) {
+            xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY() * 0.1, Constants.stickDeadband);
+            rotation = MathUtil.applyDeadband(-robot.controller.getRightX() *0.1, Constants.stickDeadband);
+            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign * 0.1, Constants.stickDeadband);
         }
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
