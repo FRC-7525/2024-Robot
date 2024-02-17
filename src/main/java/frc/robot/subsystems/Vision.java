@@ -42,4 +42,8 @@ public class Vision {
         }
         return Optional.empty();
     }
+
+    public boolean hasTargets() {
+        return botpose3d.isPresent();
+    }
 }

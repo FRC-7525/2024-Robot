@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
+//import java.util.Optional;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -98,5 +98,9 @@ public class Drive {
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
         swerveDrive.addVisionMeasurement(pose, timestamp);
+    }
+    
+    public Pose2d Pose2d() {
+        return swerveDrive.getPose();
     }
 }
