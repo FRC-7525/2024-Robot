@@ -17,6 +17,6 @@ public class Shooting extends Command {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return robot.manager.isIdle();
     }
 }

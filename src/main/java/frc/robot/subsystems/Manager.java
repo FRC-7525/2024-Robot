@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.opencv.objdetect.Board;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -13,14 +15,14 @@ enum ManagerStates {
 
 public class Manager {
 
-    ManagerStates state = ManagerStates.IDLE;
+    public ManagerStates state = ManagerStates.IDLE;
     String stateString;
     Robot robot = null;
     public Shooter shooter = new Shooter(robot);
     public Intake intake = new Intake(robot);
     Timer shooterTimer = new Timer();
     Timer speedUpTimer = new Timer();
-    // Timer handoffTimer = new Timer();
+    Timer goOutTimer = new Timer();
 
     public Manager(Robot robot) {
         this.robot = robot;
@@ -55,18 +57,24 @@ public class Manager {
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.OFF);
-            speedUpTimer.start();
-            if (speedUpTimer.get() > 1) {
-                speedUpTimer.stop();
-                shooterTimer.start();
-                intake.setState(IntakeStates.FEEDING);
-                if (shooterTimer.get() > 1) {
-                    shooterTimer.stop();
-                    shooterTimer.reset();
-                    speedUpTimer.reset();
-                    state = ManagerStates.IDLE;
+            goOutTimer.start();
+            if (goOutTimer.get() > 0.1) {
+                goOutTimer.stop();
+                speedUpTimer.start();
+                if (speedUpTimer.get() > 1) {
+                    speedUpTimer.stop();
+                    shooterTimer.start();
+                    intake.setState(IntakeStates.FEEDING);
+                    if (shooterTimer.get() > 1) {
+                        shooterTimer.stop();
+                        shooterTimer.reset();
+                        speedUpTimer.reset();
+                        goOutTimer.reset();
+                        state = ManagerStates.IDLE;
+                    }
                 }
             }
+            
             
             stateString = "Shooting";
 
@@ -74,6 +82,10 @@ public class Manager {
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
+    }
+
+    public Boolean isIdle() {
+        return state == ManagerStates.IDLE;
     }
 
     // Functions for Auto Commands
