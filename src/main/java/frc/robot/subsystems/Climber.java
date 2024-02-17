@@ -5,9 +5,14 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class Climber {
+    final int DPAD_UP = 0;
+    final int DPAD_RIGHT = 90;
+    final int DPAD_DOWN = 180;
+    final int DPAD_LEFT = 270;
     final double DEADBAND = 0.1; // TODO: set
     final double MAX_SETPOINT = 100; // TODO: set
 
@@ -28,6 +33,8 @@ public class Climber {
 
     boolean isExtended = false;
 
+    String stateString = null;
+
     public Climber(Robot robot) {
         this.robot = robot;
     }
@@ -37,14 +44,16 @@ public class Climber {
         leftTriggerAxis = this.robot.controller.getLeftTriggerAxis();
         rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
 
-        if (dPad == 0) {
+        if (dPad == DPAD_UP) {
             rightMotorSetpoint = MAX_SETPOINT;
             leftMotorSetpoint = MAX_SETPOINT;
             isExtended = true;
-        } else if (dPad == 180) {
+            stateString = "extended";
+        } else if (dPad == DPAD_DOWN) {
             rightMotorSetpoint = 0;
             leftMotorSetpoint = 0;
             isExtended = false;
+            stateString = "contracted";
         }
 
         if (isExtended && MathUtil.applyDeadband(leftTriggerAxis, DEADBAND) != 0) {
@@ -62,5 +71,7 @@ public class Climber {
 
         rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
         leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint));
+
+        SmartDashboard.putString("Climber State", stateString);
     }
 }
