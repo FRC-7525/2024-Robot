@@ -1,5 +1,10 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
+
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PowerDistribution;
+
 public final class Constants {
     public static final double stickDeadband = 0.1; 
     public static final class Drive {
@@ -13,6 +18,11 @@ public final class Constants {
         public static final int leftXSign = isNeo ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
         public static final String pathPlannerFile = isNeo ? "swerve/neo" : "swerve/falcon";
         public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
+        public static final double maxModuleSpeed = 4.5;
+        public static final double maxSpeed = Units.feetToMeters(5);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+
+        public static final PIDConstants translationPID = new PIDConstants(5, 0, 0);
+        public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.1);
     }
     public static final class Intake {
         public static final double OFF = 0.0;

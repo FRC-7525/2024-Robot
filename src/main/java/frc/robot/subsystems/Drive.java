@@ -47,7 +47,7 @@ public class Drive extends SubsystemBase {
 
         try {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
-            swerveDrive = swerveParser.createSwerveDrive(Units.feetToMeters(5), angleConversionFactor, driveConversionFactor); // Change Units.feetToMeters(x) to have a smaller x for faster robot
+            swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
             pathPlannerInit();
 
             // UNTESTED (with changes)
@@ -74,9 +74,9 @@ public class Drive extends SubsystemBase {
             swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 // More PID tuning would be nice
-                new PIDConstants(5, 0, 0), // Translation PID constants
-                new PIDConstants(4, 0, 0.1), // Rotation PID constants
-                4.5, // Max module speed, in m/s
+                Constants.Drive.translationPID, // Translation PID constants
+                Constants.Drive.rotationPID, // Rotation PID constants
+                Constants.Drive.maxModuleSpeed, // Max module speed, in m/s
                 swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot center to furthest module.
                 new ReplanningConfig(true, true) // Default path replanning config.
             ),
