@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.Intaking;
 import frc.robot.commands.ReturnRobotToIdle;
 import frc.robot.commands.Shooting;
@@ -29,6 +31,7 @@ public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     //Vision vision = new Vision();
     Drive drive = new Drive(this);
+    AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
 
@@ -38,6 +41,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        CameraServer.startAutomaticCapture();
+
         NamedCommands.registerCommand("Intaking", new Intaking(this));
         NamedCommands.registerCommand("Shoooting", new Shooting(this));
         NamedCommands.registerCommand("Return To Idle", new ReturnRobotToIdle(this));
