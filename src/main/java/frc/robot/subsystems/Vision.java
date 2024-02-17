@@ -21,7 +21,7 @@ public class Vision {
     Optional<EstimatedRobotPose> botpose3d;
     PhotonCamera frontCamera = new PhotonCamera("Front Camera");
     PhotonCamera sideCamera = new PhotonCamera("Side Camera");
-    Transform3d robotToCam = new Transform3d(new Translation3d(0, 0, 0),
+    Transform3d robotToCam = new Transform3d(new Translation3d(0, 1, 0),
             new Rotation3d(0, Units.degreesToRadians(-55), 0));
     PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(
             AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
