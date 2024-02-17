@@ -13,7 +13,8 @@ import frc.robot.commands.Intaking;
 import frc.robot.commands.ReturnRobotToIdle;
 import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Drive;
-//import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.RGB;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     //Vision vision = new Vision();
     Drive drive = new Drive(this);
+    Vision vision = new Vision();
+    RGB rgb = new RGB(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
@@ -98,6 +101,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         drive.periodic();
+        rgb.periodic();
         manager.periodic();
     }
 
