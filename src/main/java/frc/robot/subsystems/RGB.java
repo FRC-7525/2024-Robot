@@ -18,6 +18,15 @@ enum RGBStates {
 }
 
 public class RGB {
+    double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;
+    double LED_MODE_LARSON_SCANNER_RED = -0.35;
+    double LED_MODE_HEARTBEAT_RED = -0.25;
+    double LED_MODE_HEARTBEAT_WHITE = -0.21;
+    double LED_MODE_OFF = 0;
+    double LED_MODE_RED_ORANGE = 0.63;
+    double LED_MODE_GREEN = 0.77;
+    double LED_MODE_WHITE = 0.93;
+
     Robot robot = null;
     RGBStates state = RGBStates.IDLE;
     Spark RGBControl = new Spark(0);
@@ -55,21 +64,21 @@ public class RGB {
         
         // States
         if (state == RGBStates.IDLE) {
-            RGBControl.set(0.93);
+            RGBControl.set(LED_MODE_WHITE);
         } else if (state == RGBStates.ENDGAME_START) {
-            RGBControl.set(-0.21);
+            RGBControl.set(LED_MODE_HEARTBEAT_WHITE);
         } else if (state == RGBStates.LOW_BATTERY) {
-            RGBControl.set(-0.25);
+            RGBControl.set(LED_MODE_HEARTBEAT_RED);
         } else if (state == RGBStates.AUTON_ENABLED) {
-            RGBControl.set(-0.37);
+            RGBControl.set(LED_MODE_COLOR_WAVES_FOREST_PALETTE);
         } else if (state == RGBStates.HOLDING_GAMEPIECE) {
-            RGBControl.set(0.63);
+            RGBControl.set(LED_MODE_RED_ORANGE);
         } else if (state == RGBStates.SHOOTING) {
-            RGBControl.set(-0.35);
+            RGBControl.set(LED_MODE_LARSON_SCANNER_RED);
         } else if (state == RGBStates.INTAKING) {
-            RGBControl.set(0.77);
+            RGBControl.set(LED_MODE_GREEN);
         } else if (state == RGBStates.DISABLED) {
-            RGBControl.set(0);
+            RGBControl.set(LED_MODE_OFF);
         }
     }
 }
