@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -11,22 +13,13 @@ enum RGBStates {
     IDLE,
     ENDGAME_START,
     LOW_BATTERY,
-    AUTON_ENABLED,
+    AUTO_ENABLED,
     HOLDING_GAMEPIECE,
     SHOOTING,
     INTAKING
 }
 
 public class RGB {
-    double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;
-    double LED_MODE_LARSON_SCANNER_RED = -0.35;
-    double LED_MODE_HEARTBEAT_RED = -0.25;
-    double LED_MODE_HEARTBEAT_WHITE = -0.21;
-    double LED_MODE_OFF = 0;
-    double LED_MODE_RED_ORANGE = 0.63;
-    double LED_MODE_GREEN = 0.77;
-    double LED_MODE_WHITE = 0.93;
-
     Robot robot = null;
     RGBStates state = RGBStates.IDLE;
     Spark RGBControl = new Spark(0);
@@ -45,7 +38,7 @@ public class RGB {
         } else if (DriverStation.getMatchTime() < 22 && DriverStation.getMatchTime() > 18  && DriverStation.isFMSAttached()) {
             state = RGBStates.ENDGAME_START;
         } else if (DriverStation.isAutonomousEnabled()) {
-            state = RGBStates.AUTON_ENABLED;
+            state = RGBStates.AUTO_ENABLED;
         }
         // Need other subsystems working first for like some stuff ig
 
@@ -64,21 +57,21 @@ public class RGB {
         
         // States
         if (state == RGBStates.IDLE) {
-            RGBControl.set(LED_MODE_WHITE);
+            RGBControl.set(Constants.RGB.LED_MODE_WHITE);
         } else if (state == RGBStates.ENDGAME_START) {
-            RGBControl.set(LED_MODE_HEARTBEAT_WHITE);
+            RGBControl.set(Constants.RGB.LED_MODE_HEARTBEAT_WHITE);
         } else if (state == RGBStates.LOW_BATTERY) {
-            RGBControl.set(LED_MODE_HEARTBEAT_RED);
-        } else if (state == RGBStates.AUTON_ENABLED) {
-            RGBControl.set(LED_MODE_COLOR_WAVES_FOREST_PALETTE);
+            RGBControl.set(Constants.RGB.LED_MODE_HEARTBEAT_RED);
+        } else if (state == RGBStates.AUTO_ENABLED) {
+            RGBControl.set(Constants.RGB.LED_MODE_COLOR_WAVES_FOREST_PALETTE);
         } else if (state == RGBStates.HOLDING_GAMEPIECE) {
-            RGBControl.set(LED_MODE_RED_ORANGE);
+            RGBControl.set(Constants.RGB.LED_MODE_RED_ORANGE);
         } else if (state == RGBStates.SHOOTING) {
-            RGBControl.set(LED_MODE_LARSON_SCANNER_RED);
+            RGBControl.set(Constants.RGB.LED_MODE_LARSON_SCANNER_RED);
         } else if (state == RGBStates.INTAKING) {
-            RGBControl.set(LED_MODE_GREEN);
+            RGBControl.set(Constants.RGB.LED_MODE_GREEN);
         } else if (state == RGBStates.DISABLED) {
-            RGBControl.set(LED_MODE_OFF);
+            RGBControl.set(Constants.RGB.LED_MODE_OFF);
         }
     }
 }

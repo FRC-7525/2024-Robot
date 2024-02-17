@@ -1,7 +1,4 @@
 package frc.robot.subsystems;
-
-import org.opencv.objdetect.Board;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -58,22 +55,36 @@ public class Manager {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.OFF);
             goOutTimer.start();
-            if (goOutTimer.get() > 0.1) {
+
+            if (goOutTimer.get() > 1.1) {
                 goOutTimer.stop();
-                speedUpTimer.start();
-                if (speedUpTimer.get() > 1) {
-                    speedUpTimer.stop();
-                    shooterTimer.start();
-                    intake.setState(IntakeStates.FEEDING);
-                    if (shooterTimer.get() > 1) {
-                        shooterTimer.stop();
-                        shooterTimer.reset();
-                        speedUpTimer.reset();
-                        goOutTimer.reset();
-                        state = ManagerStates.IDLE;
-                    }
+                shooterTimer.start();
+                intake.setState(IntakeStates.FEEDING);
+                if (shooterTimer.get() > 1) {
+                    goOutTimer.reset();
+                    shooterTimer.stop();
+                    shooterTimer.reset();
+                    state = ManagerStates.IDLE;
                 }
             }
+
+            //TODO: review with robot testing to clean up timers
+            // if (goOutTimer.get() > 0.1) {
+            //     goOutTimer.stop();
+            //     speedUpTimer.start();
+            //     if (speedUpTimer.get() > 1) {
+            //         speedUpTimer.stop();
+            //         shooterTimer.start();
+            //         intake.setState(IntakeStates.FEEDING);
+            //         if (shooterTimer.get() > 1) {
+            //             shooterTimer.stop();
+            //             shooterTimer.reset();
+            //             speedUpTimer.reset();
+            //             goOutTimer.reset();
+            //             state = ManagerStates.IDLE;
+            //         }
+            //     }
+            // }
             
             
             stateString = "Shooting";

@@ -23,4 +23,14 @@ public final class Constants {
     public static final class Shooter {
         public static final double SPEED = 80;
     }
+    public static final class RGB {
+        public static final double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;
+        public static final double LED_MODE_LARSON_SCANNER_RED = -0.35;
+        public static final double LED_MODE_HEARTBEAT_RED = -0.25;
+        public static final double LED_MODE_HEARTBEAT_WHITE = -0.21;
+        public static final double LED_MODE_OFF = 0;
+        public static final double LED_MODE_RED_ORANGE = 0.63;
+        public static final double LED_MODE_GREEN = 0.77;
+        public static final double LED_MODE_WHITE = 0.93;
+    }
 }
