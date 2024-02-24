@@ -79,13 +79,15 @@ public class Robot extends TimedRobot {
         chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
         //5 Note Auto
         chooser.addOption("Very very very good auto zzzz", "5 Note Auto");
-
-
+        
+        
         SmartDashboard.putData("Path Chooser", chooser);
     }
-
+    
     @Override
     public void robotPeriodic() {
+        rgb.periodic();
+        manager.periodic();
         CommandScheduler.getInstance().run();
         /* 
         vision.periodic();
@@ -120,8 +122,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         drive.periodic();
-        rgb.periodic();
-        manager.periodic();
     }
 
     @Override
