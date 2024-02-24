@@ -27,8 +27,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
-    FIELD_RELATIVE,
-    LOCK_WHEELS
+    FIELD_RELATIVE
 }
 
 public class Drive extends SubsystemBase {
@@ -106,10 +105,7 @@ public class Drive extends SubsystemBase {
             if (robot.controller.getXButtonPressed()) {
                 driveStates = DriveStates.FIELD_RELATIVE;
                 System.out.println("FIELD relative ON");
-            } else if (robot.controller.getYButton()) {
-                driveStates = DriveStates.LOCK_WHEELS;
             }
-
         } else if (driveStates == DriveStates.FIELD_RELATIVE) {
             state = "Field Relative";
             fieldRelative = true;
@@ -117,19 +113,14 @@ public class Drive extends SubsystemBase {
             if (robot.controller.getXButtonPressed()) {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
                 System.out.println("FIELD Relative OFF");
-            } else if (robot.controller.getYButton()) {
-                driveStates = DriveStates.LOCK_WHEELS;
-            }
-        } else if (driveStates == DriveStates.LOCK_WHEELS) {
-            swerveDrive.lockPose();
-            if (robot.controller.getYButtonReleased()) {
-                driveStates = DriveStates.FIELD_ABSOLUTE;
             }
         }
-        
+
         if (robot.controller.getStartButtonPressed()) {
             swerveDrive.zeroGyro();
             System.out.println("Gyro Zeroed");
+        } else if (robot.controller.getYButton()) {
+            swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
             xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY() * 0.2, Constants.stickDeadband);
             rotation = MathUtil.applyDeadband(-robot.controller.getRightX() *0.2, Constants.stickDeadband);
