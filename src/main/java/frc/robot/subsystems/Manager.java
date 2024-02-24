@@ -118,14 +118,12 @@ public class Manager {
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.OFF);
-            goOutTimer.start();
-
-            if (goOutTimer.get() > Constants.Shooter.GO_OUT_TIME) {
-                goOutTimer.stop();
+        
+            if (shooter.shooterMotor1.getVelocity().getValueAsDouble() > Constants.Shooter.SPEED &&
+                shooter.shooterMotor2.getVelocity().getValueAsDouble() > Constants.Shooter.SPEED) {
                 shooterTimer.start();
                 intake.setState(IntakeStates.FEEDING);
                 if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
-                    goOutTimer.reset();
                     shooterTimer.stop();
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
