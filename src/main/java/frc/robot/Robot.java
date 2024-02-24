@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
-    public XboxController other_controller = new XboxController(1);
+    public XboxController secondaryController = new XboxController(1);
     //Vision vision = new Vision();
     Drive drive = new Drive(this);
     Vision vision = new Vision();
@@ -47,7 +47,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        CameraServer.startAutomaticCapture();
+        climber.zeroClimber();
+        //Monologue.setupMonologue(this, "Robot", true, true);
+        //CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking", new Intaking(this));
         NamedCommands.registerCommand("Shoooting", new Shooting(this));
@@ -91,6 +93,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         rgb.periodic();
         manager.periodic();
+        climber.periodic();
         CommandScheduler.getInstance().run();
         /* 
         vision.periodic();
@@ -99,6 +102,7 @@ public class Robot extends TimedRobot {
             drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
         } 
         */
+        //Monologue.updateAll();
     }
 
     @Override
@@ -112,22 +116,17 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        manager.periodic();
     }
 
     @Override
     public void teleopInit() {
-        manager.reset();
+        climber.zeroClimber();
         manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
-        climber.resetEncoder();
     }
 
     @Override
     public void teleopPeriodic() {
         drive.periodic();
-        rgb.periodic();
-        manager.periodic();
-        climber.periodic();
     }
 
     @Override

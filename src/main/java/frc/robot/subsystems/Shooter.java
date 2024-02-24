@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
     public TalonFX shooterMotor1 = new TalonFX(14);
     public TalonFX shooterMotor2 = new TalonFX(15);
     BangBangController bangController = new BangBangController();
-    String stateString;
+    String stateString = "";
 
     public Shooter(Robot robot) {
         this.robot = robot;
@@ -58,6 +58,7 @@ public class Shooter extends SubsystemBase {
         } else if (states == ShootingStates.REVERSING) {
             shooterMotor1.set(-Constants.Shooter.SLOW_SPEED);
             shooterMotor2.set(-Constants.Shooter.SLOW_SPEED);
+            stateString = "Reversing";
         }
     }
 

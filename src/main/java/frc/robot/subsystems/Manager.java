@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.IntArraySerializer;
 
-import edu.wpi.first.math.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -29,12 +27,10 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer goOutTimer = new Timer();
     Timer centerNoteTimer = new Timer();
-    boolean autospinning = false;
-    
+    boolean autoShoot = false;
 
     public Manager(Robot robot) {
         this.robot = robot;
-
     }
 
     public void reset() {
@@ -60,13 +56,13 @@ public class Manager {
                 reset();
             } else if (robot.controller.getAButtonPressed()) {
                 state = ManagerStates.START_SPINNING;
-                autospinning = true;
+                autoShoot = true;
                 reset();
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
-            } else if (robot.other_controller.getAButtonPressed()) {
+            } else if (robot.secondaryController.getAButtonPressed()) {
                 state = ManagerStates.START_SPINNING;
-                autospinning = false;
+                autoShoot = false;
                 reset();
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
@@ -126,6 +122,7 @@ public class Manager {
                 state = ManagerStates.INTAKING;
                 reset();
             }
+            stateString = "Outtaking";
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.OFF);
@@ -141,7 +138,7 @@ public class Manager {
                     reset();
 
                 }
-            }     
+            }   
             stateString = "Shooting";
         } else if (state == ManagerStates.SCORING_AMP) {
             shooterTimer.start();
@@ -150,17 +147,18 @@ public class Manager {
             if (shooterTimer.get() > 0.5) {
                 state = ManagerStates.IDLE;
             }
+            stateString = "Amp Scoring";
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);
-            stateString = "Starting to spin";
+            stateString = "Spinning up";
 
-            if (autospinning) {
+            if (autoShoot) {
                 if (shooter.atSetPoint()) {
-                    state = ManagerStates.SHOOTING;
+                    state = ManagerStates.WAIT_FOR_BACK;
                     reset();
                 }
             } else if (robot.controller.getAButtonPressed()) {
-                state = ManagerStates.SHOOTING;
+                autoShoot = true;
                 reset();
             }
         }

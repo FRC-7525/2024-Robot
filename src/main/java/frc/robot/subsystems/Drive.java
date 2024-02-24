@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
@@ -24,6 +23,7 @@ import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
+import monologue.Logged;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
@@ -129,6 +129,8 @@ public class Drive extends SubsystemBase {
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
+        
+        //this.log("Robot Pose", swerveDrive.field.getRobotPose());
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {

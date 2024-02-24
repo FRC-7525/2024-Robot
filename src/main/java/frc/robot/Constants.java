@@ -3,7 +3,6 @@ package frc.robot;
 import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.PowerDistribution;
 
 public final class Constants {
     public static final int DPAD_UP = 0;
@@ -60,6 +59,9 @@ public final class Constants {
     }
     
     public static final class Climber {
-        public static final double MAX_SETPOINT = -100;
+        public static final double MAX_SETPOINT = 80;
+        public static final double ZEROING_SPEED = -0.15;
+        public static final double CURRENT_MAX = 10;
+        public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
     }
 }
