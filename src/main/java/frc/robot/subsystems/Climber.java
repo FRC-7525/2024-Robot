@@ -4,17 +4,15 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.WPIMathJNI;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.proto.Wpimath;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.Constants;
 
 public class Climber {
-    final int DPAD_UP = 0;
-    final int DPAD_RIGHT = 90;
-    final int DPAD_DOWN = 180;
-    final int DPAD_LEFT = 270;
     final double DEADBAND = 0.1; // TODO: set
-    final double MAX_SETPOINT = 100; // TODO: set
 
     Robot robot = null;
     CANSparkMax rightMotor = new CANSparkMax(1, MotorType.kBrushless);
@@ -26,34 +24,23 @@ public class Climber {
     double rightMotorSetpoint = 0.0;
     double leftMotorSetpoint = 0.0;
 
-    double leftTriggerAxis;
-    double rightTriggerAxis;
-
-    int dPad;
-
     boolean isExtended = false;
-
-    String stateString = null;
 
     public Climber(Robot robot) {
         this.robot = robot;
     }
 
-    public void periodic() {
-        dPad = this.robot.controller.getPOV();
-        leftTriggerAxis = this.robot.controller.getLeftTriggerAxis();
-        rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
-
-        if (dPad == DPAD_UP) {
-            rightMotorSetpoint = MAX_SETPOINT;
-            leftMotorSetpoint = MAX_SETPOINT;
+    public void periodic(int dPad, double leftTriggerAxis, double rightTriggerAxis, String stateString) {
+        if (dPad == Constants.dpadUp) {
+            rightMotorSetpoint = Constants.Climber.maxSetpoint;
+            leftMotorSetpoint = Constants.Climber.maxSetpoint;
             isExtended = true;
-            stateString = "extended";
-        } else if (dPad == DPAD_DOWN) {
+            stateString = "Climber extended";
+        } else if (dPad == Constants.dpadDown) {
             rightMotorSetpoint = 0;
             leftMotorSetpoint = 0;
             isExtended = false;
-            stateString = "contracted";
+            stateString = "Climber contracted";
         }
 
         if (isExtended && MathUtil.applyDeadband(leftTriggerAxis, DEADBAND) != 0) {
@@ -61,9 +48,9 @@ public class Climber {
         } else if (isExtended && MathUtil.applyDeadband(rightTriggerAxis, DEADBAND) != 0) {
             leftMotorSetpoint -= rightTriggerAxis;
         }
-
-        rightMotorSetpoint = Math.max(0, Math.min(MAX_SETPOINT, rightMotorSetpoint));
-        leftMotorSetpoint = Math.max(0, Math.min(MAX_SETPOINT, leftMotorSetpoint));
+        
+        rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, 0, Constants.Climber.maxSetpoint);
+        leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, 0, Constants.Climber.maxSetpoint);
 
         if (rightMotorSetpoint == 0 && leftMotorSetpoint == 0) {
             isExtended = false;
