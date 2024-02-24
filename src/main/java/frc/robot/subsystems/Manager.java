@@ -3,6 +3,7 @@ import edu.wpi.first.math.trajectory.constraint.CentripetalAccelerationConstrain
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.Constants;
 
 enum ManagerStates {
     IDLE,
@@ -32,7 +33,7 @@ public class Manager {
 
     }
 
-    public void ResetStuff() {
+    public void reset() {
         robot.controller.getBButtonPressed();
         robot.controller.getAButtonPressed();
         robot.controller.getRightBumper();
@@ -41,7 +42,7 @@ public class Manager {
     public void periodic() {
         if (state == ManagerStates.IDLE) {
             resetIntakeTimer.start();
-            if (resetIntakeTimer.get() > 3) {
+            if (resetIntakeTimer.get() > Constants.WaitTimes.RESET_INTAKE_TIME) {
                 intake.resetPivotMotor();
                 resetIntakeTimer.stop();
             }
@@ -64,7 +65,7 @@ public class Manager {
             centerNoteTimer.start();
             intake.setState(IntakeStates.PUSH_OUT);
             shooter.setState(ShootingStates.FEEDING);
-            if (centerNoteTimer.get() > 1) {
+            if (centerNoteTimer.get() > Constants.WaitTimes.PUSH_CENTER_NOTE_TIME) {
                 state = ManagerStates.PULL_IN;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -73,8 +74,8 @@ public class Manager {
             stateString = "Pull In";
             centerNoteTimer.start();
             intake.setState(IntakeStates.PULL_IN);
-            shooter.setState(ShootingStates.OFF);
-            if (centerNoteTimer.get() > 0.5) {
+            shooter.setState(ShootingStates.);
+            if (centerNoteTimer.get() > Constants.WaitTimes.PULL_CENTER_NOTE_TIME) {
                 state = ManagerStates.IDLE;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -83,7 +84,7 @@ public class Manager {
             centerNoteTimer.start();
             stateString = "Wait For Back";
             intake.setState(IntakeStates.OFF);
-            if (centerNoteTimer.get() > 1) {
+            if (centerNoteTimer.get() > Constants.WaitTimes.RETURN_CENTER_NOTE_TIME) {
                 state = ManagerStates.PUSH_OUT;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -112,11 +113,11 @@ public class Manager {
             intake.setState(IntakeStates.OFF);
             goOutTimer.start();
 
-            if (goOutTimer.get() > 1.1) {
+            if (goOutTimer.get() > Constants.WaitTimes.GO_OUT_TIME) {
                 goOutTimer.stop();
                 shooterTimer.start();
                 intake.setState(IntakeStates.FEEDING);
-                if (shooterTimer.get() > 1) {
+                if (shooterTimer.get() > Constants.WaitTimes.SHOOTER_TIME) {
                     goOutTimer.reset();
                     shooterTimer.stop();
                     shooterTimer.reset();

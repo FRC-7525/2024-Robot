@@ -46,4 +46,12 @@ public final class Constants {
         public static final double LED_MODE_GREEN = 0.77;
         public static final double LED_MODE_WHITE = 0.93;
     }
+    public static final class WaitTimes {
+        public static final double RESET_INTAKE_TIME = 3; 
+        public static final double PULL_CENTER_NOTE_TIME = 0.5;
+        public static final double PUSH_CENTER_NOTE_TIME = 1;
+        public static final double RETURN_CENTER_NOTE_TIME 1;
+        public static final double GO_OUT_TIME = 1.1;
+        public static final double SHOOTER_TIME = 1;
+    }
 }
