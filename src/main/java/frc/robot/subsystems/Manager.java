@@ -42,7 +42,7 @@ public class Manager {
     public void periodic() {
         if (state == ManagerStates.IDLE) {
             resetIntakeTimer.start();
-            if (resetIntakeTimer.get() > Constants.WaitTimes.RESET_INTAKE_TIME) {
+            if (resetIntakeTimer.get() > Constants.Shooter.RESET_INTAKE_TIME) {
                 intake.resetPivotMotor();
                 resetIntakeTimer.stop();
             }
@@ -66,7 +66,7 @@ public class Manager {
             intake.setState(IntakeStates.PUSH_OUT);
             shooter.setState(ShootingStates.FEEDING);
 
-            if (centerNoteTimer.get() > Constants.WaitTimes.PUSH_CENTER_NOTE_TIME) {
+            if (centerNoteTimer.get() > Constants.Shooter.PUSH_CENTER_NOTE_TIME) {
                 state = ManagerStates.PULL_IN;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -77,7 +77,7 @@ public class Manager {
             intake.setState(IntakeStates.PULL_IN);
             shooter.setState(ShootingStates.REVERSING);
           
-            if (centerNoteTimer.get() > Constants.WaitTimes.PULL_CENTER_NOTE_TIME) {
+            if (centerNoteTimer.get() > Constants.Shooter.PULL_CENTER_NOTE_TIME) {
                 state = ManagerStates.IDLE;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -86,7 +86,7 @@ public class Manager {
             centerNoteTimer.start();
             stateString = "Wait For Back";
             intake.setState(IntakeStates.OFF);
-            if (centerNoteTimer.get() > Constants.WaitTimes.RETURN_CENTER_NOTE_TIME) {
+            if (centerNoteTimer.get() > Constants.Shooter.RETURN_CENTER_NOTE_TIME) {
                 state = ManagerStates.PUSH_OUT;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -115,11 +115,11 @@ public class Manager {
             intake.setState(IntakeStates.OFF);
             goOutTimer.start();
 
-            if (goOutTimer.get() > Constants.WaitTimes.GO_OUT_TIME) {
+            if (goOutTimer.get() > Constants.Shooter.GO_OUT_TIME) {
                 goOutTimer.stop();
                 shooterTimer.start();
                 intake.setState(IntakeStates.FEEDING);
-                if (shooterTimer.get() > Constants.WaitTimes.SHOOTER_TIME) {
+                if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
                     goOutTimer.reset();
                     shooterTimer.stop();
                     shooterTimer.reset();

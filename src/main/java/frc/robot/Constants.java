@@ -35,6 +35,12 @@ public final class Constants {
     public static final class Shooter {
         public static final double SPEED = 80;
         public static final double SLOW_SPEED = 30;
+        public static final double RESET_INTAKE_TIME = 3; 
+        public static final double PULL_CENTER_NOTE_TIME = 0.5;
+        public static final double PUSH_CENTER_NOTE_TIME = 1;
+        public static final double RETURN_CENTER_NOTE_TIME = 1.0;
+        public static final double GO_OUT_TIME = 1.1;
+        public static final double SHOOTER_TIME = 1;
     }
     public static final class RGB {
         public static final double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;
@@ -45,13 +51,5 @@ public final class Constants {
         public static final double LED_MODE_RED_ORANGE = 0.63;
         public static final double LED_MODE_GREEN = 0.77;
         public static final double LED_MODE_WHITE = 0.93;
-    }
-    public static final class WaitTimes {
-        public static final double RESET_INTAKE_TIME = 3; 
-        public static final double PULL_CENTER_NOTE_TIME = 0.5;
-        public static final double PUSH_CENTER_NOTE_TIME = 1;
-        public static final double RETURN_CENTER_NOTE_TIME = 1.0;
-        public static final double GO_OUT_TIME = 1.1;
-        public static final double SHOOTER_TIME = 1;
     }
 }
