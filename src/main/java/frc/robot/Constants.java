@@ -60,6 +60,6 @@ public final class Constants {
     }
     
     public static final class Climber {
-        public static final double MAX_SETPOINT = 100;
+        public static final double MAX_SETPOINT = -100;
     }
 }

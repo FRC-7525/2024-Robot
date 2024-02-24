@@ -72,12 +72,15 @@ public class Intake extends SubsystemBase {
         } else if (states == IntakeStates.PULL_IN) {
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.ON_SLOW;
+            currentState = "PULL IN";
         } else if (states == IntakeStates.PUSH_OUT) {
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.REVERSE_SLOW;
+            currentState = "PUSH OUT";
         } else if (states == IntakeStates.AMP_SCORING) {
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
             intakeMotorSetpoint = Constants.Intake.ON_SLOW_AMP;
+            currentState = "AMP SCORING";
         }
 
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));

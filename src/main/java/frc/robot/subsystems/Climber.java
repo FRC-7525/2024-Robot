@@ -13,26 +13,43 @@ public class Climber {
     final double DEADBAND = 0.1; // TODO: set
 
     Robot robot = null;
-    CANSparkMax rightMotor = new CANSparkMax(1, MotorType.kBrushless);
-    CANSparkMax leftMotor = new CANSparkMax(2, MotorType.kBrushless);
+    CANSparkMax rightMotor = new CANSparkMax(34, MotorType.kBrushless);
+    CANSparkMax leftMotor = new CANSparkMax(33, MotorType.kBrushless);
 
     PIDController rightMotorPID = new PIDController(1.5, 0, 0); // TODO: tune
     PIDController leftMotorPID = new PIDController(1.5, 0, 0); // TODO: tune
 
     double rightMotorSetpoint = 0.0;
     double leftMotorSetpoint = 0.0;
-
+    String stateString = "zzz Not Null";
     boolean isExtended = false;
 
     public Climber(Robot robot) {
         this.robot = robot;
+        leftMotor.setInverted(true);
+    }
+
+    public void resetEncoder() {
+        rightMotorSetpoint = 100;
+        leftMotorSetpoint = 100;
+        Boolean reset = false;
+        while (!reset) {
+            rightMotor.set(rightMotorSetpoint);
+            leftMotor.set(leftMotorSetpoint);
+            if (rightMotor.getBusVoltage() > 10 && leftMotor.getBusVoltage() > 10) {
+                leftMotor.getEncoder().setPosition(0);
+                rightMotor.getEncoder().setPosition(0);
+                rightMotorSetpoint = 0;
+                leftMotorSetpoint = 0;
+                reset = true;
+            }
+        }
     }
 
     public void periodic() {
         int dPad = this.robot.controller.getPOV();
         double leftTriggerAxis = this.robot.controller.getLeftTriggerAxis();
         double rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
-        String stateString = null;
         
         if (dPad == Constants.DPAD_UP) {
             rightMotorSetpoint = Constants.Climber.MAX_SETPOINT;
@@ -63,5 +80,7 @@ public class Climber {
         leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint));
 
         SmartDashboard.putString("Climber State", stateString);
+        SmartDashboard.putNumber("Left Climber Voltage", rightMotor.getBusVoltage());
+        SmartDashboard.putNumber("Right Climber Voltage", leftMotor.getBusVoltage());
     }
 }

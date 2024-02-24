@@ -72,6 +72,7 @@ public class Manager {
             shooter.setState(ShootingStates.FEEDING);
 
             if (centerNoteTimer.get() > Constants.Shooter.PUSH_CENTER_NOTE_TIME) {
+                reset();
                 state = ManagerStates.PULL_IN;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -83,6 +84,7 @@ public class Manager {
             shooter.setState(ShootingStates.REVERSING);
           
             if (centerNoteTimer.get() > Constants.Shooter.PULL_CENTER_NOTE_TIME) {
+                reset();
                 state = ManagerStates.IDLE;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -92,6 +94,7 @@ public class Manager {
             stateString = "Wait For Back";
             intake.setState(IntakeStates.OFF);
             if (centerNoteTimer.get() > Constants.Shooter.RETURN_CENTER_NOTE_TIME) {
+                reset();
                 state = ManagerStates.PUSH_OUT;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -102,7 +105,7 @@ public class Manager {
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
             if (intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > 30 || robot.controller.getBButtonPressed()) {
-                state = ManagerStates.WAIT_FOR_BACK;
+                state = ManagerStates.IDLE;
                 reset();
             } else if (robot.controller.getRightBumper()) {
                 state = ManagerStates.OUTTAKING;
@@ -128,6 +131,7 @@ public class Manager {
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
                     reset();
+
                 }
             }     
             stateString = "Shooting";

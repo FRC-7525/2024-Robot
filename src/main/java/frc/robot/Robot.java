@@ -12,6 +12,7 @@ import frc.robot.Commands.AutoCommands;
 import frc.robot.Commands.Intaking;
 import frc.robot.Commands.ReturnRobotToIdle;
 import frc.robot.Commands.Shooting;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
+    Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
@@ -116,12 +118,15 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         manager.reset();
         manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
-
+        climber.resetEncoder();
     }
 
     @Override
     public void teleopPeriodic() {
         drive.periodic();
+        rgb.periodic();
+        manager.periodic();
+        climber.periodic();
     }
 
     @Override
