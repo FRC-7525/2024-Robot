@@ -15,11 +15,11 @@ enum ManagerStates {
     PUSH_OUT,
     PULL_IN,
     WAIT_FOR_BACK,
-    SCORING_AMP
+    SCORING_AMP,
+    START_SPINNING
 }
 
 public class Manager {
-
     public ManagerStates state = ManagerStates.IDLE;
     String stateString;
     Robot robot = null;
@@ -29,6 +29,7 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer goOutTimer = new Timer();
     Timer centerNoteTimer = new Timer();
+    boolean autospinning = false;
     
 
     public Manager(Robot robot) {
@@ -58,7 +59,14 @@ public class Manager {
                 resetIntakeTimer.reset();
                 reset();
             } else if (robot.controller.getAButtonPressed()) {
-                state = ManagerStates.SHOOTING;
+                state = ManagerStates.START_SPINNING;
+                autospinning = true;
+                reset();
+                resetIntakeTimer.stop();
+                resetIntakeTimer.reset();
+            } else if (robot.other_controller.getAButtonPressed()) {
+                state = ManagerStates.START_SPINNING;
+                autospinning = false;
                 reset();
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
@@ -142,7 +150,21 @@ public class Manager {
             if (shooterTimer.get() > 0.5) {
                 state = ManagerStates.IDLE;
             }
+        } else if (state == ManagerStates.START_SPINNING) {
+            shooter.setState(ShootingStates.SHOOTING);
+            stateString = "Starting to spin";
+
+            if (autospinning) {
+                if (shooter.atSetPoint()) {
+                    state = ManagerStates.SHOOTING;
+                    reset();
+                }
+            } else if (robot.controller.getAButtonPressed()) {
+                state = ManagerStates.SHOOTING;
+                reset();
+            }
         }
+        
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);

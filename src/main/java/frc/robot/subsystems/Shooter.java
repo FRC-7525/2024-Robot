@@ -30,6 +30,12 @@ public class Shooter extends SubsystemBase {
         shooterMotor1.setInverted(false);
     }
 
+    public boolean atSetPoint() {
+        double motor1Vel = shooterMotor1.getVelocity().getValueAsDouble();
+        double motor2Vel = shooterMotor2.getVelocity().getValueAsDouble();
+        return Math.abs(motor1Vel - Constants.Shooter.SPEED) > 7 && Math.abs(motor2Vel - Constants.Shooter.SPEED) > 7;
+    }
+
     public void setState(ShootingStates state) {
         this.states = state;
     }

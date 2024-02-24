@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
+    public XboxController other_controller = new XboxController(1);
     //Vision vision = new Vision();
     Drive drive = new Drive(this);
     Vision vision = new Vision();
