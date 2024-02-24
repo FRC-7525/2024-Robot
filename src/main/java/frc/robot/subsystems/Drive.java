@@ -93,9 +93,9 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         String state = "";
         
-        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.stickDeadband);
-        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.stickDeadband);
-        double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.stickDeadband);
+        double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.STICK_DEADBAND);
+        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND);
+        double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.STICK_DEADBAND);
 
 
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
@@ -122,9 +122,9 @@ public class Drive extends SubsystemBase {
         } else if (robot.controller.getYButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
-            xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY() * 0.2, Constants.stickDeadband);
-            rotation = MathUtil.applyDeadband(-robot.controller.getRightX() *0.2, Constants.stickDeadband);
-            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign * 0.2, Constants.stickDeadband);
+            xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY() * 0.2, Constants.STICK_DEADBAND);
+            rotation = MathUtil.applyDeadband(-robot.controller.getRightX() *0.2, Constants.STICK_DEADBAND);
+            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign * 0.2, Constants.STICK_DEADBAND);
         }
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
