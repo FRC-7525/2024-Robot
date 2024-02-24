@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3075169526054085,
+        "x": 2.4078260281850365,
         "y": 5.5
       },
       "isLocked": false,
@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 5.5
+        "x": 7.5,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 1.9624361260529808,
-        "y": 5.5
+        "x": 6.5,
+        "y": 7.4
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "2 Note Paths",
+  "folder": "3 Note Paths",
   "previewStartingState": {
-    "rotation": -0.3710008358280269,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

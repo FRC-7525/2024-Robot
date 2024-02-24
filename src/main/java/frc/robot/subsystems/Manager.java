@@ -1,4 +1,6 @@
 package frc.robot.subsystems;
+import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.IntArraySerializer;
+
 import edu.wpi.first.math.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,7 +14,8 @@ enum ManagerStates {
     SHOOTING,
     PUSH_OUT,
     PULL_IN,
-    WAIT_FOR_BACK
+    WAIT_FOR_BACK,
+    SCORING_AMP
 }
 
 public class Manager {
@@ -59,6 +62,8 @@ public class Manager {
                 reset();
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
+            } else if (robot.controller.getBackButtonPressed()) {
+                state = ManagerStates.SCORING_AMP;
             }
         } else if (state == ManagerStates.PUSH_OUT) {
             stateString = "Push Out";
@@ -128,6 +133,13 @@ public class Manager {
                 }
             }     
             stateString = "Shooting";
+        } else if (state == ManagerStates.SCORING_AMP) {
+            shooterTimer.start();
+            intake.setState(IntakeStates.AMP_SCORING);
+            shooter.setState(ShootingStates.OFF);
+            if (shooterTimer.get() > 0.5) {
+                state = ManagerStates.IDLE;
+            }
         }
         intake.putSmartDashValues();
         shooter.putSmartDashValues();

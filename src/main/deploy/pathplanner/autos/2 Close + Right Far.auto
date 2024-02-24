@@ -1,0 +1,97 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3,
+      "y": 5.5
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to MID note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MID Note to shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Right Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Note to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Right Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Center to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 Note Autos",
+  "choreoAuto": false
+}

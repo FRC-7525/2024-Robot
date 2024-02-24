@@ -18,7 +18,8 @@ enum IntakeStates {
     FEEDING,
     OUTTAKING,
     PULL_IN,
-    PUSH_OUT
+    PUSH_OUT,
+    AMP_SCORING
 }
 
 public class Intake extends SubsystemBase {
@@ -74,6 +75,9 @@ public class Intake extends SubsystemBase {
         } else if (states == IntakeStates.PUSH_OUT) {
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.REVERSE_SLOW;
+        } else if (states == IntakeStates.AMP_SCORING) {
+            pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
+            intakeMotorSetpoint = Constants.Intake.ON_SLOW_AMP;
         }
 
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));

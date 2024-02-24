@@ -3,11 +3,16 @@
   "robotLength": 0.838,
   "holonomicMode": true,
   "pathFolders": [
-    "2 Note Autos"
+    "2 Note Paths",
+    "3 Note Paths",
+    "4 Note Paths",
+    "Misc Paths"
   ],
   "autoFolders": [
     "2 Note Autos",
-    "Misc Autos"
+    "3 Note Autos",
+    "Misc Autos",
+    "4 Note Autos"
   ],
   "defaultMaxVel": 8.0,
   "defaultMaxAccel": 3.0,

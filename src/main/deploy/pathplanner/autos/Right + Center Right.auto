@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot to left note"
+            "pathName": "Shoot to Right Note"
           }
         },
         {
@@ -32,7 +32,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left note to Shoot"
+            "pathName": "Right Note to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Right Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Center to Shoot"
           }
         },
         {
@@ -44,6 +68,6 @@
       ]
     }
   },
-  "folder": "2 Note Autos",
+  "folder": "3 Note Autos",
   "choreoAuto": false
 }

@@ -58,13 +58,29 @@ public class Robot extends TimedRobot {
         // TODO: 4 note auto (2 close and 1 far on the left) (2-28)
         // TODO: 4 note auto (2 close and 1 far on the right) (2-28)
         // TODO: 5 note auto (all 3 close and 1 far) (3-2)
-
+        
+        // Misc Autos
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
         chooser.addOption("Drive backwards, score preload", "Drive Forwards + Score");
+        // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
         chooser.addOption("Preload + Right Note", "Right Note");
+        // 3 Note Autos
+        chooser.addOption("Left + Mid", "Left + Mid");
+        chooser.addOption("Mid + Right", "Mid + Right");
+        chooser.addOption("Center Left + Left", "Center Left + Left");
+        chooser.addOption("Right + Center Right", "Right + Center Right");
+        chooser.addOption("Mid + Center Left", "Mid + Center Left");
+        // 4 Note Autos
+        chooser.addOption("All Close", "All Close");
+        chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
+        chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
+        //5 Note Auto
+        chooser.addOption("Very very very good auto zzzz", "5 Note Auto");
+
+
         SmartDashboard.putData("Path Chooser", chooser);
     }
 

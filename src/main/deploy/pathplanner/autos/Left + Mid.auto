@@ -40,10 +40,34 @@
           "data": {
             "name": "Shooting"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to MID note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MID Note to shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
         }
       ]
     }
   },
-  "folder": "2 Note Autos",
+  "folder": "3 Note Autos",
   "choreoAuto": false
 }

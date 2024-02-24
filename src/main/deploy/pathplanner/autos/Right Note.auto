@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot to MID note"
+            "pathName": "Shoot to Right Note"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MID Note to shoot"
+            "pathName": "Right Note to Shoot"
           }
         },
         {

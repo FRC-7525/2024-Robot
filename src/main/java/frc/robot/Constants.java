@@ -35,6 +35,8 @@ public final class Constants {
         public static final double REVERSE_SLOW = -0.3;
         public static final double REVERSE = -0.7;
         public static final double DOWN = -37;
+        public static final double AMP_SCORING = -17;
+        public static final double ON_SLOW_AMP = 0.3;
     }
     public static final class Shooter {
         public static final double SPEED = 80;
