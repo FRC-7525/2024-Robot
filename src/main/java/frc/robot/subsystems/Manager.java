@@ -53,10 +53,10 @@ public class Manager {
                 state = ManagerStates.INTAKING;
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
-                ResetStuff();
+                reset();
             } else if (robot.controller.getAButtonPressed()) {
                 state = ManagerStates.SHOOTING;
-                ResetStuff();
+                reset();
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
             }
@@ -98,17 +98,17 @@ public class Manager {
             stateString = "Intaking";
             if (intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > 30 || robot.controller.getBButtonPressed()) {
                 state = ManagerStates.WAIT_FOR_BACK;
-                ResetStuff();
+                reset();
             } else if (robot.controller.getRightBumper()) {
                 state = ManagerStates.OUTTAKING;
-                ResetStuff();
+                reset();
             }
         } else if (state == ManagerStates.OUTTAKING) {
             intake.setState(IntakeStates.OUTTAKING);
             shooter.setState(ShootingStates.OFF);
             if (robot.controller.getRightBumperReleased()) {
                 state = ManagerStates.INTAKING;
-                ResetStuff();
+                reset();
             }
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
@@ -124,7 +124,7 @@ public class Manager {
                     shooterTimer.stop();
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
-                    ResetStuff();
+                    reset();
                 }
             }     
             stateString = "Shooting";

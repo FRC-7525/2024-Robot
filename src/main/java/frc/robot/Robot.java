@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        manager.ResetStuff();
+        manager.reset();
         manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
 
     }
