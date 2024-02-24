@@ -28,7 +28,12 @@ public class Climber {
         this.robot = robot;
     }
 
-    public void periodic(int dPad, double leftTriggerAxis, double rightTriggerAxis, String stateString) {
+    public void periodic() {
+        int dPad = this.robot.controller.getPOV();
+        double leftTriggerAxis = this.robot.controller.getLeftTriggerAxis();
+        double rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
+        String stateString = null;
+        
         if (dPad == Constants.DPAD_UP) {
             rightMotorSetpoint = Constants.Climber.MAX_SETPOINT;
             leftMotorSetpoint = Constants.Climber.MAX_SETPOINT;
