@@ -18,12 +18,12 @@ public class RGB {
     }
 
     public void periodic() {
-        // Setting LED colors
-        if (pdh.getVoltage() < 10) { // low battery warning
+        if (pdh.getVoltage() < 10 || (robot.isDisabled() && pdh.getVoltage() < 12)) { // low battery warning
             rgbControl.set(Constants.RGB.LED_MODE_HEARTBEAT_RED);
         } else if (robot.isDisabled()) { // robot disabled
             rgbControl.set(Constants.RGB.LED_MODE_OFF);
-        } else if (DriverStation.getMatchTime() < 22 && DriverStation.getMatchTime() > 18  && DriverStation.isFMSAttached()) { // end game
+        } else if (DriverStation.getMatchTime() < 22 &&
+                   DriverStation.getMatchTime() > 18) { // end game
             rgbControl.set(Constants.RGB.LED_MODE_HEARTBEAT_WHITE);
         } else if (DriverStation.isAutonomousEnabled()) { // autonomous enabled
             rgbControl.set(Constants.RGB.LED_MODE_COLOR_WAVES_FOREST_PALETTE);
