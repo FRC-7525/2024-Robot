@@ -20,25 +20,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Get left Note"
+            "pathName": "Shoot to left note"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "intakesomething"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Return To Idle"
+            "name": "Intaking"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left note to Shoot"
+            "pathName": "Left Note to Shoot"
           }
         },
         {
@@ -50,6 +44,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "2 Note Autos",
   "choreoAuto": false
 }

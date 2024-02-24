@@ -27,11 +27,14 @@ public final class Constants {
     public static final class Intake {
         public static final double OFF = 0.0;
         public static final double ON = 0.5;
+        public static final double ON_SLOW = 0.1;
+        public static final double REVERSE_SLOW = -0.3;
         public static final double REVERSE = -0.7;
-        public static final double DOWN = -36;
+        public static final double DOWN = -37;
     }
     public static final class Shooter {
         public static final double SPEED = 80;
+        public static final double SLOW_SPEED = 30;
     }
     public static final class RGB {
         public static final double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;

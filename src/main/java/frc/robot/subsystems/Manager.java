@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import edu.wpi.first.math.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -7,7 +8,10 @@ enum ManagerStates {
     IDLE,
     INTAKING,
     OUTTAKING,
-    SHOOTING
+    SHOOTING,
+    PUSH_OUT,
+    PULL_IN,
+    WAIT_FOR_BACK
 }
 
 public class Manager {
@@ -18,38 +22,90 @@ public class Manager {
     public Shooter shooter = new Shooter(robot);
     public Intake intake = new Intake(robot);
     Timer shooterTimer = new Timer();
-    Timer speedUpTimer = new Timer();
+    Timer resetIntakeTimer = new Timer();
     Timer goOutTimer = new Timer();
+    Timer centerNoteTimer = new Timer();
+    
 
     public Manager(Robot robot) {
         this.robot = robot;
 
     }
 
+    public void ResetStuff() {
+        robot.controller.getBButtonPressed();
+        robot.controller.getAButtonPressed();
+        robot.controller.getRightBumper();
+    }
+
     public void periodic() {
         if (state == ManagerStates.IDLE) {
+            resetIntakeTimer.start();
+            if (resetIntakeTimer.get() > 3) {
+                intake.resetPivotMotor();
+                resetIntakeTimer.stop();
+            }
             intake.setState(IntakeStates.OFF);
             shooter.setState(ShootingStates.OFF);
             stateString = "Idle";
             if (robot.controller.getBButtonPressed()) {
                 state = ManagerStates.INTAKING;
+                resetIntakeTimer.stop();
+                resetIntakeTimer.reset();
+                ResetStuff();
             } else if (robot.controller.getAButtonPressed()) {
                 state = ManagerStates.SHOOTING;
+                ResetStuff();
+                resetIntakeTimer.stop();
+                resetIntakeTimer.reset();
             }
-        } else if (state == ManagerStates.INTAKING) {
+        } else if (state == ManagerStates.PUSH_OUT) {
+            stateString = "Push Out";
+            centerNoteTimer.start();
+            intake.setState(IntakeStates.PUSH_OUT);
+            shooter.setState(ShootingStates.FEEDING);
+            if (centerNoteTimer.get() > 1) {
+                state = ManagerStates.PULL_IN;
+                centerNoteTimer.stop();
+                centerNoteTimer.reset();
+            }
+        } else if (state == ManagerStates.PULL_IN) {
+            stateString = "Pull In";
+            centerNoteTimer.start();
+            intake.setState(IntakeStates.PULL_IN);
+            shooter.setState(ShootingStates.OFF);
+            if (centerNoteTimer.get() > 0.5) {
+                state = ManagerStates.IDLE;
+                centerNoteTimer.stop();
+                centerNoteTimer.reset();
+            }
+        } else if (state == ManagerStates.WAIT_FOR_BACK) {
+            centerNoteTimer.start();
+            stateString = "Wait For Back";
+            intake.setState(IntakeStates.OFF);
+            if (centerNoteTimer.get() > 1) {
+                state = ManagerStates.PUSH_OUT;
+                centerNoteTimer.stop();
+                centerNoteTimer.reset();
+            }
+        }
+         else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
             if (intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > 30 || robot.controller.getBButtonPressed()) {
-                state = ManagerStates.IDLE;
+                state = ManagerStates.WAIT_FOR_BACK;
+                ResetStuff();
             } else if (robot.controller.getRightBumper()) {
                 state = ManagerStates.OUTTAKING;
+                ResetStuff();
             }
         } else if (state == ManagerStates.OUTTAKING) {
             intake.setState(IntakeStates.OUTTAKING);
             shooter.setState(ShootingStates.OFF);
             if (robot.controller.getRightBumperReleased()) {
                 state = ManagerStates.INTAKING;
+                ResetStuff();
             }
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
@@ -65,30 +121,10 @@ public class Manager {
                     shooterTimer.stop();
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
+                    ResetStuff();
                 }
-            }
-
-            //TODO: review with robot testing to clean up timers
-            // if (goOutTimer.get() > 0.1) {
-            //     goOutTimer.stop();
-            //     speedUpTimer.start();
-            //     if (speedUpTimer.get() > 1) {
-            //         speedUpTimer.stop();
-            //         shooterTimer.start();
-            //         intake.setState(IntakeStates.FEEDING);
-            //         if (shooterTimer.get() > 1) {
-            //             shooterTimer.stop();
-            //             shooterTimer.reset();
-            //             speedUpTimer.reset();
-            //             goOutTimer.reset();
-            //             state = ManagerStates.IDLE;
-            //         }
-            //     }
-            // }
-            
-            
+            }     
             stateString = "Shooting";
-
         }
         intake.putSmartDashValues();
         shooter.putSmartDashValues();

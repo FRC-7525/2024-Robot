@@ -60,9 +60,11 @@ public class Robot extends TimedRobot {
         // TODO: 5 note auto (all 3 close and 1 far) (3-2)
 
         chooser.addOption("Drive Forwards", "Drive Forwards");
-        chooser.addOption("Drive Backwards", "Drive Backwards");
         chooser.addOption("Do Nothing", "Do Nothing");
-        chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
+        chooser.addOption("Drive backwards, score preload", "Drive Forwards + Score");
+        chooser.addOption("Preload + Left Note", "Left Note");
+        chooser.addOption("Preload + Middle Note", "Middle Note");
+        chooser.addOption("Preload + Right Note", "Right Note");
         SmartDashboard.putData("Path Chooser", chooser);
     }
 
@@ -94,6 +96,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        manager.ResetStuff();
         manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
 
     }

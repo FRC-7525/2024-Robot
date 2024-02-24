@@ -17,7 +17,8 @@ enum IntakeStates {
     INTAKING,
     FEEDING,
     OUTTAKING,
-
+    PULL_IN,
+    PUSH_OUT
 }
 
 public class Intake extends SubsystemBase {
@@ -41,6 +42,12 @@ public class Intake extends SubsystemBase {
     public void setState(IntakeStates state) {
         this.states = state;
     }
+    public void resetPivotMotor() {
+        pivotEncoder.setPosition(0);
+    }
+    public boolean nearSetpoint() {
+        return Math.abs(pivotEncoder.getPosition() - pivotMotorSetpoint) < 0.5;
+    }
 
     String currentState = "not null zzzzzzzz";
 
@@ -61,6 +68,12 @@ public class Intake extends SubsystemBase {
             pivotMotorSetpoint = Constants.Intake.DOWN;
             intakeMotorSetpoint = Constants.Intake.REVERSE;
             currentState = "OUTTAKING";
+        } else if (states == IntakeStates.PULL_IN) {
+            pivotMotorSetpoint = Constants.Intake.OFF;
+            intakeMotorSetpoint = Constants.Intake.ON_SLOW;
+        } else if (states == IntakeStates.PUSH_OUT) {
+            pivotMotorSetpoint = Constants.Intake.OFF;
+            intakeMotorSetpoint = Constants.Intake.REVERSE_SLOW;
         }
 
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));

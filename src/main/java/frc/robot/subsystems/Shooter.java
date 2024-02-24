@@ -11,7 +11,8 @@ import frc.robot.Robot;
 
 enum ShootingStates {
     SHOOTING,
-    OFF
+    OFF,
+    FEEDING
 }
 
 public class Shooter extends SubsystemBase {
@@ -43,6 +44,10 @@ public class Shooter extends SubsystemBase {
             shooterMotor2
                     .set(bangController.calculate(shooterMotor2.getVelocity().getValueAsDouble(), Constants.Shooter.SPEED));
             stateString = "Shooting";
+        } else if (states == ShootingStates.FEEDING) {
+            shooterMotor1.set(Constants.Shooter.SLOW_SPEED);
+            shooterMotor2.set(Constants.Shooter.SLOW_SPEED);
+            stateString = "Feeding";
         }
     }
 

@@ -20,12 +20,30 @@
         {
           "type": "path",
           "data": {
-            "pathName": "cross line"
+            "pathName": "Shoot to MID note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intaking"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MID Note to shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
           }
         }
       ]
     }
   },
-  "folder": "Misc Autos",
+  "folder": "2 Note Autos",
   "choreoAuto": false
 }

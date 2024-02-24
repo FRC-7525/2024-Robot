@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.25,
-        "y": 2.0
+        "x": 1.3,
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.25,
-        "y": 2.0
+        "x": 1.3075169526054085,
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 2.0
+        "x": 2.0,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 1.5,
-        "y": 2.0
+        "x": 1.9624361260529808,
+        "y": 5.5
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "2 Note Autos",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -0.3710008358280269,
     "velocity": 0
   },
   "useDefaultConstraints": true
