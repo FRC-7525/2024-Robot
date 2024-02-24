@@ -18,20 +18,20 @@ public class RGB {
     }
 
     public void periodic() {
-        // Setting states
-        if (pdh.getVoltage() < 10) {
+        // Setting LED colors
+        if (pdh.getVoltage() < 10) { // low battery warning
             rgbControl.set(Constants.RGB.LED_MODE_HEARTBEAT_RED);
-        } else if (robot.isDisabled()) {
+        } else if (robot.isDisabled()) { // robot disabled
             rgbControl.set(Constants.RGB.LED_MODE_OFF);
-        } else if (DriverStation.getMatchTime() < 22 && DriverStation.getMatchTime() > 18  && DriverStation.isFMSAttached()) {
+        } else if (DriverStation.getMatchTime() < 22 && DriverStation.getMatchTime() > 18  && DriverStation.isFMSAttached()) { // end game
             rgbControl.set(Constants.RGB.LED_MODE_HEARTBEAT_WHITE);
-        } else if (DriverStation.isAutonomousEnabled()) {
+        } else if (DriverStation.isAutonomousEnabled()) { // autonomous enabled
             rgbControl.set(Constants.RGB.LED_MODE_COLOR_WAVES_FOREST_PALETTE);
-        } else if (robot.manager.state == ManagerStates.SHOOTING) {
+        } else if (robot.manager.state == ManagerStates.SHOOTING) { // shooting
             rgbControl.set(Constants.RGB.LED_MODE_LARSON_SCANNER_RED);
-        } else if (robot.manager.state == ManagerStates.INTAKING) {
+        } else if (robot.manager.state == ManagerStates.INTAKING) { // currently intaking
             rgbControl.set(Constants.RGB.LED_MODE_GREEN);
-        } else {
+        } else { // idling
             rgbControl.set(Constants.RGB.LED_MODE_WHITE);
         }
     }
