@@ -12,7 +12,8 @@ import frc.robot.Robot;
 enum ShootingStates {
     SHOOTING,
     OFF,
-    FEEDING
+    FEEDING,
+    REVERSING
 }
 
 public class Shooter extends SubsystemBase {
@@ -48,6 +49,9 @@ public class Shooter extends SubsystemBase {
             shooterMotor1.set(Constants.Shooter.SLOW_SPEED);
             shooterMotor2.set(Constants.Shooter.SLOW_SPEED);
             stateString = "Feeding";
+        } else if (states == ShootingStates.REVERSING) {
+            shooterMotor1.set(-Constants.Shooter.SLOW_SPEED);
+            shooterMotor2.set(-Constants.Shooter.SLOW_SPEED);
         }
     }
 

@@ -10,7 +10,7 @@ import frc.robot.Robot;
 
 public class RGB {
     Robot robot = null;
-    Spark rgbControl = new Spark(0);
+    Spark rgbControl = new Spark(9);
     PowerDistribution pdh = new PowerDistribution(50, ModuleType.kRev);
 
     public RGB(Robot robot) {

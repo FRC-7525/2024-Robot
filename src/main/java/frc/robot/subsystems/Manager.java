@@ -65,6 +65,7 @@ public class Manager {
             centerNoteTimer.start();
             intake.setState(IntakeStates.PUSH_OUT);
             shooter.setState(ShootingStates.FEEDING);
+
             if (centerNoteTimer.get() > Constants.WaitTimes.PUSH_CENTER_NOTE_TIME) {
                 state = ManagerStates.PULL_IN;
                 centerNoteTimer.stop();
@@ -74,7 +75,8 @@ public class Manager {
             stateString = "Pull In";
             centerNoteTimer.start();
             intake.setState(IntakeStates.PULL_IN);
-            shooter.setState(ShootingStates.);
+            shooter.setState(ShootingStates.REVERSING);
+          
             if (centerNoteTimer.get() > Constants.WaitTimes.PULL_CENTER_NOTE_TIME) {
                 state = ManagerStates.IDLE;
                 centerNoteTimer.stop();
