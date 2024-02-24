@@ -24,13 +24,13 @@ public class Vision {
             robotToCam);
 
     public void periodic() {
-        botpose3d = estimator.update();
+        // botpose3d = estimator.update();
     }
 
     public Optional<Pose2d> getPose2d() {
-        if (botpose3d.isPresent()) {
-            return Optional.of(botpose3d.get().estimatedPose.toPose2d());
-        }
+        // if (botpose3d.isPresent()) {
+        //     return Optional.of(botpose3d.get().estimatedPose.toPose2d());
+        // }
         return Optional.empty();
     }
 }
