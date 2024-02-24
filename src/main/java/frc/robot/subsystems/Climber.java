@@ -4,9 +4,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.WPIMathJNI;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.proto.Wpimath;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
@@ -31,12 +29,12 @@ public class Climber {
     }
 
     public void periodic(int dPad, double leftTriggerAxis, double rightTriggerAxis, String stateString) {
-        if (dPad == Constants.dpadUp) {
-            rightMotorSetpoint = Constants.Climber.maxSetpoint;
-            leftMotorSetpoint = Constants.Climber.maxSetpoint;
+        if (dPad == Constants.DPAD_UP) {
+            rightMotorSetpoint = Constants.Climber.MAX_SETPOINT;
+            leftMotorSetpoint = Constants.Climber.MAX_SETPOINT;
             isExtended = true;
             stateString = "Climber extended";
-        } else if (dPad == Constants.dpadDown) {
+        } else if (dPad == Constants.DPAD_DOWN) {
             rightMotorSetpoint = 0;
             leftMotorSetpoint = 0;
             isExtended = false;
@@ -49,8 +47,8 @@ public class Climber {
             leftMotorSetpoint -= rightTriggerAxis;
         }
         
-        rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, 0, Constants.Climber.maxSetpoint);
-        leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, 0, Constants.Climber.maxSetpoint);
+        rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
+        leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
 
         if (rightMotorSetpoint == 0 && leftMotorSetpoint == 0) {
             isExtended = false;

@@ -6,11 +6,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 
 public final class Constants {
-    public static final int dpadUp = 0;
-    public static final int dpadDown = 180;
-    public static final int dpadLeft = 270;
-    public static final int dpadRight = 90;
-    public static final double stickDeadband = 0.1; 
+    public static final int DPAD_UP = 0;
+    public static final int DPAD_DOWN = 180;
+    public static final int DPAD_LEFT = 270;
+    public static final int DPAD_RIGHT = 90;
+    public static final double STICK_DEADBAND = 0.1; 
     public static final class Drive {
         /* Drive Constants */
         public static final int wheelDiameter = 4;
@@ -58,6 +58,6 @@ public final class Constants {
     }
     
     public static final class Climber {
-        public static final double maxSetpoint = 100;
+        public static final double MAX_SETPOINT = 100;
     }
 }
