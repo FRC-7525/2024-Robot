@@ -39,19 +39,11 @@ public class RGB {
             state = RGBStates.ENDGAME_START;
         } else if (DriverStation.isAutonomousEnabled()) {
             state = RGBStates.AUTO_ENABLED;
-        }
-        // Need other subsystems working first for like some stuff ig
-
-        /*
-        else if (is holding gamepiece) {
-            state = RGBStates.HOLDING_GAMEPIECE;
-        } else if (is shooting) {
+        } else if (robot.manager.state == ManagerStates.SHOOTING) {
             state = RGBStates.SHOOTING;
-        } else if (is intaking) {
+        } else if (robot.manager.state == ManagerStates.INTAKING) {
             state = RGBStates.INTAKING;
-        }
-        */
-        else {
+        } else {
             state = RGBStates.IDLE;
         }
         
