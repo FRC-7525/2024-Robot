@@ -3,6 +3,7 @@ import edu.wpi.first.math.trajectory.constraint.CentripetalAccelerationConstrain
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.Constants;
 
 enum ManagerStates {
     IDLE,
@@ -32,7 +33,7 @@ public class Manager {
 
     }
 
-    public void ResetStuff() {
+    public void reset() {
         robot.controller.getBButtonPressed();
         robot.controller.getAButtonPressed();
         robot.controller.getRightBumper();
@@ -41,7 +42,7 @@ public class Manager {
     public void periodic() {
         if (state == ManagerStates.IDLE) {
             resetIntakeTimer.start();
-            if (resetIntakeTimer.get() > 3) {
+            if (resetIntakeTimer.get() > Constants.Shooter.RESET_INTAKE_TIME) {
                 intake.resetPivotMotor();
                 resetIntakeTimer.stop();
             }
@@ -52,10 +53,10 @@ public class Manager {
                 state = ManagerStates.INTAKING;
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
-                ResetStuff();
+                reset();
             } else if (robot.controller.getAButtonPressed()) {
                 state = ManagerStates.SHOOTING;
-                ResetStuff();
+                reset();
                 resetIntakeTimer.stop();
                 resetIntakeTimer.reset();
             }
@@ -64,7 +65,8 @@ public class Manager {
             centerNoteTimer.start();
             intake.setState(IntakeStates.PUSH_OUT);
             shooter.setState(ShootingStates.FEEDING);
-            if (centerNoteTimer.get() > 0.5) {
+
+            if (centerNoteTimer.get() > Constants.Shooter.PUSH_CENTER_NOTE_TIME) {
                 state = ManagerStates.PULL_IN;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -74,7 +76,8 @@ public class Manager {
             centerNoteTimer.start();
             intake.setState(IntakeStates.PULL_IN);
             shooter.setState(ShootingStates.REVERSING);
-            if (centerNoteTimer.get() > 0.5) {
+          
+            if (centerNoteTimer.get() > Constants.Shooter.PULL_CENTER_NOTE_TIME) {
                 state = ManagerStates.IDLE;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -83,7 +86,7 @@ public class Manager {
             centerNoteTimer.start();
             stateString = "Wait For Back";
             intake.setState(IntakeStates.OFF);
-            if (centerNoteTimer.get() > 1) {
+            if (centerNoteTimer.get() > Constants.Shooter.RETURN_CENTER_NOTE_TIME) {
                 state = ManagerStates.PUSH_OUT;
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
@@ -95,33 +98,33 @@ public class Manager {
             stateString = "Intaking";
             if (intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > 30 || robot.controller.getBButtonPressed()) {
                 state = ManagerStates.WAIT_FOR_BACK;
-                ResetStuff();
+                reset();
             } else if (robot.controller.getRightBumper()) {
                 state = ManagerStates.OUTTAKING;
-                ResetStuff();
+                reset();
             }
         } else if (state == ManagerStates.OUTTAKING) {
             intake.setState(IntakeStates.OUTTAKING);
             shooter.setState(ShootingStates.OFF);
             if (robot.controller.getRightBumperReleased()) {
                 state = ManagerStates.INTAKING;
-                ResetStuff();
+                reset();
             }
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.OFF);
             goOutTimer.start();
 
-            if (goOutTimer.get() > 1.1) {
+            if (goOutTimer.get() > Constants.Shooter.GO_OUT_TIME) {
                 goOutTimer.stop();
                 shooterTimer.start();
                 intake.setState(IntakeStates.FEEDING);
-                if (shooterTimer.get() > 1) {
+                if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
                     goOutTimer.reset();
                     shooterTimer.stop();
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
-                    ResetStuff();
+                    reset();
                 }
             }     
             stateString = "Shooting";
