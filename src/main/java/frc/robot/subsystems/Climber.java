@@ -86,8 +86,8 @@ public class Climber {
                 isExtended = true;
                 stateString = "Climber extended";
             } else if (dPad == Constants.DPAD_DOWN) {
-                rightMotorSetpoint = 0;
-                leftMotorSetpoint = 0;
+                rightMotorSetpoint = Constants.Climber.DOWN;
+                leftMotorSetpoint = Constants.Climber.DOWN;
                 isExtended = false;
                 stateString = "Climber contracted";
             }
@@ -101,7 +101,7 @@ public class Climber {
             rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
             leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
 
-            if (rightMotorSetpoint == 0 && leftMotorSetpoint == 0) {
+            if (rightMotorSetpoint == Constants.Climber.DOWN && leftMotorSetpoint == Constants.Climber.DOWN) {
                 isExtended = false;
             }
             rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));

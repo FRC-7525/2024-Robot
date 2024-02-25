@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
     Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
-    Climber climber = new Climber(this);
+    //Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
@@ -47,13 +47,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        climber.zeroClimber();
+        // climber.zeroClimber();
         //Monologue.setupMonologue(this, "Robot", true, true);
         //CameraServer.startAutomaticCapture();
 
-        NamedCommands.registerCommand("Intaking", new Intaking(this));
-        NamedCommands.registerCommand("Shoooting", new Shooting(this));
-        NamedCommands.registerCommand("Return To Idle", new ReturnRobotToIdle(this));
+        NamedCommands.registerCommand("Intaking",  autoCommands.intaking());
+        NamedCommands.registerCommand("Shooting", new Shooting(this));
+        NamedCommands.registerCommand("Return To Idle", autoCommands.returnToIdle());
+        NamedCommands.registerCommand("Speeding Up", autoCommands.startSpinningUp());
 
         // TODO: Score Drive Backwards (2-17)
         // TODO: 2 note autos (score any close note) (2-21)
@@ -67,7 +68,7 @@ public class Robot extends TimedRobot {
         // Misc Autos
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
-        chooser.addOption("Drive backwards, score preload", "Drive Forwards + Score");
+        chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
         // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
@@ -93,7 +94,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         rgb.periodic();
         manager.periodic();
-        climber.periodic();
+        // climber.periodic();
         CommandScheduler.getInstance().run();
         /* 
         vision.periodic();
@@ -107,6 +108,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        drive.setHeadingCorrection(false);
         System.out.println("Scheduling Auto");
         CommandScheduler.getInstance().cancelAll();
         drive.zeroGyro();
@@ -120,7 +122,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        climber.zeroClimber();
+        // climber.zeroClimber();
+        drive.setHeadingCorrection(true);
         manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
     }
 

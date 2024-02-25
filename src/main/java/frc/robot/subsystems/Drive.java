@@ -41,7 +41,7 @@ public class Drive extends SubsystemBase {
         this.robot = robot;
 
         double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
-            Constants.Drive.driveGearRatio, 1);
+        Constants.Drive.driveGearRatio, 1);
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.Drive.angleGearRatio, 1);
 
         try {
@@ -50,11 +50,15 @@ public class Drive extends SubsystemBase {
             pathPlannerInit();
 
             // UNTESTED (with changes)
-            swerveDrive.setHeadingCorrection(true, 0.01);
+            //swerveDrive.setHeadingCorrection(true, 0.01);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setHeadingCorrection(boolean headingCorrection) {
+        swerveDrive.setHeadingCorrection(headingCorrection, 0.01);
     }
 
     public void zeroGyro() {

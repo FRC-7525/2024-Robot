@@ -24,25 +24,25 @@ public final class Constants {
         public static final double maxModuleSpeed = 4.5;
         public static final double maxSpeed = Units.feetToMeters(5);// Change Units.feetToMeters(x) to have a smaller x for faster robot
 
-        public static final PIDConstants translationPID = new PIDConstants(5, 0, 0);
-        public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.1);
+        public static final PIDConstants translationPID = new PIDConstants(5, 0, 0.1);
+        public static final PIDConstants rotationPID = new PIDConstants(5, 0, 0.1);
     }
     public static final class Intake {
         public static final double OFF = 0.0;
         public static final double ON = 0.5;
         public static final double ON_SLOW = 0.1;
-        public static final double REVERSE_SLOW = -0.3;
+        public static final double REVERSE_SLOW = -0.2;
         public static final double REVERSE = -0.7;
         public static final double DOWN = -37;
         public static final double AMP_SCORING = -17;
-        public static final double ON_SLOW_AMP = 0.3;
+        public static final double ON_SLOW_AMP = -0.5;
     }
     public static final class Shooter {
         public static final double SPEED = 80;
-        public static final double SLOW_SPEED = 30;
+        public static final double SLOW_SPEED = 20;
         public static final double RESET_INTAKE_TIME = 3; 
         public static final double PULL_CENTER_NOTE_TIME = 0.5;
-        public static final double PUSH_CENTER_NOTE_TIME = 1;
+        public static final double PUSH_CENTER_NOTE_TIME = 0.5;
         public static final double RETURN_CENTER_NOTE_TIME = 1.0;
         public static final double GO_OUT_TIME = 1.1;
         public static final double SHOOTER_TIME = 1;
@@ -63,5 +63,6 @@ public final class Constants {
         public static final double ZEROING_SPEED = -0.15;
         public static final double CURRENT_MAX = 10;
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
+        public static final double DOWN = 5;
     }
 }

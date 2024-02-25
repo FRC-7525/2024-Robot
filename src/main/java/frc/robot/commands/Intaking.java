@@ -16,6 +16,7 @@ public class Intaking extends Command {
 
     @Override
     public boolean isFinished() {
+        System.out.println(robot.manager.isIdle());
         return robot.manager.isIdle();
     }
 }

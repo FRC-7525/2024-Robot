@@ -33,7 +33,7 @@ public class Shooter extends SubsystemBase {
     public boolean atSetPoint() {
         double motor1Vel = shooterMotor1.getVelocity().getValueAsDouble();
         double motor2Vel = shooterMotor2.getVelocity().getValueAsDouble();
-        return Math.abs(motor1Vel - Constants.Shooter.SPEED) > 7 && Math.abs(motor2Vel - Constants.Shooter.SPEED) > 7;
+        return motor1Vel >= Constants.Shooter.SPEED && motor2Vel >= Constants.Shooter.SPEED;
     }
 
     public void setState(ShootingStates state) {

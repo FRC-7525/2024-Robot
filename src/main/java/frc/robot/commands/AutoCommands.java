@@ -8,8 +8,6 @@ import frc.robot.Robot;
 public class AutoCommands {
     Robot robot = null;
 
-    // zzzzzzzz were not using this
-
     public AutoCommands(Robot robot) {
         this.robot = robot;
     }
@@ -27,5 +25,9 @@ public class AutoCommands {
     public Command returnToIdle() {
         return Commands.sequence(
                 new InstantCommand(robot.manager::returnToIdle));
+    }
+
+    public Command startSpinningUp() {
+        return new InstantCommand(() -> robot.manager.speedingUp());
     }
 }
