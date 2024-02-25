@@ -19,7 +19,8 @@ enum IntakeStates {
     OUTTAKING,
     PULL_IN,
     PUSH_OUT,
-    AMP_SCORING
+    AMP_SCORING,
+    GOING_TO_AMP
 }
 
 public class Intake extends SubsystemBase {
@@ -47,7 +48,7 @@ public class Intake extends SubsystemBase {
         pivotEncoder.setPosition(0);
     }
     public boolean nearSetpoint() {
-        return Math.abs(pivotEncoder.getPosition() - pivotMotorSetpoint) < 0.5;
+        return Math.abs(pivotEncoder.getPosition() - pivotMotorSetpoint) < 1;
     }
 
     String currentState = "not null zzzzzzzz";
@@ -77,6 +78,10 @@ public class Intake extends SubsystemBase {
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.REVERSE_SLOW;
             currentState = "PUSH OUT";
+        } else if (states == IntakeStates.GOING_TO_AMP) {
+            pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
+            intakeMotorSetpoint = Constants.Intake.OFF;
+            currentState = "AMP SCORING SETUP";            
         } else if (states == IntakeStates.AMP_SCORING) {
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
             intakeMotorSetpoint = Constants.Intake.ON_SLOW_AMP;

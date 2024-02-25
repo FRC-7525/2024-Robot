@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3,
-      "y": 5.5
+      "x": 0.7,
+      "y": 4.4
     },
-    "rotation": 0
+    "rotation": -58.44990638358712
   },
   "command": {
     "type": "sequential",
@@ -18,21 +18,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Shoot to Right Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intaking"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Shoot to Right Note"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intaking"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Note to Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speeding Up"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Right Note to Shoot"
+                }
+              }
+            ]
           }
         },
         {

@@ -139,14 +139,17 @@ public class Manager {
               
             stateString = "Shooting";
         } else if (state == ManagerStates.SCORING_AMP) {
-            shooterTimer.start();
-            intake.setState(IntakeStates.AMP_SCORING);
             shooter.setState(ShootingStates.OFF);
-            if (shooterTimer.get() > 0.5) {
-                shooterTimer.stop();
-                shooterTimer.reset();
-                state = ManagerStates.IDLE;
-                reset();
+            intake.setState(IntakeStates.GOING_TO_AMP);
+            if (intake.nearSetpoint()) {
+                intake.setState(IntakeStates.AMP_SCORING);
+                shooterTimer.start();
+                if (shooterTimer.get() > 1) {
+                    shooterTimer.stop();
+                    shooterTimer.reset();
+                    state = ManagerStates.IDLE;
+                    reset();
+                }
             }
             stateString = "Amp Scoring";
         } else if (state == ManagerStates.START_SPINNING) {

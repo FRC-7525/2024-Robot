@@ -6,6 +6,7 @@ import frc.robot.Robot;
 public class Shooting extends Command {
     Robot robot = null;
 
+    
     public Shooting(Robot robot) {
         this.robot = robot;
     }
