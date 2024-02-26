@@ -51,7 +51,7 @@ public class Intake extends SubsystemBase {
         return Math.abs(pivotEncoder.getPosition() - pivotMotorSetpoint) < 1;
     }
 
-    String currentState = "not null zzzzzzzz";
+    String currentState = "State not set.";
 
     public void periodic() {
         if (states == IntakeStates.OFF) {

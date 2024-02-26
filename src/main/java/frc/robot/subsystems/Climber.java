@@ -27,7 +27,7 @@ public class Climber {
 
     double rightMotorSetpoint = 0.0;
     double leftMotorSetpoint = 0.0;
-    String stateString = "zzz Not Null";
+    String stateString = "State not set.";
     boolean isExtended = false;
     ClimberStates state = ClimberStates.ZEROING;
     double leftSpeed = Constants.Climber.ZEROING_SPEED;

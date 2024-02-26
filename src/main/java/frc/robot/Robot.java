@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
         chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
         //5 Note Auto
-        chooser.addOption("Very very very good auto zzzz", "5 Note Auto");
+        chooser.addOption("5 Note Auto", "5 Note Auto");
         
         
         SmartDashboard.putData("Path Chooser", chooser);
