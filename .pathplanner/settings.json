@@ -9,10 +9,10 @@
     "Misc Paths"
   ],
   "autoFolders": [
-    "2 Note Autos",
-    "3 Note Autos",
-    "Misc Autos",
-    "4 Note Autos"
+    "2 Notes",
+    "3 Notes",
+    "MISC",
+    "4 Notes"
   ],
   "defaultMaxVel": 8.0,
   "defaultMaxAccel": 3.0,

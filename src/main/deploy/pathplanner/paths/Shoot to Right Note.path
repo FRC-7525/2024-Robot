@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.47427539299523075,
-        "y": 3.677080687494708
+        "x": 1.1734895937694858,
+        "y": 3.560094309917578
       },
       "isLocked": false,
       "linkedName": null
@@ -49,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "2 Note Paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
