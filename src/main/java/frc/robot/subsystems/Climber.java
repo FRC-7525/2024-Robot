@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
 
+import edu.wpi.first.util.datalog.*;
+import edu.wpi.first.wpilibj.DataLogManager;
+
 enum ClimberStates {
     ZEROING,
     CLIMBING
@@ -36,12 +39,25 @@ public class Climber {
     LinearFilter leftFilter = LinearFilter.movingAverage(5);
     LinearFilter rightFilter = LinearFilter.movingAverage(5);
 
+    StringLogEntry stateStringLog;
+    DoubleLogEntry leftSetpointLog;
+    DoubleLogEntry rightSetpointLog;
+    DoubleLogEntry leftCurrentLog;
+    DoubleLogEntry rightCurrentLog;
+
     public Climber(Robot robot) {
         this.robot = robot;
         rightMotor.setInverted(true);
         leftMotor.setInverted(false);
         rightMotor.setIdleMode(IdleMode.kBrake);
         leftMotor.setIdleMode(IdleMode.kBrake);
+
+
+        stateStringLog = new StringLogEntry(this.robot.dataLog, "/climber/stateString");
+        leftSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/climber/leftSetpoint"); 
+        rightSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/climber/rightSetpoint");
+        leftCurrentLog = new DoubleLogEntry(this.robot.dataLog, "/climber/leftCurrent");
+        rightCurrentLog = new DoubleLogEntry(this.robot.dataLog, "/climber/leftCurrent");
     }
 
     public void zeroClimber() {
@@ -118,5 +134,11 @@ public class Climber {
         SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
+
+        stateStringLog.append(stateString);
+        leftSetpointLog.append(leftMotorSetpoint);
+        rightSetpointLog.append(rightMotorSetpoint);
+        leftCurrentLog.append(leftMotor.getOutputCurrent());
+        rightCurrentLog.append(rightMotor.getOutputCurrent());
     }
 }

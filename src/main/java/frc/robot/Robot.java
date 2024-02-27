@@ -27,9 +27,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.util.datalog.DataLog;
+
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
+    public DataLog dataLog;
     //Vision vision = new Vision();
     Drive drive = new Drive(this);
     Vision vision = new Vision();
@@ -39,12 +44,18 @@ public class Robot extends TimedRobot {
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
 
+    
+
     public Command getAutonomousCommand(String autoName) {
         return new PathPlannerAuto(autoName);
     }
 
     @Override
     public void robotInit() {
+        DataLogManager.start();
+        dataLog = DataLogManager.getLog();
+        DriverStation.startDataLog(dataLog);
+
         // climber.zeroClimber();
         //Monologue.setupMonologue(this, "Robot", true, true);
         //CameraServer.startAutomaticCapture();
