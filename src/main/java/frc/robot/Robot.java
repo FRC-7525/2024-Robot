@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
         chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
+        chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
         // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
