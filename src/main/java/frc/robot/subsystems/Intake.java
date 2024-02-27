@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +20,8 @@ enum IntakeStates {
     PULL_IN,
     PUSH_OUT,
     AMP_SCORING,
-    GOING_TO_AMP
+    GOING_TO_AMP,
+    INTAKE_STUCK
 }
 
 public class Intake extends SubsystemBase {
@@ -86,6 +87,10 @@ public class Intake extends SubsystemBase {
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
             intakeMotorSetpoint = Constants.Intake.ON_SLOW_AMP;
             currentState = "AMP SCORING";
+        } else if (states == IntakeStates.INTAKE_STUCK) {
+            pivotMotorSetpoint = Constants.Intake.OFF;
+            intakeMotorSetpoint = Constants.Intake.ON;
+            currentState = "INTAKING STUCK NOTE";
         }
 
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));

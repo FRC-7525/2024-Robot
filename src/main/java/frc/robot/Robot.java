@@ -14,6 +14,7 @@ import frc.robot.Commands.ReturnRobotToIdle;
 import frc.robot.Commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;
@@ -32,7 +33,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
-    //Vision vision = new Vision();
+    // Vision vision = new Vision();
     Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
@@ -96,13 +97,10 @@ public class Robot extends TimedRobot {
         manager.periodic();
         // climber.periodic();
         CommandScheduler.getInstance().run();
-        /* 
         vision.periodic();
-        intake.putSmartDashValues();
         if (vision.getPose2d().isPresent()) {
             drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
         } 
-        */
         //Monologue.updateAll();
     }
 

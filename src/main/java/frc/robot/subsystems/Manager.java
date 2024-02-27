@@ -18,6 +18,7 @@ enum ManagerStates {
     WAIT_FOR_BACK,
     SCORING_AMP,
     START_SPINNING,
+    INTAKE_STUCK
 }
 
 public class Manager {
@@ -37,9 +38,18 @@ public class Manager {
     }
 
     public void reset() {
+        resetSecondary();
         robot.controller.getBButtonPressed();
         robot.controller.getAButtonPressed();
         robot.controller.getRightBumper();
+        resetIntakeTimer.stop();
+        resetIntakeTimer.reset();
+    }
+
+    public void resetSecondary() {
+        robot.secondaryController.getBButtonPressed();
+        robot.secondaryController.getAButtonPressed();
+        robot.secondaryController.getRightBumper();
         resetIntakeTimer.stop();
         resetIntakeTimer.reset();
     }
@@ -69,6 +79,9 @@ public class Manager {
                 shooterTimer.reset();
                 reset();
                 state = ManagerStates.SCORING_AMP;
+            } else if (robot.secondaryController.getAButtonPressed()) {
+                reset();
+                state = ManagerStates.INTAKE_STUCK;
             }
         } else if (state == ManagerStates.PUSH_OUT) {
             stateString = "Push Out";
@@ -104,8 +117,7 @@ public class Manager {
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
             }
-        }
-         else if (state == ManagerStates.INTAKING) {
+        } else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
@@ -165,6 +177,20 @@ public class Manager {
                 }  
             } else if (robot.controller.getAButtonPressed()) {
                 autoShoot = true;
+                reset();
+            }
+        } else if (state == ManagerStates.INTAKE_STUCK) {
+            intake.setState(IntakeStates.INTAKE_STUCK);
+            shooter.setState(ShootingStates.OFF);
+            stateString = "Intaking stuck note";
+
+            if (robot.controller.getAButtonPressed()) {
+                state = ManagerStates.START_SPINNING; 
+                autoShoot = true;
+                reset();
+            } else if (robot.secondaryController.getAButtonPressed()) {
+                state = ManagerStates.START_SPINNING;
+                autoShoot = false;
                 reset();
             }
         }
