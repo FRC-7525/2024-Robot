@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
+import edu.wpi.first.util.datalog.*;
+
 enum IntakeStates {
     OFF,
     INTAKING,
@@ -35,11 +37,19 @@ public class Intake extends SubsystemBase {
     double pivotMotorSetpoint = 0.0;
     double intakeMotorSetpoint = 0.0;
 
+    StringLogEntry stateStringLog;
+    DoubleLogEntry pivotSetpointLog;
+    DoubleLogEntry intakeSetpointLog;
+
     public Intake(Robot robot) {
         this.robot = robot;
         intakeMotor.setInverted(true);
         pivotEncoder.setPosition(0);
         pivotMotor.setIdleMode(IdleMode.kBrake);
+
+        stateStringLog = new StringLogEntry(this.robot.dataLog, "/intake/stateString");
+        pivotSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/intake/pivotSetpoint");
+        intakeSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/intake/intakeSetpoint");
     }
     public void setState(IntakeStates state) {
         this.states = state;
@@ -95,6 +105,10 @@ public class Intake extends SubsystemBase {
 
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
         intakeMotor.set(intakeMotorSetpoint);
+
+        stateStringLog.append(currentState);
+        pivotSetpointLog.append(pivotMotorSetpoint);
+        intakeSetpointLog.append(intakeMotorSetpoint);
     }
     public void putSmartDashValues() {
         SmartDashboard.putString("Current state of INTAKE:", currentState);

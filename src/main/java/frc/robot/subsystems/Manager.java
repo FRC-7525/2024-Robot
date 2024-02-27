@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
 
+import edu.wpi.first.util.datalog.*;
+
 enum ManagerStates {
     IDLE,
     INTAKING,
@@ -32,8 +34,11 @@ public class Manager {
     Timer centerNoteTimer = new Timer();
     boolean autoShoot = false;
 
+    StringLogEntry stateStringLog;
+
     public Manager(Robot robot) {
         this.robot = robot;
+        stateStringLog = new StringLogEntry(this.robot.dataLog, "/manager/stateString");
     }
 
     public void reset() {
@@ -171,6 +176,7 @@ public class Manager {
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
+        stateStringLog.append(stateString);
     }
 
     public Boolean isIdle() {

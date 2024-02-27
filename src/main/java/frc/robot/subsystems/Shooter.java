@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
+import edu.wpi.first.util.datalog.*;
+
 enum ShootingStates {
     SHOOTING,
     OFF,
@@ -24,10 +26,14 @@ public class Shooter extends SubsystemBase {
     BangBangController bangController = new BangBangController();
     String stateString = "";
 
+    StringLogEntry stateStringLog;
+
     public Shooter(Robot robot) {
         this.robot = robot;
         shooterMotor2.setInverted(true);
         shooterMotor1.setInverted(false);
+
+        stateStringLog = new StringLogEntry(this.robot.dataLog, "/shooter/stateString");
     }
 
     public boolean atSetPoint() {
@@ -60,6 +66,8 @@ public class Shooter extends SubsystemBase {
             shooterMotor2.set(-Constants.Shooter.SLOW_SPEED);
             stateString = "Reversing";
         }
+
+        stateStringLog.append(stateString);
     }
 
     public void putSmartDashValues() {
