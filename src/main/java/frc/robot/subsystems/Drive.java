@@ -24,6 +24,8 @@ import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
+import edu.wpi.first.util.datalog.*;
+
 enum DriveStates {
     FIELD_ABSOLUTE,
     FIELD_RELATIVE
@@ -34,7 +36,10 @@ public class Drive extends SubsystemBase {
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
-    
+   
+    StringLogEntry stateStringLog;
+    BooleanLogEntry fieldRelativeLog;
+
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
@@ -54,6 +59,9 @@ public class Drive extends SubsystemBase {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        stateStringLog = new StringLogEntry(this.robot.dataLog, "/drive/stateString");
+        fieldRelativeLog = new BooleanLogEntry(this.robot.dataLog, "/drive/fieldRelative");
     }
 
     public void setHeadingCorrection(boolean headingCorrection) {
@@ -134,6 +142,8 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putString("Drive State", state);
         
         //this.log("Robot Pose", swerveDrive.field.getRobotPose());
+        fieldRelativeLog.append(fieldRelative);
+        stateStringLog.append(state);
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {

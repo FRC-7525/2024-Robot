@@ -12,7 +12,6 @@ import frc.robot.Robot;
 import frc.robot.Constants;
 
 import edu.wpi.first.util.datalog.*;
-import edu.wpi.first.wpilibj.DataLogManager;
 
 enum ClimberStates {
     ZEROING,
