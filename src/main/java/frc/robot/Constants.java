@@ -10,8 +10,9 @@ public final class Constants {
     public static final int DPAD_LEFT = 270;
     public static final int DPAD_RIGHT = 90;
     public static final double STICK_DEADBAND = 0.1; 
+
     public static final class Drive {
-        /* Drive Constants */
+        // Drive Constants
         public static final int wheelDiameter = 4;
         public static final double neoDriveGearRatio = 6.12;
         public static final double angleGearRatio = 21.4286;
@@ -27,7 +28,9 @@ public final class Constants {
         public static final PIDConstants translationPID = new PIDConstants(5, 0, 0.1);
         public static final PIDConstants rotationPID = new PIDConstants(5, 0, 0.1);
     }
+
     public static final class Intake {
+        // Motor setpoints for the intake motors.
         public static final double OFF = 0.0;
         public static final double ON = 0.5;
         public static final double ON_SLOW = 0.1;
@@ -37,6 +40,7 @@ public final class Constants {
         public static final double AMP_SCORING = -16.2;
         public static final double ON_SLOW_AMP = -0.45;
     }
+
     public static final class Shooter {
         public static final double SPEED = 80;
         public static final double SLOW_SPEED = 20;
@@ -47,6 +51,7 @@ public final class Constants {
         public static final double GO_OUT_TIME = 1.1;
         public static final double SHOOTER_TIME = 1;
     }
+
     public static final class RGB {
         public static final double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;
         public static final double LED_MODE_LARSON_SCANNER_RED = -0.35;

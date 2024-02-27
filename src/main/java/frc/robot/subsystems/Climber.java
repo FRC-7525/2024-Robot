@@ -60,18 +60,19 @@ public class Climber {
         if (state == ClimberStates.ZEROING) {
             double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
             double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
-            if (leftCurrent > Constants.Climber.CURRENT_MAX) {
+            if (leftCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the left motor.
                 leftMotor.getEncoder().setPosition(0);
                 leftSpeed = 0;
                 System.out.println("LEFT SPEED ZERO");
             }
-            if (rightCurrent > Constants.Climber.CURRENT_MAX) {
+
+            if (rightCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the right motor.
                 rightMotor.getEncoder().setPosition(0);
                 rightSpeed = 0;
                 System.out.println("RIGHT SPEED ZERO");
             }
 
-            if (rightSpeed == 0 && leftSpeed == 0) {
+            if (rightSpeed == 0 && leftSpeed == 0) { // Hacky solution to switch to the climbing state when both are zeroed.
                 System.out.println("TRANSITION");
                 state = ClimberStates.CLIMBING;
             }
@@ -115,6 +116,5 @@ public class Climber {
         SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
-
     }
 }
