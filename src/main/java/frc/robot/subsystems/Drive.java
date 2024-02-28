@@ -49,13 +49,13 @@ public class Drive extends SubsystemBase {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
 
-        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
-        Constants.Drive.driveGearRatio, 1);
-        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.Drive.angleGearRatio, 1);
+        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.WHEEL_DIAMETER),
+        Constants.Drive.DRIVE_GEAR_RATIO, 1);
+        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(Constants.Drive.ANGLE_GEAR_RATIO, 1);
 
         try {
-            SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
-            swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
+            SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.PATH_PLANNER_FILE));
+            swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.MAX_SPEED, angleConversionFactor, driveConversionFactor);
             pathPlannerInit();
 
             // UNTESTED (with changes)
@@ -94,9 +94,9 @@ public class Drive extends SubsystemBase {
             swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 // More PID tuning would be nice
-                Constants.Drive.translationPID, // Translation PID constants
-                Constants.Drive.rotationPID, // Rotation PID constants
-                Constants.Drive.maxModuleSpeed, // Max module speed, in m/s
+                Constants.Drive.TRANSLATION_PID, // Translation PID constants
+                Constants.Drive.ROTATION_PID, // Rotation PID constants
+                Constants.Drive.MAX_MODULE_SPEED, // Max module speed, in m/s
                 swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot center to furthest module.
                 new ReplanningConfig(true, true) // Default path replanning config.
             ),
@@ -116,7 +116,7 @@ public class Drive extends SubsystemBase {
         
         double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.STICK_DEADBAND);
         double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND);
-        double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.STICK_DEADBAND);
+        double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.LEFT_X_SIGN, Constants.STICK_DEADBAND);
 
 
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
@@ -143,9 +143,9 @@ public class Drive extends SubsystemBase {
         } else if (robot.controller.getYButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
-            xMovement *= Constants.Drive.slowSpeedMultiplier;
-            rotation *= Constants.Drive.slowRotationMultiplier;
-            yMovement *= Constants.Drive.slowSpeedMultiplier;
+            xMovement *= Constants.Drive.SLOW_SPEED_MULTIPLIER;
+            rotation *= Constants.Drive.SLOW_ROTATION_MULTIPLIER;
+            yMovement *= Constants.Drive.SLOW_SPEED_MULTIPLIER;
         }
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);

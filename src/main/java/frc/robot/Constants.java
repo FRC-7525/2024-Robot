@@ -13,23 +13,23 @@ public final class Constants {
 
     public static final class Drive {
         // Drive Constants
-        public static final int wheelDiameter = 4;
-        public static final double neoDriveGearRatio = 6.12;
-        public static final double angleGearRatio = 21.4286;
-        public static final double encoderResolution = 42;
-        public static final double falconDriveGearRatio = 6.75;
-        public static final boolean isNeo = true; // SET TO FALSE FOR FALCON
-        public static final int leftXSign = isNeo ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
-        public static final String pathPlannerFile = isNeo ? "swerve/neo" : "swerve/falcon";
-        public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
-        public static final double maxModuleSpeed = 4.5;
-        public static final double maxSpeed = Units.feetToMeters(5);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+        public static final int WHEEL_DIAMETER = 4;
+        public static final double NEO_DRIVE_GEAR_RATIO = 6.12;
+        public static final double ANGLE_GEAR_RATIO = 21.4286;
+        public static final double ENCODER_RESOLUTION = 42;
+        public static final double FALCON_DRIVE_GEAR_RATIO = 6.75;
+        public static final boolean IS_NEO = true; // SET TO FALSE FOR FALCON
+        public static final int LEFT_X_SIGN = IS_NEO ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
+        public static final String PATH_PLANNER_FILE = IS_NEO ? "swerve/neo" : "swerve/falcon";
+        public static final double DRIVE_GEAR_RATIO = IS_NEO ? NEO_DRIVE_GEAR_RATIO : FALCON_DRIVE_GEAR_RATIO;
+        public static final double MAX_MODULE_SPEED = 4.5;
+        public static final double MAX_SPEED = Units.feetToMeters(5);// Change Units.feetToMeters(x) to have a smaller x for faster robot
 
-        public static final PIDConstants translationPID = new PIDConstants(5, 0, 0.1);
-        public static final PIDConstants rotationPID = new PIDConstants(5, 0, 0.1);
+        public static final PIDConstants TRANSLATION_PID = new PIDConstants(5, 0, 0.1);
+        public static final PIDConstants ROTATION_PID = new PIDConstants(5, 0, 0.1);
 
-        public static final double slowSpeedMultiplier = 0.2;
-        public static final double slowRotationMultiplier = 0.7;
+        public static final double SLOW_SPEED_MULTIPLIER = 0.2;
+        public static final double SLOW_ROTATION_MULTIPLIER = 0.7;
     }
 
     public static final class Intake {
