@@ -126,9 +126,9 @@ public class Drive extends SubsystemBase {
         } else if (robot.controller.getYButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
-            xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY() * Constants.Drive.slowSpeedMultiplier, Constants.STICK_DEADBAND);
-            rotation = MathUtil.applyDeadband(-robot.controller.getRightX() * Constants.Drive.slowSpeedMultiplier, Constants.STICK_DEADBAND);
-            yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign * Constants.Drive.slowSpeedMultiplier, Constants.STICK_DEADBAND);
+            xMovement *= Constants.Drive.slowSpeedMultiplier;
+            rotation *= Constants.Drive.slowSpeedMultiplier;
+            yMovement *= Constants.Drive.slowSpeedMultiplier;
         }
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
