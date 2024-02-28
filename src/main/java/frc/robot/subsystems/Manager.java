@@ -184,11 +184,8 @@ public class Manager {
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking stuck note";
 
-            if (robot.controller.getBButtonPressed()) {
-                state = ManagerStates.OFF; 
-                reset();
-            } else if (robot.secondaryController.getBButtonPressed()) {
-                state = ManagerStates.OFF;
+            if (robot.controller.getBButtonPressed() || robot.secondaryController.getBButtonPressed()) {
+                state = ManagerStates.IDLE; 
                 reset();
             }
         }
