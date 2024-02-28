@@ -8,10 +8,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-repositories {
-  maven { url 'https://jitpack.io' }
-}
-
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -73,8 +69,6 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    implementation 'com.github.shueja:Monologue:v1.0.0-beta5'
 }
 
 test {

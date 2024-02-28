@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,7 +24,8 @@ import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
-import monologue.Logged;
+
+import edu.wpi.first.util.datalog.*;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
@@ -35,7 +37,14 @@ public class Drive extends SubsystemBase {
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
-    
+   
+    StringLogEntry stateStringLog;
+    BooleanLogEntry fieldRelativeLog;
+
+    DoubleLogEntry robotPoseX;
+    DoubleLogEntry robotPoseY;
+    DoubleLogEntry robotPoseRotation;
+
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
@@ -55,6 +64,14 @@ public class Drive extends SubsystemBase {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/drive/stateString");
+        fieldRelativeLog = new BooleanLogEntry(dataLog, "/drive/fieldRelative");
+
+        robotPoseX = new DoubleLogEntry(dataLog, "/drive/pose/x");
+        robotPoseY = new DoubleLogEntry(dataLog, "/drive/pose/y");
+        robotPoseRotation = new DoubleLogEntry(dataLog, "/drive/pose/rotation");
     }
 
     public void setHeadingCorrection(boolean headingCorrection) {
@@ -134,7 +151,13 @@ public class Drive extends SubsystemBase {
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
         
-        //this.log("Robot Pose", swerveDrive.field.getRobotPose());
+        fieldRelativeLog.append(fieldRelative);
+        stateStringLog.append(state);
+
+        Pose2d robotPose = swerveDrive.field.getRobotPose();
+        robotPoseX.append(robotPose.getX());
+        robotPoseY.append(robotPose.getY());
+        robotPoseRotation.append(robotPose.getRotation().getDegrees());
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
