@@ -27,6 +27,8 @@ public final class Constants {
 
         public static final PIDConstants translationPID = new PIDConstants(5, 0, 0.1);
         public static final PIDConstants rotationPID = new PIDConstants(5, 0, 0.1);
+
+        public static final double JOYSTICK_VALUE_MULTIPLIER = 0.2;
     }
 
     public static final class Intake {

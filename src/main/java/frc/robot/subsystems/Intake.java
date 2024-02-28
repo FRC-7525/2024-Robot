@@ -26,7 +26,7 @@ enum IntakeStates {
 public class Intake extends SubsystemBase {
     IntakeStates states = IntakeStates.OFF;
     Robot robot = null;
-    public CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
+    private CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
     public TalonFX intakeMotor = new TalonFX(20);
     private RelativeEncoder pivotEncoder = pivotMotor.getEncoder();
 
@@ -44,6 +44,11 @@ public class Intake extends SubsystemBase {
     public void setState(IntakeStates state) {
         this.states = state;
     }
+
+    public void setPivotMotorMode(IdleMode mode) {
+        pivotMotor.setIdleMode(mode);
+    }
+
     public void resetPivotMotor() {
         pivotEncoder.setPosition(0);
     }

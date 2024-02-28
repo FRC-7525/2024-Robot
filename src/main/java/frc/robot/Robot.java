@@ -8,10 +8,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Commands.AutoCommands;
-import frc.robot.Commands.Intaking;
-import frc.robot.Commands.ReturnRobotToIdle;
-import frc.robot.Commands.Shooting;
+import frc.robot.commands.AutoCommands;
+import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.RGB;
@@ -125,7 +123,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         // climber.zeroClimber();
         drive.setHeadingCorrection(true);
-        manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
+        
+        manager.intake.setPivotMotorMode(IdleMode.kBrake);
     }
 
     @Override
@@ -135,7 +134,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        manager.intake.pivotMotor.setIdleMode(IdleMode.kCoast);
+        manager.intake.setPivotMotorMode(IdleMode.kCoast);
     }
 
     @Override
