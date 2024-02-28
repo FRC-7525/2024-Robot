@@ -21,15 +21,17 @@ public class Vision {
     Optional<EstimatedRobotPose> botpose3d;
     PhotonCamera frontCamera = new PhotonCamera("Front Camera");
     PhotonCamera sideCamera = new PhotonCamera("Side Camera");
-    Transform3d robotToCam = new Transform3d(new Translation3d(0, 1, 0),
-            new Rotation3d(0, Units.degreesToRadians(-55), 0));
+    Transform3d frontrobotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(-13.25), 0, Units.inchesToMeters(13)),
+            new Rotation3d(0, Units.degreesToRadians(35), Units.degreesToRadians(180)));
+    Transform3d siderobotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(-9.25), Units.inchesToMeters(9.75), Units.inchesToMeters(15.25)),
+            new Rotation3d(0, Units.degreesToRadians(9.5), Units.degreesToRadians(90)));
     PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(
             AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
-            robotToCam);
+            frontrobotToCam);
     PhotonPoseEstimator sideEstimator = new PhotonPoseEstimator(AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, sideCamera,
-            robotToCam);
+           siderobotToCam);
 
     public void periodic() {
         botpose3d = frontEstimator.update();
