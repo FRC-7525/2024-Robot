@@ -127,7 +127,7 @@ public class Drive extends SubsystemBase {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
             xMovement *= Constants.Drive.slowSpeedMultiplier;
-            rotation *= Constants.Drive.slowSpeedMultiplier;
+            rotation *= Constants.Drive.slowRotationMultiplier;
             yMovement *= Constants.Drive.slowSpeedMultiplier;
         }
 
