@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -47,9 +48,10 @@ public class Intake extends SubsystemBase {
         pivotEncoder.setPosition(0);
         pivotMotor.setIdleMode(IdleMode.kBrake);
 
-        stateStringLog = new StringLogEntry(this.robot.dataLog, "/intake/stateString");
-        pivotSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/intake/pivotSetpoint");
-        intakeSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/intake/intakeSetpoint");
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/intake/stateString");
+        pivotSetpointLog = new DoubleLogEntry(dataLog, "/intake/pivotSetpoint");
+        intakeSetpointLog = new DoubleLogEntry(dataLog, "/intake/intakeSetpoint");
     }
     public void setState(IntakeStates state) {
         this.states = state;

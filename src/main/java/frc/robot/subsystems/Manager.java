@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.security.cert.TrustAnchor;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,7 +39,8 @@ public class Manager {
 
     public Manager(Robot robot) {
         this.robot = robot;
-        stateStringLog = new StringLogEntry(this.robot.dataLog, "/manager/stateString");
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/manager/stateString");
     }
 
     public void reset() {

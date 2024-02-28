@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,12 +65,13 @@ public class Drive extends SubsystemBase {
             e.printStackTrace();
         }
 
-        stateStringLog = new StringLogEntry(this.robot.dataLog, "/drive/stateString");
-        fieldRelativeLog = new BooleanLogEntry(this.robot.dataLog, "/drive/fieldRelative");
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/drive/stateString");
+        fieldRelativeLog = new BooleanLogEntry(dataLog, "/drive/fieldRelative");
 
-        robotPoseX = new DoubleLogEntry(this.robot.dataLog, "/drive/pose/x");
-        robotPoseY = new DoubleLogEntry(this.robot.dataLog, "/drive/pose/y");
-        robotPoseRotation = new DoubleLogEntry(this.robot.dataLog, "/drive/pose/rotation");
+        robotPoseX = new DoubleLogEntry(dataLog, "/drive/pose/x");
+        robotPoseY = new DoubleLogEntry(dataLog, "/drive/pose/y");
+        robotPoseRotation = new DoubleLogEntry(dataLog, "/drive/pose/rotation");
     }
 
     public void setHeadingCorrection(boolean headingCorrection) {

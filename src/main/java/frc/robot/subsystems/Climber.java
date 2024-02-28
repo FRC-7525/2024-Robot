@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
@@ -52,11 +53,12 @@ public class Climber {
         leftMotor.setIdleMode(IdleMode.kBrake);
 
 
-        stateStringLog = new StringLogEntry(this.robot.dataLog, "/climber/stateString");
-        leftSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/climber/leftSetpoint"); 
-        rightSetpointLog = new DoubleLogEntry(this.robot.dataLog, "/climber/rightSetpoint");
-        leftCurrentLog = new DoubleLogEntry(this.robot.dataLog, "/climber/leftCurrent");
-        rightCurrentLog = new DoubleLogEntry(this.robot.dataLog, "/climber/leftCurrent");
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/climber/stateString");
+        leftSetpointLog = new DoubleLogEntry(dataLog, "/climber/leftSetpoint"); 
+        rightSetpointLog = new DoubleLogEntry(dataLog, "/climber/rightSetpoint");
+        leftCurrentLog = new DoubleLogEntry(dataLog, "/climber/leftCurrent");
+        rightCurrentLog = new DoubleLogEntry(dataLog, "/climber/leftCurrent");
     }
 
     public void zeroClimber() {

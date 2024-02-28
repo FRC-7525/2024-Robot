@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,7 +34,8 @@ public class Shooter extends SubsystemBase {
         shooterMotor2.setInverted(true);
         shooterMotor1.setInverted(false);
 
-        stateStringLog = new StringLogEntry(this.robot.dataLog, "/shooter/stateString");
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/shooter/stateString");
     }
 
     public boolean atSetPoint() {
