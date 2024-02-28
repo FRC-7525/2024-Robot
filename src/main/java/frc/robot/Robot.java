@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
         DriverStation.startDataLog(DataLogManager.getLog());
 
         // climber.zeroClimber();
-        //Monologue.setupMonologue(this, "Robot", true, true);
         //CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking",  autoCommands.intaking());
@@ -110,8 +109,7 @@ public class Robot extends TimedRobot {
             drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
         } 
         */
-        //Monologue.updateAll();
-    }
+   }
 
     @Override
     public void autonomousInit() {
