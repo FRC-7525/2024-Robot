@@ -79,7 +79,7 @@ public class Manager {
                 shooterTimer.reset();
                 reset();
                 state = ManagerStates.SCORING_AMP;
-            } else if (robot.secondaryController.getAButtonPressed()) {
+            } else if (robot.secondaryController.getBButtonPressed()) {
                 reset();
                 state = ManagerStates.INTAKE_STUCK;
             }
