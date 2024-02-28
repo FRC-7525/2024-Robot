@@ -184,13 +184,11 @@ public class Manager {
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking stuck note";
 
-            if (robot.controller.getAButtonPressed()) {
-                state = ManagerStates.START_SPINNING; 
-                autoShoot = true;
+            if (robot.controller.getBButtonPressed()) {
+                state = ManagerStates.OFF; 
                 reset();
-            } else if (robot.secondaryController.getAButtonPressed()) {
-                state = ManagerStates.START_SPINNING;
-                autoShoot = false;
+            } else if (robot.secondaryController.getBButtonPressed()) {
+                state = ManagerStates.OFF;
                 reset();
             }
         }
