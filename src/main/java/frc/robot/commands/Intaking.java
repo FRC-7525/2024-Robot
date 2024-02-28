@@ -1,5 +1,3 @@
-package frc.robot.Commands;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
@@ -9,6 +7,7 @@ public class Intaking extends Command {
     public Intaking(Robot robot) {
         this.robot = robot;
     }
+
     @Override
     public void initialize() {
         robot.manager.intaking();
@@ -16,7 +15,6 @@ public class Intaking extends Command {
 
     @Override
     public boolean isFinished() {
-        System.out.println(robot.manager.isIdle());
         return robot.manager.isIdle();
     }
 }

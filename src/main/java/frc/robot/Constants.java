@@ -39,6 +39,7 @@ public final class Constants {
         public static final double DOWN = -37;
         public static final double AMP_SCORING = -16.2;
         public static final double ON_SLOW_AMP = -0.45;
+        public static final double SUPPLY_CURRENT_MINIMUM = 30;
     }
 
     public static final class Shooter {

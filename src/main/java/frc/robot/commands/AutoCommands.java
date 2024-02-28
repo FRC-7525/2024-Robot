@@ -1,5 +1,3 @@
-package frc.robot.Commands;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -28,6 +26,6 @@ public class AutoCommands {
     }
 
     public Command startSpinningUp() {
-        return new InstantCommand(() -> robot.manager.speedingUp());
+        return new InstantCommand(() -> robot.manager.spinningUp());
     }
 }

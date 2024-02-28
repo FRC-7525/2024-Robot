@@ -109,7 +109,7 @@ public class Manager {
             intake.setState(IntakeStates.INTAKING);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
-            if ((intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > 30 && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
+            if ((intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > Constants.Intake.SUPPLY_CURRENT_MINIMUM && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
                 System.out.println("Current sensing made it go in");
                 state = ManagerStates.IDLE;
                 reset();
@@ -143,7 +143,7 @@ public class Manager {
             if (intake.nearSetpoint()) {
                 intake.setState(IntakeStates.AMP_SCORING);
                 shooterTimer.start();
-                if (shooterTimer.get() > 1) {
+                if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
                     shooterTimer.stop();
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
@@ -188,7 +188,7 @@ public class Manager {
         autoShoot = true;
     }
 
-    public void speedingUp() {
+    public void spinningUp() {
         reset();
         state = ManagerStates.START_SPINNING;
         autoShoot = false;
