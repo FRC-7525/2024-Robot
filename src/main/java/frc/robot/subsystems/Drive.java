@@ -40,6 +40,10 @@ public class Drive extends SubsystemBase {
     StringLogEntry stateStringLog;
     BooleanLogEntry fieldRelativeLog;
 
+    DoubleLogEntry robotPoseX;
+    DoubleLogEntry robotPoseY;
+    DoubleLogEntry robotPoseRotation;
+
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
         this.robot = robot;
@@ -62,6 +66,10 @@ public class Drive extends SubsystemBase {
 
         stateStringLog = new StringLogEntry(this.robot.dataLog, "/drive/stateString");
         fieldRelativeLog = new BooleanLogEntry(this.robot.dataLog, "/drive/fieldRelative");
+
+        robotPoseX = new DoubleLogEntry(this.robot.dataLog, "/drive/pose/x");
+        robotPoseY = new DoubleLogEntry(this.robot.dataLog, "/drive/pose/y");
+        robotPoseRotation = new DoubleLogEntry(this.robot.dataLog, "/drive/pose/rotation");
     }
 
     public void setHeadingCorrection(boolean headingCorrection) {
@@ -141,9 +149,13 @@ public class Drive extends SubsystemBase {
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
         
-        //this.log("Robot Pose", swerveDrive.field.getRobotPose());
         fieldRelativeLog.append(fieldRelative);
         stateStringLog.append(state);
+
+        Pose2d robotPose = swerveDrive.field.getRobotPose();
+        robotPoseX.append(robotPose.getX());
+        robotPoseY.append(robotPose.getY());
+        robotPoseRotation.append(robotPose.getRotation().getDegrees());
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
