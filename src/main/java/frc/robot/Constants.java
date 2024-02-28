@@ -9,7 +9,7 @@ public final class Constants {
     public static final int DPAD_DOWN = 180;
     public static final int DPAD_LEFT = 270;
     public static final int DPAD_RIGHT = 90;
-    public static final double STICK_DEADBAND = 0.1; 
+    public static final double STICK_DEADBAND = 0.02; 
 
     public static final class Drive {
         // Drive Constants
