@@ -70,6 +70,6 @@ public class RGB {
             RGBControl.set(0.77);
         } else if (state == RGBStates.DISABLED) {
             RGBControl.set(0);
-        }
+        } 
     }
 }
