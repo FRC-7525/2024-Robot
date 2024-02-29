@@ -34,15 +34,16 @@ import edu.wpi.first.util.datalog.DataLog;
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
-    //Vision vision = new Vision();
     Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
-    //Climber climber = new Climber(this);
+    // Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
-    
+    boolean hasFrontPose;
+    boolean hasSidePose;
+
 
     public Command getAutonomousCommand(String autoName) {
         return new PathPlannerAuto(autoName);
@@ -54,9 +55,9 @@ public class Robot extends TimedRobot {
         DriverStation.startDataLog(DataLogManager.getLog());
 
         // climber.zeroClimber();
-        //CameraServer.startAutomaticCapture();
+        // CameraServer.startAutomaticCapture();
 
-        NamedCommands.registerCommand("Intaking",  autoCommands.intaking());
+        NamedCommands.registerCommand("Intaking", autoCommands.intaking());
         NamedCommands.registerCommand("Shooting", new Shooting(this));
         NamedCommands.registerCommand("Return To Idle", autoCommands.returnToIdle());
         NamedCommands.registerCommand("Speeding Up", autoCommands.startSpinningUp());
@@ -69,7 +70,7 @@ public class Robot extends TimedRobot {
         // TODO: 4 note auto (2 close and 1 far on the left) (2-28)
         // TODO: 4 note auto (2 close and 1 far on the right) (2-28)
         // TODO: 5 note auto (all 3 close and 1 far) (3-2)
-        
+
         // Misc Autos
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
@@ -89,27 +90,31 @@ public class Robot extends TimedRobot {
         chooser.addOption("All Close", "All Close");
         chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
         chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
-        //5 Note Auto
+        // 5 Note Auto
         chooser.addOption("5 Note Auto", "5 Note Auto");
-        
-        
+
         SmartDashboard.putData("Path Chooser", chooser);
     }
-    
+
     @Override
     public void robotPeriodic() {
         rgb.periodic();
         manager.periodic();
         // climber.periodic();
         CommandScheduler.getInstance().run();
-        /* 
+
         vision.periodic();
-        intake.putSmartDashValues();
-        if (vision.getPose2d().isPresent()) {
-            drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
-        } 
-        */
-   }
+        hasFrontPose = vision.getFrontPose2d().isPresent();
+        hasSidePose = vision.getSidePose2d().isPresent();
+
+        if (hasSidePose) {
+            drive.addVisionMeasurement(vision.getSidePose2d().get(), Timer.getFPGATimestamp());
+        }
+
+        if (hasFrontPose) {
+            drive.addVisionMeasurement(vision.getFrontPose2d().get(), Timer.getFPGATimestamp());
+        }
+    }
 
     @Override
     public void autonomousInit() {
@@ -129,7 +134,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         // climber.zeroClimber();
         drive.setHeadingCorrection(true);
-        
+
         manager.intake.setPivotMotorMode(IdleMode.kBrake);
     }
 
