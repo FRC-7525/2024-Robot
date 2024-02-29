@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import java.beans.Encoder;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.AbsoluteEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -20,24 +22,21 @@ public class AmpBar {
     private AmpBarStates state = AmpBarStates.OUT;
     private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(40);
     private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(45);
-    //private WPI_TalonSRX pivotEncoder;
-    private TalonSRXSwerve pivotEncoder;
+    private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(0);
     double pivotMotorSetpoint = 0;
 
+    public AmpBar() {
+        rightMotor.follow(leftMotor);
+    }
 
-    public AmpBar(){
+    public void periodic() {
         if(state == AmpBarStates.OUT){
             pivotMotorSetpoint = 5;
-            leftMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
-            rightMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
-
         } else if (state == AmpBarStates.IN){
             pivotMotorSetpoint = 0;
-            leftMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
-            rightMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
         }
-
-
+        
+        leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
     }
 }
 
