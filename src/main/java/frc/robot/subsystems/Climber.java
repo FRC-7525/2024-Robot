@@ -9,7 +9,6 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
-import monologue.Logged;
 
 enum ClimberStates {
     ZEROING,

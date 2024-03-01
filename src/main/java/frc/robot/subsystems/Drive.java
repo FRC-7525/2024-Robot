@@ -23,7 +23,6 @@ import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
-import monologue.Logged;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
