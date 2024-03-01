@@ -28,7 +28,7 @@ public class Vision {
     Transform3d frontrobotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(-14.25), 0, Units.inchesToMeters(6)),
             new Rotation3d(0, Units.degreesToRadians(-67), Units.degreesToRadians(180)));
     Transform3d siderobotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(-9.25), Units.inchesToMeters(9.75), Units.inchesToMeters(15.25)),
-            new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(90)));
+            new Rotation3d(0, Units.degreesToRadians(-14), Units.degreesToRadians(90)));
     PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(AprilTagFields.k2024Crescendo.loadAprilTagLayoutField(),
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
             frontrobotToCam);

@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
         DriverStation.startDataLog(DataLogManager.getLog());
 
         // climber.zeroClimber();
-        // CameraServer.startAutomaticCapture();
+        CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking", autoCommands.intaking());
         NamedCommands.registerCommand("Shooting", new Shooting(this));
