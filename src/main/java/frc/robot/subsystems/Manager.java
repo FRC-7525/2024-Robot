@@ -2,11 +2,14 @@ package frc.robot.subsystems;
 
 import java.security.cert.TrustAnchor;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
+
+import edu.wpi.first.util.datalog.*;
 
 enum ManagerStates {
     IDLE,
@@ -33,8 +36,12 @@ public class Manager {
     Timer centerNoteTimer = new Timer();
     boolean autoShoot = false;
 
+    StringLogEntry stateStringLog;
+
     public Manager(Robot robot) {
         this.robot = robot;
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/manager/stateString");
     }
 
     public void reset() {
@@ -121,7 +128,7 @@ public class Manager {
             intake.setState(IntakeStates.INTAKING);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
-            if ((intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > 30 && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) {
+            if ((intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > Constants.Intake.SUPPLY_CURRENT_MINIMUM && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
                 System.out.println("Current sensing made it go in");
                 state = ManagerStates.IDLE;
                 reset();
@@ -146,7 +153,6 @@ public class Manager {
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
                 reset();
-
             }
               
             stateString = "Shooting";
@@ -156,7 +162,7 @@ public class Manager {
             if (intake.nearSetpoint()) {
                 intake.setState(IntakeStates.AMP_SCORING);
                 shooterTimer.start();
-                if (shooterTimer.get() > 1) {
+                if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
                     shooterTimer.stop();
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
@@ -170,7 +176,7 @@ public class Manager {
             stateString = "Spinning up";
 
             if (autoShoot) {
-                if (shooter.atSetPoint()) {
+                if (shooter.atSetPoint()) { // Ensures the shooter motors are at setpoint before shooting.
                     state = ManagerStates.SHOOTING;
                     reset();
                     System.out.println("It switched to shooting");
@@ -193,6 +199,7 @@ public class Manager {
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
+        stateStringLog.append(stateString);
     }
 
     public Boolean isIdle() {
@@ -210,7 +217,7 @@ public class Manager {
         autoShoot = true;
     }
 
-    public void speedingUp() {
+    public void spinningUp() {
         reset();
         state = ManagerStates.START_SPINNING;
         autoShoot = false;

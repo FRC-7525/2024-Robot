@@ -2,13 +2,16 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
+import edu.wpi.first.util.datalog.*;
 
 enum ClimberStates {
     ZEROING,
@@ -35,10 +38,26 @@ public class Climber {
     LinearFilter leftFilter = LinearFilter.movingAverage(5);
     LinearFilter rightFilter = LinearFilter.movingAverage(5);
 
+    StringLogEntry stateStringLog;
+    DoubleLogEntry leftSetpointLog;
+    DoubleLogEntry rightSetpointLog;
+    DoubleLogEntry leftCurrentLog;
+    DoubleLogEntry rightCurrentLog;
+
     public Climber(Robot robot) {
         this.robot = robot;
         rightMotor.setInverted(true);
         leftMotor.setInverted(false);
+        rightMotor.setIdleMode(IdleMode.kBrake);
+        leftMotor.setIdleMode(IdleMode.kBrake);
+
+
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/climber/stateString");
+        leftSetpointLog = new DoubleLogEntry(dataLog, "/climber/leftSetpoint"); 
+        rightSetpointLog = new DoubleLogEntry(dataLog, "/climber/rightSetpoint");
+        leftCurrentLog = new DoubleLogEntry(dataLog, "/climber/leftCurrent");
+        rightCurrentLog = new DoubleLogEntry(dataLog, "/climber/leftCurrent");
     }
 
     public void zeroClimber() {
@@ -59,18 +78,19 @@ public class Climber {
         if (state == ClimberStates.ZEROING) {
             double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
             double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
-            if (leftCurrent > Constants.Climber.CURRENT_MAX) {
+            if (leftCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the left motor.
                 leftMotor.getEncoder().setPosition(0);
                 leftSpeed = 0;
                 System.out.println("LEFT SPEED ZERO");
             }
-            if (rightCurrent > Constants.Climber.CURRENT_MAX) {
+
+            if (rightCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the right motor.
                 rightMotor.getEncoder().setPosition(0);
                 rightSpeed = 0;
                 System.out.println("RIGHT SPEED ZERO");
             }
 
-            if (rightSpeed == 0 && leftSpeed == 0) {
+            if (rightSpeed == 0 && leftSpeed == 0) { // Hacky solution to switch to the climbing state when both are zeroed.
                 System.out.println("TRANSITION");
                 state = ClimberStates.CLIMBING;
             }
@@ -115,5 +135,10 @@ public class Climber {
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
 
+        stateStringLog.append(stateString);
+        leftSetpointLog.append(leftMotorSetpoint);
+        rightSetpointLog.append(rightMotorSetpoint);
+        leftCurrentLog.append(leftMotor.getOutputCurrent());
+        rightCurrentLog.append(rightMotor.getOutputCurrent());
     }
 }

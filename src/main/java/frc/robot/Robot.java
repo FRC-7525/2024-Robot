@@ -8,10 +8,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Commands.AutoCommands;
-import frc.robot.Commands.Intaking;
-import frc.robot.Commands.ReturnRobotToIdle;
-import frc.robot.Commands.Shooting;
+import frc.robot.commands.AutoCommands;
+import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -30,6 +28,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.util.datalog.DataLog;
+
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
@@ -41,6 +43,7 @@ public class Robot extends TimedRobot {
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
+    
 
     public Command getAutonomousCommand(String autoName) {
         return new PathPlannerAuto(autoName);
@@ -48,8 +51,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
+
         // climber.zeroClimber();
-        //Monologue.setupMonologue(this, "Robot", true, true);
         //CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking",  autoCommands.intaking());
@@ -70,6 +75,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
         chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
+        chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
         // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
@@ -101,8 +107,8 @@ public class Robot extends TimedRobot {
         if (vision.getPose2d().isPresent()) {
             drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
         } 
-        //Monologue.updateAll();
     }
+
 
     @Override
     public void autonomousInit() {
@@ -122,7 +128,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         // climber.zeroClimber();
         drive.setHeadingCorrection(true);
-        manager.intake.pivotMotor.setIdleMode(IdleMode.kBrake);
+        
+        manager.intake.setPivotMotorMode(IdleMode.kBrake);
     }
 
     @Override
@@ -132,13 +139,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        manager.intake.pivotMotor.setIdleMode(IdleMode.kCoast);
+        manager.intake.setPivotMotorMode(IdleMode.kCoast);
     }
 
     @Override
     public void disabledPeriodic() {
-        manager.intake.putSmartDashValues();
-
     }
 
     @Override

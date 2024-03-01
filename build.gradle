@@ -8,10 +8,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-repositories {
-  maven { url 'https://jitpack.io' }
-}
-
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)

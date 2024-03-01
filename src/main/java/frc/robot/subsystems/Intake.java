@@ -7,10 +7,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+
+import edu.wpi.first.util.datalog.*;
 
 enum IntakeStates {
     OFF,
@@ -27,7 +30,7 @@ enum IntakeStates {
 public class Intake extends SubsystemBase {
     IntakeStates states = IntakeStates.OFF;
     Robot robot = null;
-    public CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
+    private CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
     public TalonFX intakeMotor = new TalonFX(20);
     private RelativeEncoder pivotEncoder = pivotMotor.getEncoder();
 
@@ -36,15 +39,29 @@ public class Intake extends SubsystemBase {
     double pivotMotorSetpoint = 0.0;
     double intakeMotorSetpoint = 0.0;
 
+    StringLogEntry stateStringLog;
+    DoubleLogEntry pivotSetpointLog;
+    DoubleLogEntry intakeSetpointLog;
+
     public Intake(Robot robot) {
         this.robot = robot;
         intakeMotor.setInverted(true);
         pivotEncoder.setPosition(0);
         pivotMotor.setIdleMode(IdleMode.kBrake);
+
+        DataLog dataLog = DataLogManager.getLog();
+        stateStringLog = new StringLogEntry(dataLog, "/intake/stateString");
+        pivotSetpointLog = new DoubleLogEntry(dataLog, "/intake/pivotSetpoint");
+        intakeSetpointLog = new DoubleLogEntry(dataLog, "/intake/intakeSetpoint");
     }
     public void setState(IntakeStates state) {
         this.states = state;
     }
+
+    public void setPivotMotorMode(IdleMode mode) {
+        pivotMotor.setIdleMode(mode);
+    }
+
     public void resetPivotMotor() {
         pivotEncoder.setPosition(0);
     }
@@ -95,6 +112,10 @@ public class Intake extends SubsystemBase {
 
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
         intakeMotor.set(intakeMotorSetpoint);
+
+        stateStringLog.append(currentState);
+        pivotSetpointLog.append(pivotMotorSetpoint);
+        intakeSetpointLog.append(intakeMotorSetpoint);
     }
     public void putSmartDashValues() {
         SmartDashboard.putString("Current state of INTAKE:", currentState);
