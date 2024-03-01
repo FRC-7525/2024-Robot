@@ -8,8 +8,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.AutoCommands;
-import frc.robot.commands.Shooting;
+import frc.robot.Commands.AutoCommands;
+import frc.robot.Commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.RGB;
@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
         DriverStation.startDataLog(DataLogManager.getLog());
 
         // climber.zeroClimber();
-        //CameraServer.startAutomaticCapture();
+        CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking",  autoCommands.intaking());
         NamedCommands.registerCommand("Shooting", new Shooting(this));
