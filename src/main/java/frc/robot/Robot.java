@@ -103,10 +103,10 @@ public class Robot extends TimedRobot {
         manager.periodic();
         // climber.periodic();
         CommandScheduler.getInstance().run();
-        vision.periodic();
+        /* vision.periodic();
         if (vision.getPose2d().isPresent()) {
             drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
-        } 
+        }  */
     }
 
 
