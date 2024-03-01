@@ -91,7 +91,7 @@ public class Drive extends SubsystemBase {
             swerveDrive::getPose, // Robot pose supplier
             swerveDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            swerveDrive::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 // More PID tuning would be nice
                 Constants.Drive.translationPID, // Translation PID constants
@@ -150,7 +150,10 @@ public class Drive extends SubsystemBase {
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
-        
+        double actualAngle = swerveDrive.getModules()[0].getAngleMotor().getPosition();
+        double desiredAngle = SwerveDriveTelemetry.desiredStates[0];
+        SmartDashboard.putNumber("Angle position error", Units.radiansToDegrees(MathUtil.angleModulus(Units.degreesToRadians(desiredAngle - actualAngle))));
+
         fieldRelativeLog.append(fieldRelative);
         stateStringLog.append(state);
 
