@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
         chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
         //Choreo Autos
-        chooser.addOption("4 Note Choreo", "Optimized 4 Note");
+        chooser.addOption("2 Note Choreo", "Optimized 2 Note");
         // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
