@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
         NamedCommands.registerCommand("Shooting", new Shooting(this));
         NamedCommands.registerCommand("Return To Idle", autoCommands.returnToIdle());
         NamedCommands.registerCommand("Speeding Up", autoCommands.startSpinningUp());
+        NamedCommands.registerCommand("Spin and Intake", autoCommands.spinAndIntake());
 
         // TODO: Score Drive Backwards (2-17)
         // TODO: 2 note autos (score any close note) (2-21)
@@ -76,10 +77,12 @@ public class Robot extends TimedRobot {
         chooser.addOption("Do Nothing", "Do Nothing");
         chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
         chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
-        //Choreo Autos
+        //Choreo Autos (not running these)
+        /* 
         chooser.addOption("2 Note Choreo", "Optimized 2 Note");
         chooser.addOption("3 Note Choreo", "Optimized 3 Note");
         chooser.addOption("4 Note Choreo", "Optimized 4 Note");
+        */
         // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
@@ -94,6 +97,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("All Close", "All Close");
         chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
         chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
+        chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line");
         // 5 Note Auto
         chooser.addOption("5 Note Auto", "5 Note Auto");
 
@@ -138,7 +142,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         // climber.zeroClimber();
         drive.setHeadingCorrection(true);
-
+        manager.returnToIdle();
+        manager.reset();
         manager.intake.setPivotMotorMode(IdleMode.kBrake);
     }
 

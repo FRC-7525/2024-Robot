@@ -30,4 +30,8 @@ public class AutoCommands {
     public Command startSpinningUp() {
         return new InstantCommand(() -> robot.manager.spinningUp());
     }
+
+    public Command spinAndIntake() {
+        return new InstantCommand(() -> robot.manager.intakingWhileSpinning());
+    }
 }

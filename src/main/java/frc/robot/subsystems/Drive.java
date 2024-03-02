@@ -4,6 +4,9 @@ import frc.robot.Constants;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
+
+import javax.swing.text.TabExpander;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -13,6 +16,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -153,6 +158,8 @@ public class Drive extends SubsystemBase {
         double actualAngle = swerveDrive.getModules()[0].getAngleMotor().getPosition();
         double desiredAngle = SwerveDriveTelemetry.desiredStates[0];
         SmartDashboard.putNumber("Angle position error", Units.radiansToDegrees(MathUtil.angleModulus(Units.degreesToRadians(desiredAngle - actualAngle))));
+        SmartDashboard.putNumber("Acceleration", calculateAcceleration(swerveDrive.getAccel()));
+        SmartDashboard.putNumber("Robot Velocity", calculateVelocity(swerveDrive.getRobotVelocity()));
 
         fieldRelativeLog.append(fieldRelative);
         stateStringLog.append(state);
@@ -161,6 +168,26 @@ public class Drive extends SubsystemBase {
         robotPoseX.append(robotPose.getX());
         robotPoseY.append(robotPose.getY());
         robotPoseRotation.append(robotPose.getRotation().getDegrees());
+    }
+
+    public double calculateAcceleration(Optional<Translation3d> acceleration) {
+        if (acceleration.isPresent()) {
+            Translation3d presentAcceleration = acceleration.get();
+            return Math.sqrt(
+                Math.pow(presentAcceleration.getX(), 2) +
+                Math.pow(presentAcceleration.getY(), 2) +
+                Math.pow(presentAcceleration.getZ(), 2)
+            );
+        } else {
+            return 0;
+        }
+    }
+
+    public double calculateVelocity(ChassisSpeeds velocity) {
+        double x = velocity.vxMetersPerSecond;
+        double y = velocity.vyMetersPerSecond;
+        double angularVelocity = velocity.omegaRadiansPerSecond;
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(angularVelocity, 2));
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
