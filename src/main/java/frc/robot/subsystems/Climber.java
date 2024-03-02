@@ -118,15 +118,15 @@ public class Climber {
                 leftMotorSetpoint -= rightTriggerAxis;
             }
             
-            rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
-            leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
+            rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
+            leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
 
             if (rightMotorSetpoint == Constants.Climber.DOWN && leftMotorSetpoint == Constants.Climber.DOWN) {
                 isExtended = false;
             }
             rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
             leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint)); 
-        } 
+        }
 
         SmartDashboard.putString("Climber State", stateString);
         SmartDashboard.putNumber("Left Climber Current", leftMotor.getOutputCurrent());

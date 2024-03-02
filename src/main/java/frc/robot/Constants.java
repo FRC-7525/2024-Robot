@@ -23,7 +23,7 @@ public final class Constants {
         public static final String pathPlannerFile = isNeo ? "swerve/neo" : "swerve/falcon";
         public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 4.5;
-        public static final double maxSpeed = Units.feetToMeters(5);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+        public static final double maxSpeed = Units.feetToMeters(0.1);// Change Units.feetToMeters(x) to have a smaller x for faster robot
 
         public static final PIDConstants translationPID = new PIDConstants(5, 0, 0.1);
         public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.4);

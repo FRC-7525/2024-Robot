@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
-    // Climber climber = new Climber(this);
+    Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
@@ -78,6 +78,8 @@ public class Robot extends TimedRobot {
         chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
         //Choreo Autos
         chooser.addOption("2 Note Choreo", "Optimized 2 Note");
+        chooser.addOption("3 Note Choreo", "Optimized 3 Note");
+        chooser.addOption("4 Note Choreo", "Optimized 4 Note");
         // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
@@ -102,7 +104,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         rgb.periodic();
         manager.periodic();
-        // climber.periodic();
+        climber.periodic();
         CommandScheduler.getInstance().run();
 
         vision.periodic();
