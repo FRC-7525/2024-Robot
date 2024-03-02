@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3914165945307624,
-        "y": 4.801442983770418
+        "x": 3.699126954302743,
+        "y": 6.032232974565838
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.0777770571233,
-        "y": 5.972526638348569
+        "x": 6.370208700461798,
+        "y": 6.206633500947357
       },
       "prevControl": {
-        "x": 3.0777770571233,
-        "y": 5.972526638348569
+        "x": 5.6762408276742224,
+        "y": 6.523631171233039
+      },
+      "nextControl": {
+        "x": 7.113705681351431,
+        "y": 5.867011423257032
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.1,
+        "y": 5.78
+      },
+      "prevControl": {
+        "x": 7.79709382260052,
+        "y": 5.578062548400346
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 85.51212957117164,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Misc Paths",
+  "folder": "4 Note Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

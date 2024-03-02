@@ -21,6 +21,7 @@ enum ManagerStates {
     WAIT_FOR_BACK,
     SCORING_AMP,
     START_SPINNING,
+    SPINNING_AND_INTAKING
 }
 
 public class Manager {
@@ -173,7 +174,10 @@ public class Manager {
                 autoShoot = true;
                 reset();
             }
-        }
+        } else if (state == ManagerStates.SPINNING_AND_INTAKING) {
+            shooter.setState(ShootingStates.SHOOTING);
+            intake.setState(IntakeStates.INTAKING);
+        } 
         
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
@@ -186,6 +190,10 @@ public class Manager {
     }
 
     // Functions for Auto Commands
+    public void intakingWhileSpinning() {
+        state = ManagerStates.SPINNING_AND_INTAKING;
+    }
+
     public void intaking() {
         state = ManagerStates.INTAKING;
     }
