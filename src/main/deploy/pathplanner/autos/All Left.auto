@@ -1,0 +1,113 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8448339118900462,
+      "y": 6.584539835746337
+    },
+    "rotation": 58.74490506575118
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin and Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Shoot to Left Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speeding Up"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Left note to Shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intaking"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftCenterFromLeft"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speeding Up"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftCenterToLeftShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "3 Notes",
+  "choreoAuto": false
+}

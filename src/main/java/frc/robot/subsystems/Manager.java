@@ -73,7 +73,7 @@ public class Manager {
                 state = ManagerStates.START_SPINNING;
                 autoShoot = false;
                 reset();
-            } else if (robot.controller.getBackButtonPressed()) {
+            } else if (robot.controller.getYButtonPressed()) {
                 shooterTimer.reset();
                 reset();
                 state = ManagerStates.SCORING_AMP;

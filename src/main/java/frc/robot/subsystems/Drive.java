@@ -49,6 +49,7 @@ public class Drive extends SubsystemBase {
     DoubleLogEntry robotPoseX;
     DoubleLogEntry robotPoseY;
     DoubleLogEntry robotPoseRotation;
+    DoubleLogEntry robotSpin;
 
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
@@ -120,7 +121,7 @@ public class Drive extends SubsystemBase {
         String state = "";
         
         double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.STICK_DEADBAND);
-        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND);
+        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND) * Constants.Drive.regularRotationMultiplier;
         double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.STICK_DEADBAND);
 
 
@@ -145,7 +146,7 @@ public class Drive extends SubsystemBase {
         if (robot.controller.getStartButtonPressed()) {
             swerveDrive.zeroGyro();
             System.out.println("Gyro Zeroed");
-        } else if (robot.controller.getYButton()) {
+        } else if (robot.controller.getBackButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
             xMovement *= Constants.Drive.slowSpeedMultiplier;
@@ -175,8 +176,7 @@ public class Drive extends SubsystemBase {
             Translation3d presentAcceleration = acceleration.get();
             return Math.sqrt(
                 Math.pow(presentAcceleration.getX(), 2) +
-                Math.pow(presentAcceleration.getY(), 2) +
-                Math.pow(presentAcceleration.getZ(), 2)
+                Math.pow(presentAcceleration.getY(), 2)
             );
         } else {
             return 0;
@@ -187,7 +187,12 @@ public class Drive extends SubsystemBase {
         double x = velocity.vxMetersPerSecond;
         double y = velocity.vyMetersPerSecond;
         double angularVelocity = velocity.omegaRadiansPerSecond;
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(angularVelocity, 2));
+        robotSpin.append(angularVelocity);
+        return Math.sqrt(
+            Math.pow(x, 2) + 
+            Math.pow(y, 2) + 
+            Math.pow(angularVelocity, 2)
+        );
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
