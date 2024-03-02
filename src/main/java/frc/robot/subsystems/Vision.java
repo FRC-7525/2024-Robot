@@ -40,13 +40,13 @@ public class Vision {
             siderobotToCam);
     Boolean seesSideVision = false;
     Boolean seesFrontVision = false;
-    double lastSideVisionMeasurment;
-    double lastFrontVisionMeasurment;
+    double lastSideVisionMeasurment = 0;
+    double lastFrontVisionMeasurment = 0;
 
     public void periodic() {
         frontBotpose3d = frontEstimator.update();
         sideBotpose3d = sideEstimator.update();
-        SmartDashboard.putBoolean("Side vision?", seesSideVision);
+        SmartDashboard.putBoolean("Side Vision", seesSideVision);
         SmartDashboard.putBoolean("Front Vision", seesFrontVision);
     }
 
