@@ -39,7 +39,6 @@ public class Manager {
     
 
     StringLogEntry stateStringLog;
-    private String pivotEncoder;
 
     public Manager(Robot robot) {
         this.robot = robot;
@@ -187,7 +186,6 @@ public class Manager {
                 reset();
                 
             }
-            SmartDashboard.putString("Nisala's Encoder", pivotEncoder);
         }
         
         intake.putSmartDashValues();

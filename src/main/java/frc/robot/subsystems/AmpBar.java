@@ -21,7 +21,6 @@ public class AmpBar {
     private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(45);
     private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(0);
     double pivotMotorSetpoint = 0;
-    private AmpBarStates states;
     
     public AmpBar() {
         rightMotor.follow(leftMotor);
@@ -35,9 +34,12 @@ public class AmpBar {
         }
         
         leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
+        SmartDashboard.putNumber("Amp motor setpoint", pivotMotorSetpoint);
+        SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getAbsolutePosition());
+
     }
 
 	public void setState(AmpBarStates state) {
-        this.states = state;
+        this.state = state;
     }
 }
