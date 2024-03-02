@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
-
 import java.beans.Encoder;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.AbsoluteEncoder;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -24,18 +21,23 @@ public class AmpBar {
     private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(45);
     private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(0);
     double pivotMotorSetpoint = 0;
-
+    private AmpBarStates states;
+    
     public AmpBar() {
         rightMotor.follow(leftMotor);
     }
 
     public void periodic() {
-        if(state == AmpBarStates.OUT){
-            pivotMotorSetpoint = 5;
-        } else if (state == AmpBarStates.IN){
+        if (state == AmpBarStates.OUT) {
+            pivotMotorSetpoint = 0.5;
+        } else if (state == AmpBarStates.IN) {
             pivotMotorSetpoint = 0;
         }
         
         leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
+    }
+
+	public void setState(AmpBarStates state) {
+        this.states = state;
     }
 }
