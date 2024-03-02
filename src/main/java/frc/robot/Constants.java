@@ -74,4 +74,8 @@ public final class Constants {
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
         public static final double DOWN = 5;
     }
+
+    public static final class Vision {
+        public static final double LAST_VISION_MEASURMENT_TIMER = 0.5;
+    }
 }

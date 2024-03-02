@@ -10,7 +10,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Pose2d;
 
 import org.photonvision.PhotonPoseEstimator;
@@ -37,6 +40,8 @@ public class Vision {
             siderobotToCam);
     Boolean seesSideVision = false;
     Boolean seesFrontVision = false;
+    double lastSideVisionMeasurment;
+    double lastFrontVisionMeasurment;
 
     public void periodic() {
         frontBotpose3d = frontEstimator.update();
@@ -48,9 +53,12 @@ public class Vision {
     public Optional<Pose2d> getSidePose2d() {
         if (sideBotpose3d.isPresent()) {
             seesSideVision = true;
+            lastSideVisionMeasurment = Timer.getFPGATimestamp();
             return Optional.of(sideBotpose3d.get().estimatedPose.toPose2d());
         } else {
-            seesSideVision = false;
+            if (Timer.getFPGATimestamp() - lastSideVisionMeasurment > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
+                seesSideVision = false;
+            }
         }
         return Optional.empty();
     }
@@ -58,9 +66,12 @@ public class Vision {
     public Optional<Pose2d> getFrontPose2d() {
         if (frontBotpose3d.isPresent()) {
             seesFrontVision = true;
+            lastFrontVisionMeasurment = Timer.getFPGATimestamp();
             return Optional.of(frontBotpose3d.get().estimatedPose.toPose2d());
         } else {
-            seesFrontVision = false;
+            if (Timer.getFPGATimestamp() - lastFrontVisionMeasurment > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
+                seesFrontVision = false;
+            }
         }
         return Optional.empty();
     }
