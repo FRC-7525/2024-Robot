@@ -46,22 +46,46 @@ class Logger:
         self.file.writerow(vals)
 
 if __name__ == "__main__":
-    stateLog = Logger(fileName="statelogs.csv")
+    log = Logger(fileName="smartdashboard.csv")
 
     #so ya how you use this is you subscribe to what you want outside of the loop and 
     #then do whatever printing/saving/wtv inside the loop
 
     #log state strings
-    stateLog.logString("Shooting States")
-    stateLog.logString("Manager State")
-    stateLog.logString("Drive State")
-    stateLog.logString("Climber State")
-    stateLog.initializeCsv()
-
-    #climber log
-    climberLog = Logger(fileName="climberlog.csv")
+    log.logString("Shooting States")
+    log.logString("Manager State")
+    log.logString("Drive State")
+    log.logString("Climber State")
+    log.logString("Current state of INTAKE:") #why is it named like this.
+    log.logString("Currently selected autonomous")
     
+    #log climber stuff
+    log.logDouble("Left Climber Current")
+    log.logDouble("Left Encoder Position")
+    log.logDouble("Left Encoder Setpoint")
+    log.logDouble("Right Climber Current")
+    log.logDouble("Right Encoder Position")
+    log.logDouble("Right Encoder Setpoint")
+
+    #log intake stuff
+    log.logDouble("Intake motor current")
+    log.logDouble("intake motor position")
+    log.logDouble("intake motor setpoint")
+    log.logDouble("pivot motor position")
+    log.logDouble("pivot motor setpoint")
+
+    #i think this is the shooter? yall need better names
+    log.logDouble("Motor 1 velocity")
+    log.logDouble("Motor 2 velocity")
+
+    #log drive stuff
+    log.logDouble("Robot Velocity")
+    log.logDouble("Acceleration")
+
+    #log path stuff
+    log.logString("Path Chooser/active")
+    log.logString("Path Chooser/selected")
 
     while True:
         time.sleep(SLEEP_TIME) #so it doesnt kill your disk/memory 
-        stateLog.addToCSV()
+        log.addToCSV()
