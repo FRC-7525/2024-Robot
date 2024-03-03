@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-import org.opencv.features2d.FlannBasedMatcher;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 
@@ -10,7 +9,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -40,8 +38,8 @@ public class Vision {
             siderobotToCam);
     Boolean seesSideVision = false;
     Boolean seesFrontVision = false;
-    double lastSideVisionMeasurment = 0;
-    double lastFrontVisionMeasurment = 0;
+    Timer frontVisionTimer = new Timer();
+    Timer sideVisionTimer = new Timer();
 
     public void periodic() {
         frontBotpose3d = frontEstimator.update();
@@ -53,10 +51,11 @@ public class Vision {
     public Optional<Pose2d> getSidePose2d() {
         if (sideBotpose3d.isPresent()) {
             seesSideVision = true;
-            lastSideVisionMeasurment = Timer.getFPGATimestamp();
+            sideVisionTimer.reset();
+            sideVisionTimer.start();
             return Optional.of(sideBotpose3d.get().estimatedPose.toPose2d());
         } else {
-            if (Timer.getFPGATimestamp() - lastSideVisionMeasurment > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
+            if (sideVisionTimer.get() > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
                 seesSideVision = false;
             }
         }
@@ -66,10 +65,11 @@ public class Vision {
     public Optional<Pose2d> getFrontPose2d() {
         if (frontBotpose3d.isPresent()) {
             seesFrontVision = true;
-            lastFrontVisionMeasurment = Timer.getFPGATimestamp();
+            frontVisionTimer.reset();
+            frontVisionTimer.start();
             return Optional.of(frontBotpose3d.get().estimatedPose.toPose2d());
         } else {
-            if (Timer.getFPGATimestamp() - lastFrontVisionMeasurment > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
+            if (frontVisionTimer.get() > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
                 seesFrontVision = false;
             }
         }

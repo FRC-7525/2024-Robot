@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -78,6 +79,7 @@ public class Drive extends SubsystemBase {
         robotPoseX = new DoubleLogEntry(dataLog, "/drive/pose/x");
         robotPoseY = new DoubleLogEntry(dataLog, "/drive/pose/y");
         robotPoseRotation = new DoubleLogEntry(dataLog, "/drive/pose/rotation");
+        robotSpin = new DoubleLogEntry(dataLog, "/drive/angularVelocity");
     }
 
     public void setHeadingCorrection(boolean headingCorrection) {
@@ -119,10 +121,14 @@ public class Drive extends SubsystemBase {
 
     public void periodic() {
         String state = "";
-        
         double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.STICK_DEADBAND);
         double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND) * Constants.Drive.regularRotationMultiplier;
         double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.STICK_DEADBAND);
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red && fieldRelative) {
+            xMovement *= -1;
+            yMovement *= -1;
+        }
+        
 
 
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
@@ -149,18 +155,24 @@ public class Drive extends SubsystemBase {
         } else if (robot.controller.getBackButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
-            xMovement *= Constants.Drive.slowSpeedMultiplier;
-            rotation *= Constants.Drive.slowRotationMultiplier;
-            yMovement *= Constants.Drive.slowSpeedMultiplier;
+            xMovement *= 4;
+            yMovement *= 4;
+            rotation *= 4;
+        } else{
+            xMovement *= 16.6;
+            yMovement *= 16.6;
+            rotation *= 16.6;
         }
+
+        
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
         double actualAngle = swerveDrive.getModules()[0].getAngleMotor().getPosition();
         double desiredAngle = SwerveDriveTelemetry.desiredStates[0];
         SmartDashboard.putNumber("Angle position error", Units.radiansToDegrees(MathUtil.angleModulus(Units.degreesToRadians(desiredAngle - actualAngle))));
-        SmartDashboard.putNumber("Acceleration", calculateAcceleration(swerveDrive.getAccel()));
-        SmartDashboard.putNumber("Robot Velocity", calculateVelocity(swerveDrive.getRobotVelocity()));
+        SmartDashboard.putNumber("Acceleration", Units.metersToFeet(calculateAcceleration(swerveDrive.getAccel())));
+        SmartDashboard.putNumber("Robot Velocity", Units.metersToFeet(calculateVelocity(swerveDrive.getRobotVelocity())));
 
         fieldRelativeLog.append(fieldRelative);
         stateStringLog.append(state);
@@ -172,6 +184,7 @@ public class Drive extends SubsystemBase {
     }
 
     public double calculateAcceleration(Optional<Translation3d> acceleration) {
+
         if (acceleration.isPresent()) {
             Translation3d presentAcceleration = acceleration.get();
             return Math.sqrt(
@@ -190,8 +203,7 @@ public class Drive extends SubsystemBase {
         robotSpin.append(angularVelocity);
         return Math.sqrt(
             Math.pow(x, 2) + 
-            Math.pow(y, 2) + 
-            Math.pow(angularVelocity, 2)
+            Math.pow(y, 2)
         );
     }
 

@@ -16,8 +16,8 @@
     "Choreo Autos"
   ],
   "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 6.0,
-  "defaultMaxAngVel": 500.0,
-  "defaultMaxAngAccel": 500.0,
+  "defaultMaxAccel": 3.0,
+  "defaultMaxAngVel": 180.0,
+  "defaultMaxAngAccel": 180.0,
   "maxModuleSpeed": 4.5
 }
