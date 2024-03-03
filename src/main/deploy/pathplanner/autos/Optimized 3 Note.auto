@@ -18,7 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ChoreoShootToLeftNote"
+                  "pathName": null
                 }
               },
               {
@@ -43,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ChoreoLeftNoteToShoot"
+                  "pathName": null
                 }
               }
             ]
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ChoreoShootToMidNote"
+                  "pathName": null
                 }
               }
             ]
@@ -93,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ChoreoMidNoteToShoot.1"
+                  "pathName": null
                 }
               }
             ]
