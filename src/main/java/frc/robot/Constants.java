@@ -81,5 +81,6 @@ public final class Constants {
 
     public static final class Vision {
         public static final double LAST_VISION_MEASURMENT_TIMER = 0.5;
+        public static final boolean VISION_ENABLED = true;
     }
 }
