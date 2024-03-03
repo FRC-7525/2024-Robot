@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +43,8 @@ public class Intake extends SubsystemBase {
     DoubleLogEntry pivotSetpointLog;
     DoubleLogEntry intakeSetpointLog;
 
+    LinearFilter currentFilter = LinearFilter.movingAverage(10);
+
     public Intake(Robot robot) {
         this.robot = robot;
         intakeMotor.setInverted(true);
@@ -68,6 +71,12 @@ public class Intake extends SubsystemBase {
         return Math.abs(pivotEncoder.getPosition() - pivotMotorSetpoint) < 1;
     }
 
+    public boolean overCurrentLimit() {
+        double currentCurrent = currentFilter.calculate(intakeMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Current Intake Current", currentCurrent);
+        return currentCurrent > Constants.Intake.SUPPLY_CURRENT_MINIMUM;
+    }
+
     String currentState = "State not set.";
 
     public void periodic() {
@@ -75,6 +84,7 @@ public class Intake extends SubsystemBase {
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.OFF;
             currentState = "OFF";
+            currentFilter.calculate(0);
         } else if (states == IntakeStates.INTAKING) {
             pivotMotorSetpoint = Constants.Intake.DOWN;
             intakeMotorSetpoint = Constants.Intake.ON;

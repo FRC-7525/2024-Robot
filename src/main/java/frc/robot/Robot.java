@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> chooser = new SendableChooser<>();
     boolean hasFrontPose;
     boolean hasSidePose;
+    Command autoCommand = null;
 
 
     public Command getAutonomousCommand(String autoName) {
@@ -54,7 +55,6 @@ public class Robot extends TimedRobot {
         DataLogManager.start();
         DriverStation.startDataLog(DataLogManager.getLog());
 
-        // climber.zeroClimber();
         CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking", autoCommands.intaking());
@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
         chooser.addOption("Center Left + Left", "Center Left + Left");
         chooser.addOption("Right + Center Right", "Right + Center Right");
         chooser.addOption("Mid + Center Left", "Mid + Center Left");
+        chooser.addOption("2 Left Close", "CloseTwoLeft");
+        chooser.addOption("All Left", "All Left");
         // 4 Note Autos
         chooser.addOption("All Close", "All Close");
         chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
@@ -108,7 +110,6 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         rgb.periodic();
         manager.periodic();
-        climber.periodic();
         CommandScheduler.getInstance().run();
 
         vision.periodic();
@@ -131,7 +132,8 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
         drive.zeroGyro();
         drive.resetOdometry();
-        getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing").schedule();
+        autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
+        autoCommand.schedule();
     }
 
     @Override
@@ -149,6 +151,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        autoCommand = null;
+        climber.periodic();
         drive.periodic();
     }
 
@@ -159,6 +163,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
+        autoCommand = null;
     }
 
     @Override

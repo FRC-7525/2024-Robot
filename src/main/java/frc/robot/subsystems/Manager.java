@@ -34,6 +34,7 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer goOutTimer = new Timer();
     Timer centerNoteTimer = new Timer();
+    Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
 
     StringLogEntry stateStringLog;
@@ -117,13 +118,18 @@ public class Manager {
             intake.setState(IntakeStates.INTAKING);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
-            if ((intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > Constants.Intake.SUPPLY_CURRENT_MINIMUM && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
-                System.out.println("Current sensing made it go in");
-                state = ManagerStates.IDLE;
-                reset();
-            } else if (robot.controller.getRightBumper()) {
-                state = ManagerStates.OUTTAKING;
-                reset();
+            currentSensingTimer.start();
+            if (currentSensingTimer.get() > Constants.Intake.CURRENT_SENSING_TIMER) { 
+                if ((intake.overCurrentLimit() && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
+                    System.out.println("Current sensing made it go in");
+                    state = ManagerStates.IDLE;
+                    reset();
+                    currentSensingTimer.stop();
+                    currentSensingTimer.reset();
+                } else if (robot.controller.getRightBumper()) {
+                    state = ManagerStates.OUTTAKING;
+                    reset();
+                }
             }
         } else if (state == ManagerStates.OUTTAKING) {
             intake.setState(IntakeStates.OUTTAKING);
@@ -137,7 +143,7 @@ public class Manager {
             shooter.setState(ShootingStates.SHOOTING);
             shooterTimer.start();
             intake.setState(IntakeStates.FEEDING);
-            if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
+            if (shooterTimer.get() > (DriverStation.isAutonomous() ? Constants.Shooter.AUTO_SHOOTER_TIME : Constants.Shooter.SHOOTER_TIME)) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
@@ -151,7 +157,7 @@ public class Manager {
             if (intake.nearSetpoint()) {
                 intake.setState(IntakeStates.AMP_SCORING);
                 shooterTimer.start();
-                if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
+                if (shooterTimer.get() > Constants.Shooter.AMP_TIME) {
                     shooterTimer.stop();
                     shooterTimer.reset();
                     state = ManagerStates.IDLE;
