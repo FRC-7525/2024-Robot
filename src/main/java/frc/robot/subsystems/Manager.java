@@ -2,14 +2,11 @@ package frc.robot.subsystems;
 
 import java.security.cert.TrustAnchor;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
-
-import edu.wpi.first.util.datalog.*;
 
 enum ManagerStates {
     IDLE,
@@ -37,12 +34,8 @@ public class Manager {
     Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
 
-    StringLogEntry stateStringLog;
-
     public Manager(Robot robot) {
         this.robot = robot;
-        DataLog dataLog = DataLogManager.getLog();
-        stateStringLog = new StringLogEntry(dataLog, "/manager/stateString");
     }
 
     public void reset() {
@@ -188,7 +181,6 @@ public class Manager {
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
-        stateStringLog.append(stateString);
     }
 
     public Boolean isIdle() {

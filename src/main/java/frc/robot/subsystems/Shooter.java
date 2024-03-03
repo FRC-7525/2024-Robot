@@ -4,13 +4,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
-
-import edu.wpi.first.util.datalog.*;
 
 enum ShootingStates {
     SHOOTING,
@@ -27,15 +24,10 @@ public class Shooter extends SubsystemBase {
     BangBangController bangController = new BangBangController();
     String stateString = "";
 
-    StringLogEntry stateStringLog;
-
     public Shooter(Robot robot) {
         this.robot = robot;
         shooterMotor2.setInverted(true);
         shooterMotor1.setInverted(false);
-
-        DataLog dataLog = DataLogManager.getLog();
-        stateStringLog = new StringLogEntry(dataLog, "/shooter/stateString");
     }
 
     public boolean atSetPoint() {
@@ -68,8 +60,6 @@ public class Shooter extends SubsystemBase {
             shooterMotor2.set(-Constants.Shooter.SLOW_SPEED);
             stateString = "Reversing";
         }
-
-        stateStringLog.append(stateString);
     }
 
     public void putSmartDashValues() {

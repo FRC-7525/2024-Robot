@@ -20,7 +20,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,8 +29,6 @@ import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
-
-import edu.wpi.first.util.datalog.*;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
@@ -43,14 +40,6 @@ public class Drive extends SubsystemBase {
     DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
     Robot robot = null;
     boolean fieldRelative = false;
-   
-    StringLogEntry stateStringLog;
-    BooleanLogEntry fieldRelativeLog;
-
-    DoubleLogEntry robotPoseX;
-    DoubleLogEntry robotPoseY;
-    DoubleLogEntry robotPoseRotation;
-    DoubleLogEntry robotSpin;
 
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
@@ -71,15 +60,6 @@ public class Drive extends SubsystemBase {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        DataLog dataLog = DataLogManager.getLog();
-        stateStringLog = new StringLogEntry(dataLog, "/drive/stateString");
-        fieldRelativeLog = new BooleanLogEntry(dataLog, "/drive/fieldRelative");
-
-        robotPoseX = new DoubleLogEntry(dataLog, "/drive/pose/x");
-        robotPoseY = new DoubleLogEntry(dataLog, "/drive/pose/y");
-        robotPoseRotation = new DoubleLogEntry(dataLog, "/drive/pose/rotation");
-        robotSpin = new DoubleLogEntry(dataLog, "/drive/angularVelocity");
     }
 
     public void setHeadingCorrection(boolean headingCorrection) {
@@ -174,13 +154,7 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("Acceleration", Units.metersToFeet(calculateAcceleration(swerveDrive.getAccel())));
         SmartDashboard.putNumber("Robot Velocity", Units.metersToFeet(calculateVelocity(swerveDrive.getRobotVelocity())));
 
-        fieldRelativeLog.append(fieldRelative);
-        stateStringLog.append(state);
-
         Pose2d robotPose = swerveDrive.field.getRobotPose();
-        robotPoseX.append(robotPose.getX());
-        robotPoseY.append(robotPose.getY());
-        robotPoseRotation.append(robotPose.getRotation().getDegrees());
     }
 
     public double calculateAcceleration(Optional<Translation3d> acceleration) {
@@ -200,7 +174,6 @@ public class Drive extends SubsystemBase {
         double x = velocity.vxMetersPerSecond;
         double y = velocity.vyMetersPerSecond;
         double angularVelocity = velocity.omegaRadiansPerSecond;
-        robotSpin.append(angularVelocity);
         return Math.sqrt(
             Math.pow(x, 2) + 
             Math.pow(y, 2)
