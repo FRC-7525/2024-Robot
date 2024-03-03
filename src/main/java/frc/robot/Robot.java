@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     boolean hasFrontPose;
     boolean hasSidePose;
     Command autoCommand = null;
-
+    String currentSelected = "";
 
     public Command getAutonomousCommand(String autoName) {
         return new PathPlannerAuto(autoName);
@@ -112,27 +112,32 @@ public class Robot extends TimedRobot {
         manager.periodic();
         CommandScheduler.getInstance().run();
 
-        vision.periodic();
-        hasFrontPose = vision.getFrontPose2d().isPresent();
-        hasSidePose = vision.getSidePose2d().isPresent();
+        if (Constants.Vision.VISION_ENABLED) {
+            vision.periodic();
+            hasFrontPose = vision.getFrontPose2d().isPresent();
+            hasSidePose = vision.getSidePose2d().isPresent();
 
-        if (hasSidePose) {
-            drive.addVisionMeasurement(vision.getSidePose2d().get(), Timer.getFPGATimestamp());
+            if (hasSidePose) {
+                drive.addVisionMeasurement(vision.getSidePose2d().get(), Timer.getFPGATimestamp());
+            }
+
+            if (hasFrontPose) {
+                drive.addVisionMeasurement(vision.getFrontPose2d().get(), Timer.getFPGATimestamp());
+            }
         }
 
-        if (hasFrontPose) {
-            drive.addVisionMeasurement(vision.getFrontPose2d().get(), Timer.getFPGATimestamp());
-        }
+        SmartDashboard.putString("Currently selected autonomous", ((currentSelected != null) ? currentSelected : "None"));
     }
 
     @Override
     public void autonomousInit() {
         drive.setHeadingCorrection(false);
-        System.out.println("Scheduling Auto");
+        if (!Constants.Vision.VISION_ENABLED) {
+            drive.zeroGyro();
+            drive.resetOdometry();
+        }
+
         CommandScheduler.getInstance().cancelAll();
-        drive.zeroGyro();
-        drive.resetOdometry();
-        autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
         autoCommand.schedule();
     }
 
@@ -158,12 +163,18 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        CommandScheduler.getInstance().cancelAll();
         manager.intake.setPivotMotorMode(IdleMode.kCoast);
+        autoCommand = null;
+        currentSelected = "";
     }
 
     @Override
     public void disabledPeriodic() {
-        autoCommand = null;
+        if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs to be made
+            autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
+            currentSelected = chooser.getSelected();
+        }
     }
 
     @Override
