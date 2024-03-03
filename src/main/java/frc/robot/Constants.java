@@ -28,9 +28,10 @@ public final class Constants {
         public static final PIDConstants translationPID = new PIDConstants(6, 0, 0.1);
         public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.4);
 
-        public static final double slowSpeedMultiplier = 0.05;
-        public static final double slowRotationMultiplier = 0.1;
-        public static final double regularRotationMultiplier = 0.2;
+        public static final double slowTranslationMultiplier = Units.feetToMeters(4);
+        public static final double slowRotationMultiplier = Units.feetToMeters(15);
+        public static final double fastTranslationMultiplier = Units.feetToMeters(16.6);
+        public static final double fastRotationMultiplier = Units.feetToMeters(25);
     }
 
     public static final class Intake {

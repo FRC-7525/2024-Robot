@@ -102,7 +102,7 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         String state = "";
         double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.STICK_DEADBAND);
-        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND) * Constants.Drive.regularRotationMultiplier;
+        double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND);
         double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.STICK_DEADBAND);
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red && fieldRelative) {
             xMovement *= -1;
@@ -135,13 +135,13 @@ public class Drive extends SubsystemBase {
         } else if (robot.controller.getBackButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
-            xMovement *= 4;
-            yMovement *= 4;
-            rotation *= 4;
+            xMovement *= Constants.Drive.slowTranslationMultiplier;
+            yMovement *= Constants.Drive.slowTranslationMultiplier;
+            rotation *= Constants.Drive.slowRotationMultiplier;
         } else{
-            xMovement *= 16.6;
-            yMovement *= 16.6;
-            rotation *= 16.6;
+            xMovement *= Constants.Drive.fastTranslationMultiplier;
+            yMovement *= Constants.Drive.fastTranslationMultiplier;
+            rotation *= Constants.Drive.fastRotationMultiplier;
         }
 
         
