@@ -31,7 +31,10 @@ public class Intake extends SubsystemBase {
     public TalonFX intakeMotor = new TalonFX(20);
     private RelativeEncoder pivotEncoder = pivotMotor.getEncoder();
 
-    PIDController pivotController = new PIDController(0.05, 0, 0);
+    PIDController outPivotController = new PIDController(0.09, 0, 0);
+    PIDController inPIDController = new PIDController(0.05, 0, 0);
+
+    PIDController pivotController;
 
     double pivotMotorSetpoint = 0.0;
     double intakeMotorSetpoint = 0.0;
@@ -69,35 +72,43 @@ public class Intake extends SubsystemBase {
 
     public void periodic() {
         if (states == IntakeStates.OFF) {
+            pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.OFF;
             currentState = "OFF";
             currentFilter.calculate(0);
         } else if (states == IntakeStates.INTAKING) {
+            pivotController = outPivotController;
             pivotMotorSetpoint = Constants.Intake.DOWN;
             intakeMotorSetpoint = Constants.Intake.ON;
             currentState = "INTAKING";
         } else if (states == IntakeStates.FEEDING) {
+            pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.REVERSE;
             currentState = "FEEDING";
         } else if (states == IntakeStates.OUTTAKING) {
+            pivotController = outPivotController;
             pivotMotorSetpoint = Constants.Intake.DOWN;
             intakeMotorSetpoint = Constants.Intake.REVERSE;
             currentState = "OUTTAKING";
         } else if (states == IntakeStates.PULL_IN) {
+            pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.ON_SLOW;
             currentState = "PULL IN";
         } else if (states == IntakeStates.PUSH_OUT) {
+            pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.REVERSE_SLOW;
             currentState = "PUSH OUT";
         } else if (states == IntakeStates.GOING_TO_AMP) {
+            pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
             intakeMotorSetpoint = Constants.Intake.OFF;
             currentState = "AMP SCORING SETUP";            
         } else if (states == IntakeStates.AMP_SCORING) {
+            pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
             intakeMotorSetpoint = Constants.Intake.ON_SLOW_AMP;
             currentState = "AMP SCORING";
