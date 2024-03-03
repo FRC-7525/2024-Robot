@@ -8,26 +8,31 @@ from pathlib import Path
 #oh my god i hate python WHERE ARE THE SEMICOLONS
 SLEEP_TIME = 0.05
 CSV_FOLDER = "logs"
+LOGGING = True
+ANNOYING_LOGGING = False
 
 class Logger:
-    def __init__(self, fileName, timestamps=True):
+    def __init__(self, fileName, tableName="SmartDashboard", timestamps=True):
         inst = ntcore.NetworkTableInstance.getDefault()
-        self.table = inst.getTable("SmartDashboard")
+        self.table = inst.getTable(tableName)
         inst.startClient4("very good logging zzzzzzzzzzzz") #youll never take me alive
         inst.setServerTeam(7525)
         inst.startDSClient()
         self.subscriptions = [] #ok i have to admit this is easier than Vec::<Type>::new()
-        p = Path("..").joinpath(CSV_FOLDER).joinpath(fileName) #this is bad but wtv
+        p = Path(CSV_FOLDER).joinpath(fileName) #this is bad but wtv
         self.file = csv.writer(open(p, "w", newline=''))
         self.timestamps = timestamps
+        if LOGGING: print(f"{time.strftime(f"%H:%M:%S")}: Connected to table {tableName}")
 
-    def logString(self, string_name: str): # grrrr camel case
-        sub = self.table.getStringTopic(string_name).subscribe("None")
+    def logString(self, stringName: str): # grrrr camel case
+        sub = self.table.getStringTopic(stringName).subscribe("None")
         self.subscriptions.append(sub)
+        if LOGGING: print(f"{time.strftime(f"%H:%M:%S")}: Subscripted to {stringName}")
 
-    def logDouble(self, string_name: str): # grrrr camel case
-        sub = self.table.getDoubleTopic(string_name).subscribe(0)
+    def logDouble(self, stringName: str): # grrrr camel case
+        sub = self.table.getDoubleTopic(stringName).subscribe(0)
         self.subscriptions.append(sub)
+        if LOGGING: print(f"{time.strftime(f"%H:%M:%S")}: Subscripted to {stringName}")
 
     def initializeCsv(self):
         header = []
@@ -36,6 +41,7 @@ class Logger:
         if self.timestamps:
             header.append("time")
         self.file.writerow(header)
+        if LOGGING: print(f"{time.strftime(f"%H:%M:%S")}: Added CSV headers {header}")
 
     def addToCSV(self):
         vals = []
@@ -44,8 +50,9 @@ class Logger:
         if self.timestamps:
             vals.append(time.strftime(f"%H:%M:%S"))
         self.file.writerow(vals)
+        if ANNOYING_LOGGING: print(f"{time.strftime(f"%H:%M:%S")}: Wrote row {vals}")
 
-if __name__ == "__main__":
+def logSmartDashboard():
     log = Logger(fileName="smartdashboard.csv")
 
     #so ya how you use this is you subscribe to what you want outside of the loop and 
@@ -86,6 +93,12 @@ if __name__ == "__main__":
     log.logString("Path Chooser/active")
     log.logString("Path Chooser/selected")
 
+    return log
+
+if __name__ == "__main__":
+    smartDash = logSmartDashboard()
+    smartDash.initializeCsv()
+
     while True:
         time.sleep(SLEEP_TIME) #so it doesnt kill your disk/memory 
-        log.addToCSV()
+        smartDash.addToCSV()
