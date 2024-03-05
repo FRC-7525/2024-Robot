@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -12,13 +12,14 @@ public class RGB {
     Robot robot = null;
     Spark rgbControl = new Spark(9);
     PowerDistribution pdh = new PowerDistribution(50, ModuleType.kRev);
+    LinearFilter ledFiler = LinearFilter.movingAverage(10);
 
     public RGB(Robot robot) {
         this.robot = robot;
     }
 
     public void periodic() {
-        if (pdh.getVoltage() < 10 || (robot.isDisabled() && pdh.getVoltage() < 12)) { // low battery warning
+        if (ledFiler.calculate(pdh.getVoltage()) < 10 || (robot.isDisabled() && ledFiler.calculate(pdh.getVoltage()) < 12)) { // low battery warning
             rgbControl.set(Constants.RGB.LED_MODE_HEARTBEAT_RED);
         } else if (robot.isDisabled()) { // robot disabled
             rgbControl.set(Constants.RGB.LED_MODE_OFF);

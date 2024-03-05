@@ -7,12 +7,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
-
-import edu.wpi.first.util.datalog.*;
 
 enum ClimberStates {
     ZEROING,
@@ -39,26 +36,12 @@ public class Climber {
     LinearFilter leftFilter = LinearFilter.movingAverage(5);
     LinearFilter rightFilter = LinearFilter.movingAverage(5);
 
-    StringLogEntry stateStringLog;
-    DoubleLogEntry leftSetpointLog;
-    DoubleLogEntry rightSetpointLog;
-    DoubleLogEntry leftCurrentLog;
-    DoubleLogEntry rightCurrentLog;
-
     public Climber(Robot robot) {
         this.robot = robot;
         rightMotor.setInverted(true);
         leftMotor.setInverted(false);
         rightMotor.setIdleMode(IdleMode.kBrake);
         leftMotor.setIdleMode(IdleMode.kBrake);
-
-
-        DataLog dataLog = DataLogManager.getLog();
-        stateStringLog = new StringLogEntry(dataLog, "/climber/stateString");
-        leftSetpointLog = new DoubleLogEntry(dataLog, "/climber/leftSetpoint"); 
-        rightSetpointLog = new DoubleLogEntry(dataLog, "/climber/rightSetpoint");
-        leftCurrentLog = new DoubleLogEntry(dataLog, "/climber/leftCurrent");
-        rightCurrentLog = new DoubleLogEntry(dataLog, "/climber/leftCurrent");
     }
 
     public void zeroClimber() {
@@ -118,15 +101,15 @@ public class Climber {
                 leftMotorSetpoint -= rightTriggerAxis;
             }
             
-            rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
-            leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, 0, Constants.Climber.MAX_SETPOINT);
+            rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
+            leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
 
             if (rightMotorSetpoint == Constants.Climber.DOWN && leftMotorSetpoint == Constants.Climber.DOWN) {
                 isExtended = false;
             }
             rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
             leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint)); 
-        } 
+        }
 
         SmartDashboard.putString("Climber State", stateString);
         SmartDashboard.putNumber("Left Climber Current", leftMotor.getOutputCurrent());
@@ -135,11 +118,5 @@ public class Climber {
         SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
-
-        stateStringLog.append(stateString);
-        leftSetpointLog.append(leftMotorSetpoint);
-        rightSetpointLog.append(rightMotorSetpoint);
-        leftCurrentLog.append(leftMotor.getOutputCurrent());
-        rightCurrentLog.append(rightMotor.getOutputCurrent());
     }
 }

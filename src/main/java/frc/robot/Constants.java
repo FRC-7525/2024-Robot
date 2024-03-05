@@ -23,13 +23,15 @@ public final class Constants {
         public static final String pathPlannerFile = isNeo ? "swerve/neo" : "swerve/falcon";
         public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 4.5;
-        public static final double maxSpeed = Units.feetToMeters(5);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+        public static final double maxSpeed = Units.feetToMeters(16.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
 
-        public static final PIDConstants translationPID = new PIDConstants(5, 0, 0.1);
-        public static final PIDConstants rotationPID = new PIDConstants(5, 0, 0.1);
+        public static final PIDConstants translationPID = new PIDConstants(6, 0, 0.1);
+        public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.4);
 
-        public static final double slowSpeedMultiplier = 0.2;
-        public static final double slowRotationMultiplier = 0.7;
+        public static final double slowTranslationMultiplier = Units.feetToMeters(4);
+        public static final double slowRotationMultiplier = Units.feetToMeters(15);
+        public static final double fastTranslationMultiplier = Units.feetToMeters(16.6);
+        public static final double fastRotationMultiplier = Units.feetToMeters(25);
     }
 
     public static final class Intake {
@@ -40,9 +42,10 @@ public final class Constants {
         public static final double REVERSE_SLOW = -0.2;
         public static final double REVERSE = -0.7;
         public static final double DOWN = -37;
-        public static final double AMP_SCORING = -16.2;
-        public static final double ON_SLOW_AMP = -0.45;
-        public static final double SUPPLY_CURRENT_MINIMUM = 30;
+        public static final double AMP_SCORING = -16.7;
+        public static final double ON_SLOW_AMP = -0.4;
+        public static final double SUPPLY_CURRENT_MINIMUM = 25;
+        public static final double CURRENT_SENSING_TIMER = 0.2;
     }
 
     public static final class Shooter {
@@ -57,7 +60,8 @@ public final class Constants {
         public static final double AMP_SPEED = 15;
         public static final double AMP_TIME = 1;
         public static final double REVERSE_SLOW_SPEED = -0.20;
-   }
+        public static final double AUTO_SHOOTER_TIME = 0.6;
+    }
 
     public static final class RGB {
         public static final double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;
@@ -71,7 +75,7 @@ public final class Constants {
     }
     
     public static final class Climber {
-        public static final double MAX_SETPOINT = 80;
+        public static final double MAX_SETPOINT = 120;
         public static final double ZEROING_SPEED = -0.15;
         public static final double CURRENT_MAX = 10;
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
@@ -81,5 +85,10 @@ public final class Constants {
     public static final class AmpBar {
         public static final double IN = 0.45;
         public static final double OUT = IN + 0.26;
+    }
+  
+    public static final class Vision {
+        public static final double LAST_VISION_MEASURMENT_TIMER = 0.5;
+        public static final boolean VISION_ENABLED = true;
     }
 }

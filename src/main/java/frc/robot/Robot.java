@@ -27,22 +27,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.util.datalog.DataLog;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
-    //Vision vision = new Vision();
     Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
-    //Climber climber = new Climber(this);
+    Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
-    
+    boolean hasFrontPose;
+    boolean hasSidePose;
+    Command autoCommand = null;
+    String currentSelected = "";
 
     public Command getAutonomousCommand(String autoName) {
         return new PathPlannerAuto(autoName);
@@ -50,16 +50,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        DataLogManager.start();
-        DriverStation.startDataLog(DataLogManager.getLog());
+        CameraServer.startAutomaticCapture();
 
-        // climber.zeroClimber();
-        //CameraServer.startAutomaticCapture();
-
-        NamedCommands.registerCommand("Intaking",  autoCommands.intaking());
+        NamedCommands.registerCommand("Intaking", autoCommands.intaking());
         NamedCommands.registerCommand("Shooting", new Shooting(this));
         NamedCommands.registerCommand("Return To Idle", autoCommands.returnToIdle());
         NamedCommands.registerCommand("Speeding Up", autoCommands.startSpinningUp());
+        NamedCommands.registerCommand("Spin and Intake", autoCommands.spinAndIntake());
 
         // TODO: Score Drive Backwards (2-17)
         // TODO: 2 note autos (score any close note) (2-21)
@@ -69,12 +66,18 @@ public class Robot extends TimedRobot {
         // TODO: 4 note auto (2 close and 1 far on the left) (2-28)
         // TODO: 4 note auto (2 close and 1 far on the right) (2-28)
         // TODO: 5 note auto (all 3 close and 1 far) (3-2)
-        
+
         // Misc Autos
         chooser.addOption("Drive Forwards", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
         chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
         chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
+        //Choreo Autos (not running these)
+        /* 
+        chooser.addOption("2 Note Choreo", "Optimized 2 Note");
+        chooser.addOption("3 Note Choreo", "Optimized 3 Note");
+        chooser.addOption("4 Note Choreo", "Optimized 4 Note");
+        */
         // 2 Note Autos
         chooser.addOption("Preload + Left Note", "Left Note");
         chooser.addOption("Preload + Middle Note", "Middle Note");
@@ -85,40 +88,46 @@ public class Robot extends TimedRobot {
         chooser.addOption("Center Left + Left", "Center Left + Left");
         chooser.addOption("Right + Center Right", "Right + Center Right");
         chooser.addOption("Mid + Center Left", "Mid + Center Left");
+        chooser.addOption("2 Left Close", "CloseTwoLeft");
+        chooser.addOption("All Left", "All Left");
         // 4 Note Autos
         chooser.addOption("All Close", "All Close");
         chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
         chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
-        //5 Note Auto
+        chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line");
+        // 5 Note Auto
         chooser.addOption("5 Note Auto", "5 Note Auto");
-        
-        
+
         SmartDashboard.putData("Path Chooser", chooser);
     }
-    
+
     @Override
     public void robotPeriodic() {
         rgb.periodic();
         manager.periodic();
-        // climber.periodic();
         CommandScheduler.getInstance().run();
-        /* 
-        vision.periodic();
-        intake.putSmartDashValues();
-        if (vision.getPose2d().isPresent()) {
-            drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
-        } 
-        */
-   }
+
+        if (Constants.Vision.VISION_ENABLED) {
+            vision.periodic();
+            hasFrontPose = vision.getFrontPose2d().isPresent();
+            if (hasFrontPose) {
+                drive.addVisionMeasurement(vision.getFrontPose2d().get(), Timer.getFPGATimestamp());
+            }
+        }
+
+        SmartDashboard.putString("Currently selected autonomous", ((currentSelected != null) ? currentSelected : "None"));
+    }
 
     @Override
     public void autonomousInit() {
         drive.setHeadingCorrection(false);
-        System.out.println("Scheduling Auto");
+        if (!Constants.Vision.VISION_ENABLED) {
+            drive.zeroGyro();
+            drive.resetOdometry();
+        }
+
         CommandScheduler.getInstance().cancelAll();
-        drive.zeroGyro();
-        drive.resetOdometry();
-        getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing").schedule();
+        autoCommand.schedule();
     }
 
     @Override
@@ -129,22 +138,32 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         // climber.zeroClimber();
         drive.setHeadingCorrection(true);
-        
+        manager.returnToIdle();
+        manager.reset();
         manager.intake.setPivotMotorMode(IdleMode.kBrake);
     }
 
     @Override
     public void teleopPeriodic() {
+        autoCommand = null;
+        climber.periodic();
         drive.periodic();
     }
 
     @Override
     public void disabledInit() {
+        CommandScheduler.getInstance().cancelAll();
         manager.intake.setPivotMotorMode(IdleMode.kCoast);
+        autoCommand = null;
+        currentSelected = "";
     }
 
     @Override
     public void disabledPeriodic() {
+        if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs to be made
+            autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
+            currentSelected = chooser.getSelected();
+        }
     }
 
     @Override

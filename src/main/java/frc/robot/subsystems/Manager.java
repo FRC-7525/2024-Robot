@@ -2,15 +2,12 @@ package frc.robot.subsystems;
 
 import java.security.cert.TrustAnchor;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.AmpBar.AmpBarStates;
 import frc.robot.Constants;
-
-import edu.wpi.first.util.datalog.*;
 
 enum ManagerStates {
     IDLE,
@@ -22,6 +19,7 @@ enum ManagerStates {
     WAIT_FOR_BACK,
     SCORING_AMP,
     START_SPINNING,
+    SPINNING_AND_INTAKING
 }
 
 public class Manager {
@@ -35,15 +33,12 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer goOutTimer = new Timer();
     Timer centerNoteTimer = new Timer();
+    Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
     
 
-    StringLogEntry stateStringLog;
-
     public Manager(Robot robot) {
         this.robot = robot;
-        DataLog dataLog = DataLogManager.getLog();
-        stateStringLog = new StringLogEntry(dataLog, "/manager/stateString");
     }
 
     public void reset() {
@@ -124,13 +119,18 @@ public class Manager {
             ampBar.setState(AmpBarStates.IN);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
-            if ((intake.intakeMotor.getSupplyCurrent().getValueAsDouble() > Constants.Intake.SUPPLY_CURRENT_MINIMUM && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
-                System.out.println("Current sensing made it go in");
-                state = ManagerStates.IDLE;
-                reset();
-            } else if (robot.controller.getRightBumper()) {
-                state = ManagerStates.OUTTAKING;
-                reset();
+            currentSensingTimer.start();
+            if (currentSensingTimer.get() > Constants.Intake.CURRENT_SENSING_TIMER) { 
+                if ((intake.overCurrentLimit() && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
+                    System.out.println("Current sensing made it go in");
+                    state = ManagerStates.IDLE;
+                    reset();
+                    currentSensingTimer.stop();
+                    currentSensingTimer.reset();
+                } else if (robot.controller.getRightBumper()) {
+                    state = ManagerStates.OUTTAKING;
+                    reset();
+                }
             }
         } else if (state == ManagerStates.OUTTAKING) {
             intake.setState(IntakeStates.OUTTAKING);
@@ -146,7 +146,7 @@ public class Manager {
             shooterTimer.start();
             ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.FEEDING);
-            if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
+            if (shooterTimer.get() > (DriverStation.isAutonomous() ? Constants.Shooter.AUTO_SHOOTER_TIME : Constants.Shooter.SHOOTER_TIME)) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
@@ -190,12 +190,15 @@ public class Manager {
                 reset();
                 
             }
-        }
+        } else if (state == ManagerStates.SPINNING_AND_INTAKING) {
+            shooter.setState(ShootingStates.SHOOTING);
+            intake.setState(IntakeStates.INTAKING);
+        } 
         
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
-        stateStringLog.append(stateString);
+        
         ampBar.periodic();
     }
 
@@ -204,6 +207,10 @@ public class Manager {
     }
 
     // Functions for Auto Commands
+    public void intakingWhileSpinning() {
+        state = ManagerStates.SPINNING_AND_INTAKING;
+    }
+
     public void intaking() {
         state = ManagerStates.INTAKING;
     }
