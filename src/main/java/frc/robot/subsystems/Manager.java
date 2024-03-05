@@ -76,7 +76,7 @@ public class Manager {
                 state = ManagerStates.START_SPINNING;
                 autoShoot = false;
                 reset();
-            } else if (robot.controller.getBackButtonPressed()) {
+            } else if (robot.controller.getYButtonPressed()) {
                 shooterTimer.reset();
                 reset();
                 state = ManagerStates.SCORING_AMP;
@@ -155,19 +155,23 @@ public class Manager {
               
             stateString = "Shooting";
         } else if (state == ManagerStates.SCORING_AMP) {
-            shooter.setState(ShootingStates.OFF);
-            intake.setState(IntakeStates.GOING_TO_AMP); 
+            shooter.setState(ShootingStates.SCORING_AMP);
             ampBar.setState(AmpBarStates.OUT);
-            if (intake.nearSetpoint()) {
-                intake.setState(IntakeStates.AMP_SCORING);
+            intake.setState(IntakeStates.OFF);
+            if (ampBar.nearSetpoint() && shooter.atSetPoint()) {
+                intake.setState(IntakeStates.FEEDING);
                 shooterTimer.start();
-                if (shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
+                if (shooterTimer.get() > Constants.Shooter.AMP_TIME) {
                     shooterTimer.stop();
                     shooterTimer.reset(); 
                     state = ManagerStates.IDLE;
                     reset();
                 }
+            } else if (robot.secondaryController.getYButtonPressed()) {
+                state = ManagerStates.IDLE;
+                ampBar.setState(AmpBarStates.IN);
             }
+            
             stateString = "Amp Scoring";
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);
@@ -192,6 +196,7 @@ public class Manager {
         shooter.putSmartDashValues();
         SmartDashboard.putString("Manager State", stateString);
         stateStringLog.append(stateString);
+        ampBar.periodic();
     }
 
     public Boolean isIdle() {

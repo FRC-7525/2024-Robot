@@ -140,7 +140,7 @@ public class Drive extends SubsystemBase {
         if (robot.controller.getStartButtonPressed()) {
             swerveDrive.zeroGyro();
             System.out.println("Gyro Zeroed");
-        } else if (robot.controller.getYButton()) {
+        } else if (robot.controller.getBackButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
             xMovement *= Constants.Drive.slowSpeedMultiplier;

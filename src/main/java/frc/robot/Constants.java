@@ -54,7 +54,10 @@ public final class Constants {
         public static final double RETURN_CENTER_NOTE_TIME = 1.0;
         public static final double GO_OUT_TIME = 1.1;
         public static final double SHOOTER_TIME = 1;
-    }
+        public static final double AMP_SPEED = 15;
+        public static final double AMP_TIME = 1;
+        public static final double REVERSE_SLOW_SPEED = -0.20;
+   }
 
     public static final class RGB {
         public static final double LED_MODE_COLOR_WAVES_FOREST_PALETTE = -0.37;
@@ -73,5 +76,10 @@ public final class Constants {
         public static final double CURRENT_MAX = 10;
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
         public static final double DOWN = 5;
+    }
+
+    public static final class AmpBar {
+        public static final double IN = 0.45;
+        public static final double OUT = IN + 0.26;
     }
 }
