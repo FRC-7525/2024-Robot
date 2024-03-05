@@ -113,4 +113,4 @@ if __name__ == "__main__":
 
     while True:
         time.sleep(SLEEP_TIME)  # so it doesnt kill your disk/memory
-		smartDash.addToCSV()
+        smartDash.addToCSV()
