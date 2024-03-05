@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
@@ -44,12 +45,16 @@ public class Robot extends TimedRobot {
     Command autoCommand = null;
     String currentSelected = "";
 
+    String matchState = "";
+
     public Command getAutonomousCommand(String autoName) {
         return new PathPlannerAuto(autoName);
     }
 
     @Override
     public void robotInit() {
+        matchState = "ON";
+        
         CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking", autoCommands.intaking());
@@ -121,11 +126,15 @@ public class Robot extends TimedRobot {
             }
         }
 
-        SmartDashboard.putString("Currently selected autonomous", ((currentSelected != null) ? currentSelected : "None"));
+        SmartDashboard.putString("Currently selected autonomous", ((currentSelected != null) ? currentSelected : "None"));\
+        SmartDashboard.putString("Match State", matchState);
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
     }
 
     @Override
     public void autonomousInit() {
+        matchState = "AUTONOMOUS";
+
         drive.setHeadingCorrection(false);
         if (!Constants.Vision.VISION_ENABLED) {
             drive.zeroGyro();
@@ -142,6 +151,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        matchState = "TELEOP";
         // climber.zeroClimber();
         drive.setHeadingCorrection(true);
         manager.returnToIdle();
@@ -158,6 +168,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        matchState = "DISABLED";
+
         CommandScheduler.getInstance().cancelAll();
         manager.intake.setPivotMotorMode(IdleMode.kCoast);
         autoCommand = null;
@@ -174,6 +186,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        matchState = "TESTING";
     }
 
     @Override
@@ -182,6 +195,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationInit() {
+        matchState = "SIMULATING";
     }
 
     @Override

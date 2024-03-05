@@ -8,109 +8,129 @@ from pathlib import Path
 SLEEP_TIME = 0.05
 CSV_FOLDER = "logs"
 
-
 class LogLevels:
     SILENT = 0
     INFO = 1
     VERBOSE = 2
 
-
 class Logger:
-    def __init__(self, fileName, tableName="SmartDashboard", timestamps=True, logging=1):
+    def __init__(self, file_name, table_name="SmartDashboard", timestamps=True, logging=1):
         inst = ntcore.NetworkTableInstance.getDefault()
-        self.table = inst.getTable(tableName)
+        self.table = inst.getTable(table_name)
         inst.startClient4("very very very good logging zzzzzzzzzzzz")
         inst.setServerTeam(7525)
         inst.startDSClient()
         self.subscriptions = []
-        p = Path(CSV_FOLDER).joinpath(fileName)
+        p = Path(CSV_FOLDER).joinpath(file_name)
         self.file = csv.writer(open(p, "w", newline=""))
         self.timestamps = timestamps
-        if self.logging >= 1: 
-            print(f"{time.strftime('%H:%M:%S')}: Connected to table {tableName}")
-        self.startTime = time.time()
 
-    def logString(self, stringName: str):  # grrrr camel case
-        sub = self.table.getStringTopic(stringName).subscribe("None")
+        self.logging = logging
+        
+        if self.logging >= 1: 
+            print(f"{time.strftime('%H:%M:%S')}: Connected to table {table_name}")
+        self.start_time = time.time()
+
+    def log_string(self, string_name: str):
+        sub = self.table.getStringTopic(string_name).subscribe("None")
         self.subscriptions.append(sub)
         if self.logging >= 1: 
             print(f"{time.strftime('%H:%M:%S')}: Connected to table {self.table}")
 
-    def logDouble(self, stringName: str):  # grrrr camel case
-        sub = self.table.getDoubleTopic(stringName).subscribe(0)
+    def log_double(self, string_name: str):
+        sub = self.table.getDoubleTopic(string_name).subscribe(0)
         self.subscriptions.append(sub)
         if self.logging >= 1: 
-            print(f"{time.strftime('%H:%M:%S')}: Subscripted to {stringName}")
+            print(f"{time.strftime('%H:%M:%S')}: Subscripted to {string_name}")
 
-    def initializeCsv(self):
+    def log_double_array(self, array_name: list):
+        sub = self.table.getDoubleArrayTopic(array_name).subscribe([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        self.subscriptions.append(sub)
+        if self.logging >= 1: 
+            print(f"{time.strftime('%H:%M:%S')}: Subscripted to {array_name}")
+    
+    def log_boolean(self, bool_name: bool):
+        sub = self.table.getBooleanTopic(bool_name).subscribe(True)
+        self.subscriptions.append(sub)
+        if self.logging >= 1:
+            print(f"{time.strftime('%H:%M:%S')}: Subscripted to {bool_name}")
+
+    def initialize_csv(self):
         header = []
         if self.timestamps:
             header.append("time")
         for sub in self.subscriptions:
-            header.append(sub.getTopic().getName())
+            header.append(sub.getTopic().getName().split("/SmartDashboard/")[1])
         self.file.writerow(header)
         if self.logging >= 1: 
             print(f"{time.strftime('%H:%M:%S')}: Added CSV headers {header}")
 
-    def addToCSV(self):
+    def add_to_csv(self):
         vals = []
+        if self.timestamps:
+            vals.append(time.time() - self.start_time) # aiden wrote this!!1!1
         for sub in self.subscriptions:
             vals.append(sub.get())
-        if self.timestamps:
-            vals.append(time.time() - self.startTime)
         self.file.writerow(vals)
         if self.logging >= 2:
             print(f"{time.strftime('%H:%M:%S')}: Wrote row {vals}")
 
 
-def logSmartDashboard():
-    log = Logger(fileName=f"{time.strftime('%Y-%m-%d-%H-%M')}-smartdashboard.csv")
+def log_smart_dashboard():
+    log = Logger(file_name=f"{time.strftime('%Y-%m-%d-%H-%M')}-smartdashboard.csv")
 
     # so ya how you use this is you subscribe to what you want outside of the loop and
     # then do whatever printing/saving/wtv inside the loop
 
     # log state strings
-    log.logString("Shooting States")
-    log.logString("Manager State")
-    log.logString("Drive State")
-    log.logString("Climber State")
-    log.logString("Current state of INTAKE:")  # why is it named like this.
-    log.logString("Currently selected autonomous")
+    log.log_string("Shooting States")
+    log.log_string("Manager State")
+    log.log_string("Drive State")
+    log.log_string("Climber State")
+    log.log_string("Intake State")
+    log.log_string("Currently selected autonomous")
+    log.log_string("Match State")
 
     # log climber stuff
-    log.logDouble("Left Climber Current")
-    log.logDouble("Left Encoder Position")
-    log.logDouble("Left Encoder Setpoint")
-    log.logDouble("Right Climber Current")
-    log.logDouble("Right Encoder Position")
-    log.logDouble("Right Encoder Setpoint")
+    log.log_double("Left Climber Current")
+    log.log_double("Left Encoder Position")
+    log.log_double("Left Encoder Setpoint")
+    log.log_double("Right Climber Current")
+    log.log_double("Right Encoder Position")
+    log.log_double("Right Encoder Setpoint")
 
     # log intake stuff
-    log.logDouble("Intake motor current")
-    log.logDouble("intake motor position")
-    log.logDouble("intake motor setpoint")
-    log.logDouble("pivot motor position")
-    log.logDouble("pivot motor setpoint")
+    log.log_double("Intake motor current")
+    log.log_double("intake motor position")
+    log.log_double("intake motor setpoint")
+    log.log_double("pivot motor position")
+    log.log_double("pivot motor setpoint")
 
     # i think this is the shooter? yall need better names
-    log.logDouble("Motor 1 velocity")
-    log.logDouble("Motor 2 velocity")
+    log.log_double("Shooter Motor 1 velocity")
+    log.log_double("Shooter Motor 2 velocity")
 
     # log drive stuff
-    log.logDouble("Robot Velocity")
-    log.logDouble("Acceleration")
+    log.log_double("Robot Velocity")
+    log.log_double("Acceleration")
 
-    # log path stuff
-    log.logString("Path Chooser/active")
-    log.logString("Path Chooser/selected")
+    # robot position
+    log.log_double("Robot X")
+    log.log_double("Robot Y")
+    log.log_double("Robot Theta (deg)")
+
+    # robot pose
+    log.log_double_array("Front Pose")
+
+    # battery volatage
+    log.log_double("Battery Voltage")
 
     return log
 
-
 if __name__ == "__main__":
-    smartDash = logSmartDashboard()
-    smartDash.initializeCsv()
+    smartDash = log_smart_dashboard()
+    smartDash.initialize_csv()
 
     while True:
         time.sleep(SLEEP_TIME)  # so it doesnt kill your disk/memory
-        smartDash.addToCSV()
+        smartDash.add_to_csv()

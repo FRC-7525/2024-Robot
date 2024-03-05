@@ -107,7 +107,7 @@ public class Intake extends SubsystemBase {
         intakeMotor.set(intakeMotorSetpoint);
     }
     public void putSmartDashValues() {
-        SmartDashboard.putString("Current state of INTAKE:", currentState);
+        SmartDashboard.putString("Intake State", currentState);
         SmartDashboard.putNumber("pivot motor position", pivotEncoder.getPosition());
         SmartDashboard.putNumber("intake motor position", intakeMotor.getPosition().getValue());
         SmartDashboard.putNumber("pivot motor setpoint", pivotMotorSetpoint);

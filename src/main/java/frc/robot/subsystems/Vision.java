@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -46,6 +48,13 @@ public class Vision {
         sideBotpose3d = sideEstimator.update();
         SmartDashboard.putBoolean("Side Vision", seesSideVision);
         SmartDashboard.putBoolean("Front Vision", seesFrontVision);
+        
+        if (frontBotpose3d.isPresent()) {
+            var tempPose = frontBotpose3d.get().estimatedPose;
+            double[] frontPose = {tempPose.getX(), tempPose.getY()};
+
+            SmartDashboard.putNumberArray("Front Pose", frontPose);
+        }
     }
 
     public Optional<Pose2d> getSidePose2d() {
