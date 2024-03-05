@@ -36,8 +36,7 @@ public class Vision {
 
     public void periodic() {
         frontBotpose3d = frontEstimator.update();
-        SmartDashboard.putBoolean("Front Vision", seesFrontVision);
-        
+        SmartDashboard.putBoolean("Front Vision", seesFrontVision); 
         if (frontBotpose3d.isPresent()) {
             var tempPose = frontBotpose3d.get().estimatedPose;
             double[] frontPose = {tempPose.getX(), tempPose.getY()};

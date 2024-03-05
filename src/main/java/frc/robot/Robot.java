@@ -44,7 +44,6 @@ public class Robot extends TimedRobot {
     boolean hasSidePose;
     Command autoCommand = null;
     String currentSelected = "";
-
     String matchState = "";
 
     public Command getAutonomousCommand(String autoName) {
@@ -54,7 +53,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         matchState = "ON";
-        
         CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking", autoCommands.intaking());
@@ -163,7 +161,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         matchState = "DISABLED";
-
         CommandScheduler.getInstance().cancelAll();
         manager.intake.setPivotMotorMode(IdleMode.kCoast);
         autoCommand = null;

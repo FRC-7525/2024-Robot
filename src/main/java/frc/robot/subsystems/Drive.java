@@ -155,7 +155,6 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("Robot Velocity", Units.metersToFeet(calculateVelocity(swerveDrive.getRobotVelocity())));
 
         Pose2d robotPose = swerveDrive.field.getRobotPose();
-
         SmartDashboard.putNumber("Robot X", robotPose.getX());
         SmartDashboard.putNumber("Robot Y", robotPose.getY());
         SmartDashboard.putNumber("Robot Theta (deg)", robotPose.getRotation().getDegrees());
