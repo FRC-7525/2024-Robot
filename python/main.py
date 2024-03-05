@@ -14,7 +14,7 @@ class LogLevels:
     VERBOSE = 2
 
 class Logger:
-    def __init__(self, file_name, table_name="SmartDashboard", timestamps=True, logging=1):
+    def __init__(self, file_name, table_name="SmartDashboard", timestamps=True, logging=LogLevels.INFO):
         inst = ntcore.NetworkTableInstance.getDefault()
         self.table = inst.getTable(table_name)
         inst.startClient4("very very very good logging zzzzzzzzzzzz")
@@ -34,25 +34,25 @@ class Logger:
     def log_string(self, string_name: str):
         sub = self.table.getStringTopic(string_name).subscribe("None")
         self.subscriptions.append(sub)
-        if self.logging >= 1: 
+        if self.logging >= LogLevels.INFO: 
             print(f"{time.strftime('%H:%M:%S')}: Connected to table {self.table}")
 
     def log_double(self, string_name: str):
         sub = self.table.getDoubleTopic(string_name).subscribe(0)
         self.subscriptions.append(sub)
-        if self.logging >= 1: 
+        if self.logging >= LogLevels.INFO: 
             print(f"{time.strftime('%H:%M:%S')}: Subscripted to {string_name}")
 
     def log_double_array(self, array_name: list):
         sub = self.table.getDoubleArrayTopic(array_name).subscribe([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         self.subscriptions.append(sub)
-        if self.logging >= 1: 
+        if self.logging >= LogLevels.INFO: 
             print(f"{time.strftime('%H:%M:%S')}: Subscripted to {array_name}")
     
     def log_boolean(self, bool_name: bool):
         sub = self.table.getBooleanTopic(bool_name).subscribe(True)
         self.subscriptions.append(sub)
-        if self.logging >= 1:
+        if self.logging >= LogLevels.INFO:
             print(f"{time.strftime('%H:%M:%S')}: Subscripted to {bool_name}")
 
     def initialize_csv(self):
@@ -62,7 +62,7 @@ class Logger:
         for sub in self.subscriptions:
             header.append(sub.getTopic().getName().split("/SmartDashboard/")[1])
         self.file.writerow(header)
-        if self.logging >= 1: 
+        if self.logging >= LogLevels.INFO: 
             print(f"{time.strftime('%H:%M:%S')}: Added CSV headers {header}")
 
     def add_to_csv(self):
@@ -72,7 +72,7 @@ class Logger:
         for sub in self.subscriptions:
             vals.append(sub.get())
         self.file.writerow(vals)
-        if self.logging >= 2:
+        if self.logging >= LogLevels.VERBOSE:
             print(f"{time.strftime('%H:%M:%S')}: Wrote row {vals}")
 
 
