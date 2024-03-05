@@ -120,7 +120,7 @@ public class Robot extends TimedRobot {
             }
         }
 
-        SmartDashboard.putString("Currently selected autonomous", ((currentSelected != null) ? currentSelected : "None"));\
+        SmartDashboard.putString("Currently selected autonomous", ((currentSelected != null) ? currentSelected : "None"));
         SmartDashboard.putString("Match State", matchState);
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
     }
