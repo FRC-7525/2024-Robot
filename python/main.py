@@ -16,7 +16,7 @@ class LogLevels:
 
 
 class Logger:
-    def __init__(self, fileName, tableName="SmartDashboard", timestamps=True, logging=1):
+    def __init__(self, fileName, tableName="SmartDashboard", timestamps=True, logging=Info):
         inst = ntcore.NetworkTableInstance.getDefault()
         self.table = inst.getTable(tableName)
         inst.startClient4("very very very good logging zzzzzzzzzzzz")
