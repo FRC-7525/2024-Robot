@@ -43,13 +43,13 @@ class Logger:
         if self.logging >= LogLevels.INFO: 
             print(f"{time.strftime('%H:%M:%S')}: Subscripted to {string_name}")
 
-    def log_double_array(self, array_name: list):
+    def log_double_array(self, array_name: str):
         sub = self.table.getDoubleArrayTopic(array_name).subscribe([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         self.subscriptions.append(sub)
         if self.logging >= LogLevels.INFO: 
             print(f"{time.strftime('%H:%M:%S')}: Subscripted to {array_name}")
     
-    def log_boolean(self, bool_name: bool):
+    def log_boolean(self, bool_name: str):
         sub = self.table.getBooleanTopic(bool_name).subscribe(True)
         self.subscriptions.append(sub)
         if self.logging >= LogLevels.INFO:
@@ -98,6 +98,7 @@ def log_smart_dashboard():
     log.log_double("Right Climber Current")
     log.log_double("Right Encoder Position")
     log.log_double("Right Encoder Setpoint")
+    log.log_boolean("Climb In Progress")
 
     # log intake stuff
     log.log_double("Intake motor current")
@@ -119,7 +120,7 @@ def log_smart_dashboard():
     log.log_double("Robot Y")
     log.log_double("Robot Theta (deg)")
 
-    # robot pose
+    # front camera vision pose
     log.log_double_array("Front Pose")
 
     # battery volatage
