@@ -9,11 +9,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.subsystems.AmpBar.AmpBarStates;
 import frc.robot.Constants;
 
 enum ClimberStates {
     ZEROING,
-    CLIMBING
+    CLIMB_READY
 }
 
 public class Climber {
@@ -35,6 +36,8 @@ public class Climber {
 
     LinearFilter leftFilter = LinearFilter.movingAverage(5);
     LinearFilter rightFilter = LinearFilter.movingAverage(5);
+
+    public boolean isClimbing = false;
 
     public Climber(Robot robot) {
         this.robot = robot;
@@ -76,12 +79,13 @@ public class Climber {
 
             if (rightSpeed == 0 && leftSpeed == 0) { // Hacky solution to switch to the climbing state when both are zeroed.
                 System.out.println("TRANSITION");
-                state = ClimberStates.CLIMBING;
+                state = ClimberStates.CLIMB_READY;
             }
             stateString = "Zeroing";
             rightMotor.set(rightSpeed);
             leftMotor.set(leftSpeed);
-        } else if (state == ClimberStates.CLIMBING) {
+        } else if (state == ClimberStates.CLIMB_READY) {
+            isClimbing();
             stateString = "Climber ready";
             if (dPad == Constants.DPAD_UP) {
                 rightMotorSetpoint = Constants.Climber.MAX_SETPOINT;
@@ -121,6 +125,11 @@ public class Climber {
     }
 
     public boolean isClimbing() {
-        return state == ClimberStates.CLIMBING;
+        if (leftMotorSetpoint != Constants.Climber.DOWN && rightMotorSetpoint != Constants.Climber.DOWN && state != ClimberStates.ZEROING) {
+            robot.manager.ampBar.setState(AmpBarStates.OUT);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

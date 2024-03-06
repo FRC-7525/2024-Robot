@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class AmpBar {
     enum AmpBarStates {
@@ -21,8 +22,10 @@ public class AmpBar {
     private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(9);
     double pivotMotorSetpoint = Constants.AmpBar.IN;
     String stateString = "";
+    Robot robot = null;
     
-    public AmpBar() {
+    public AmpBar(Robot robot) {
+        this.robot = robot;
         rightMotor.follow(leftMotor);
         leftMotor.setInverted(true);
 
@@ -58,6 +61,10 @@ public class AmpBar {
     }
 
 	public void setState(AmpBarStates state) {
-        this.state = state;
+        if (!robot.isClimbing()) {
+            this.state = state;
+        } else {
+            System.out.println("Cannot pull in amp bar, currently climbing (zzzz)");
+        }
     }
 }
