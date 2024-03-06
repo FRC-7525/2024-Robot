@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.subsystems.AmpBar.AmpBarStates;
 import frc.robot.Constants;
 
 enum ClimberStates {
@@ -36,6 +35,8 @@ public class Climber {
 
     LinearFilter leftFilter = LinearFilter.movingAverage(5);
     LinearFilter rightFilter = LinearFilter.movingAverage(5);
+
+    public boolean climbingInProgress = false;
 
     public Climber(Robot robot) {
         this.robot = robot;
@@ -83,9 +84,9 @@ public class Climber {
             rightMotor.set(rightSpeed);
             leftMotor.set(leftSpeed);
         } else if (state == ClimberStates.CLIMB_READY) {
-            isClimbing();
             stateString = "Climber ready";
             if (dPad == Constants.DPAD_UP) {
+                climbingInProgress = true;
                 rightMotorSetpoint = Constants.Climber.MAX_SETPOINT;
                 leftMotorSetpoint = Constants.Climber.MAX_SETPOINT;
                 isExtended = true;
@@ -95,6 +96,10 @@ public class Climber {
                 leftMotorSetpoint = Constants.Climber.DOWN;
                 isExtended = false;
                 stateString = "Climber contracted";
+            }
+
+            if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN) {
+                climbingInProgress = false;
             }
 
             if (isExtended && MathUtil.applyDeadband(leftTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
@@ -120,14 +125,5 @@ public class Climber {
         SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
-    }
-
-    public boolean isClimbing() {
-        if (leftMotorSetpoint != Constants.Climber.DOWN && rightMotorSetpoint != Constants.Climber.DOWN && state != ClimberStates.ZEROING) {
-            robot.manager.ampBar.setState(AmpBarStates.OUT);
-            return true;
-        } else {
-            return false;
-        }
     }
 }

@@ -64,6 +64,7 @@ public class AmpBar {
         if (!robot.isClimbing()) {
             this.state = state;
         } else {
+            this.state = AmpBarStates.OUT;
             System.out.println("Cannot pull in amp bar, currently climbing (zzzz)");
         }
     }
