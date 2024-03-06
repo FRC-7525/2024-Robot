@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +31,9 @@ public class Shooter {
         this.robot = robot;
         shooterMotor2.setInverted(true);
         shooterMotor1.setInverted(false);
+
+        shooterMotor1.setNeutralMode(NeutralModeValue.Coast);
+        shooterMotor2.setNeutralMode(NeutralModeValue.Coast);
     }
 
     public boolean atSetPoint(double speed) {

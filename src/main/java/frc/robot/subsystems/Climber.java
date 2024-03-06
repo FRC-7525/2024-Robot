@@ -125,5 +125,6 @@ public class Climber {
         SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
+        SmartDashboard.putBoolean("Climb In Progress", climbingInProgress);
     }
 }

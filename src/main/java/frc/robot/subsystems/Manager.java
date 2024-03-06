@@ -41,9 +41,6 @@ public class Manager {
         robot.controller.getBButtonPressed();
         robot.controller.getAButtonPressed();
         robot.controller.getRightBumper();
-        robot.secondaryController.getYButtonPressed();
-        robot.secondaryController.getXButtonPressed();
-        robot.secondaryController.getAButtonPressed();
         resetIntakeTimer.stop();
         resetIntakeTimer.reset();
     }
@@ -51,9 +48,7 @@ public class Manager {
     public void resetSecondary() {
         robot.secondaryController.getBButtonPressed();
         robot.secondaryController.getAButtonPressed();
-        robot.secondaryController.getRightBumper();
-        resetIntakeTimer.stop();
-        resetIntakeTimer.reset();
+        robot.secondaryController.getXButtonPressed();
     }
 
     public void periodic() {

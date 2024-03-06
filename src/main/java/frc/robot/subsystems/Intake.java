@@ -40,7 +40,7 @@ public class Intake {
     double pivotMotorSetpoint = 0.0;
     double intakeMotorSetpoint = 0.0;
 
-    LinearFilter currentFilter = LinearFilter.movingAverage(10);
+    LinearFilter currentFilter = LinearFilter.movingAverage(8);
 
     public Intake(Robot robot) {
         this.robot = robot;
