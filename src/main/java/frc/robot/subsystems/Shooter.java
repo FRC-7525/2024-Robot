@@ -32,10 +32,10 @@ public class Shooter {
         shooterMotor1.setInverted(false);
     }
 
-    public boolean atSetPoint() {
+    public boolean atSetPoint(double speed) {
         double motor1Vel = shooterMotor1.getVelocity().getValueAsDouble();
         double motor2Vel = shooterMotor2.getVelocity().getValueAsDouble();
-        return motor1Vel >= speedPoint && motor2Vel >= speedPoint;
+        return motor1Vel >= speed && motor2Vel >= speed;
     }
 
     public void setState(ShootingStates state) {

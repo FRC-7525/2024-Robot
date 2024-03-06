@@ -119,4 +119,8 @@ public class Climber {
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
     }
+
+    public boolean isClimbing() {
+        return state == ClimberStates.CLIMBING;
+    }
 }

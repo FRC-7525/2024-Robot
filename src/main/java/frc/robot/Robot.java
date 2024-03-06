@@ -47,6 +47,10 @@ public class Robot extends TimedRobot {
         return new PathPlannerAuto(autoName);
     }
 
+    public boolean isClimbing() {
+        return climber.isClimbing();
+    }
+
     @Override
     public void robotInit() {
         matchState = "ON";
