@@ -25,7 +25,7 @@ enum ManagerStates {
 
 public class Manager {
     public ManagerStates state = ManagerStates.IDLE;
-    String stateString;>
+    String stateString;
     Robot robot = null;
     public Shooter shooter = new Shooter(robot);
     public Intake intake = new Intake(robot);
