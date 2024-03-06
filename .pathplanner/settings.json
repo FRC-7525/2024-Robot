@@ -11,12 +11,13 @@
   "autoFolders": [
     "2 Notes",
     "3 Notes",
+    "4 Notes",
     "MISC",
-    "4 Notes"
+    "Choreo Autos"
   ],
-  "defaultMaxVel": 8.0,
-  "defaultMaxAccel": 3.0,
-  "defaultMaxAngVel": 500.0,
-  "defaultMaxAngAccel": 500.0,
+  "defaultMaxVel": 4.2,
+  "defaultMaxAccel": 3.5,
+  "defaultMaxAngVel": 180.0,
+  "defaultMaxAngAccel": 180.0,
   "maxModuleSpeed": 4.5
 }

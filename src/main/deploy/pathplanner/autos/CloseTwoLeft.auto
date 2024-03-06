@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.3,
-      "y": 5.5
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -30,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "StraightShootToLeftNote"
+                  "pathName": "New Shoot to Left Note"
                 }
               }
             ]
@@ -49,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left note to Shoot"
+                  "pathName": "New Left note to Shoot"
                 }
               }
             ]
@@ -68,63 +62,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Spin and Intake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.1
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Shoot to MID note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Speeding Up"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MID Note to shoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
                   "name": "Intaking"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Shoot to Right Note"
+                  "pathName": "New Shoot to MID note"
                 }
               }
             ]
@@ -135,15 +79,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Right Note to Shoot"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Speeding Up"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Mid Note To Shoot"
                 }
               }
             ]
@@ -158,6 +102,6 @@
       ]
     }
   },
-  "folder": "4 Notes",
+  "folder": "3 Notes",
   "choreoAuto": false
 }
