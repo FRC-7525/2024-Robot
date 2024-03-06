@@ -19,6 +19,7 @@ enum ManagerStates {
     WAIT_FOR_BACK,
     SCORING_AMP,
     START_SPINNING,
+    INTAKE_STUCK
     SPINNING_AND_INTAKING
 }
 
@@ -42,9 +43,18 @@ public class Manager {
     }
 
     public void reset() {
+        resetSecondary();
         robot.controller.getBButtonPressed();
         robot.controller.getAButtonPressed();
         robot.controller.getRightBumper();
+        resetIntakeTimer.stop();
+        resetIntakeTimer.reset();
+    }
+
+    public void resetSecondary() {
+        robot.secondaryController.getBButtonPressed();
+        robot.secondaryController.getAButtonPressed();
+        robot.secondaryController.getRightBumper();
         resetIntakeTimer.stop();
         resetIntakeTimer.reset();
     }
@@ -75,6 +85,9 @@ public class Manager {
                 shooterTimer.reset();
                 reset();
                 state = ManagerStates.SCORING_AMP;
+            } else if (robot.secondaryController.getBButtonPressed()) {
+                reset();
+                state = ManagerStates.INTAKE_STUCK;
             }
         } else if (state == ManagerStates.PUSH_OUT) {
             stateString = "Push Out";
@@ -113,8 +126,7 @@ public class Manager {
                 centerNoteTimer.stop();
                 centerNoteTimer.reset();
             }
-        }
-         else if (state == ManagerStates.INTAKING) {
+        } else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
             ampBar.setState(AmpBarStates.IN);
             shooter.setState(ShootingStates.OFF);
@@ -190,6 +202,16 @@ public class Manager {
                 reset();
                 
             }
+        } else if (state == ManagerStates.INTAKE_STUCK) {
+            intake.setState(IntakeStates.INTAKE_STUCK);
+            shooter.setState(ShootingStates.OFF);
+            stateString = "Intaking stuck note";
+
+            if (robot.controller.getBButtonPressed() || robot.secondaryController.getBButtonPressed()) {
+                state = ManagerStates.IDLE; 
+                reset();
+            }
+        }
         } else if (state == ManagerStates.SPINNING_AND_INTAKING) {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.INTAKING);

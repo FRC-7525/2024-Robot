@@ -12,6 +12,7 @@ import frc.robot.commands.AutoCommands;
 import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;
