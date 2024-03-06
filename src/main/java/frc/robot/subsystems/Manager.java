@@ -62,9 +62,17 @@ public class Manager {
     }
 
     public void periodic() {
+        ampBar.periodic();
+        intake.periodic();
+        shooter.periodic();
+
         if (state == ManagerStates.IDLE) {
             resetIntakeTimer.start();
-            ampBar.setState(AmpBarStates.IN);
+            if (!robot.isClimbing()) {
+                ampBar.setState(AmpBarStates.IN);
+            } else {
+                ampBar.setState(AmpBarStates.OUT);
+            }
             if (resetIntakeTimer.get() > Constants.Shooter.RESET_INTAKE_TIME) {
                 intake.resetPivotMotor();
                 resetIntakeTimer.stop();
@@ -83,7 +91,7 @@ public class Manager {
                 state = ManagerStates.START_SPINNING;
                 autoShoot = false;
                 reset();
-            } else if (robot.controller.getYButtonPressed()) {
+            } else if (robot.controller.getYButtonPressed() && !robot.isClimbing()) {
                 shooterTimer.reset();
                 reset();
                 state = ManagerStates.SCORING_AMP;
@@ -94,7 +102,6 @@ public class Manager {
         } else if (state == ManagerStates.PUSH_OUT) {
             stateString = "Push Out";
             centerNoteTimer.start();
-            ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.PUSH_OUT);
             shooter.setState(ShootingStates.FEEDING);
 
@@ -107,7 +114,6 @@ public class Manager {
         } else if (state == ManagerStates.PULL_IN) {
             stateString = "Pull In";
             centerNoteTimer.start();
-            ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.PULL_IN);
             shooter.setState(ShootingStates.REVERSING);
           
@@ -120,7 +126,6 @@ public class Manager {
         } else if (state == ManagerStates.WAIT_FOR_BACK) {
             centerNoteTimer.start();
             stateString = "Wait For Back";
-            ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.OFF);
             if (centerNoteTimer.get() > Constants.Shooter.RETURN_CENTER_NOTE_TIME) {
                 reset();
@@ -130,7 +135,6 @@ public class Manager {
             }
         } else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
-            ampBar.setState(AmpBarStates.IN);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking";
             currentSensingTimer.start();
@@ -148,7 +152,6 @@ public class Manager {
             }
         } else if (state == ManagerStates.OUTTAKING) {
             intake.setState(IntakeStates.OUTTAKING);
-            ampBar.setState(AmpBarStates.IN);
             shooter.setState(ShootingStates.OFF);
             if (robot.controller.getRightBumperReleased()) {
                 state = ManagerStates.INTAKING;
@@ -158,7 +161,6 @@ public class Manager {
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
             shooterTimer.start();
-            ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.FEEDING);
             if (shooterTimer.get() > (DriverStation.isAutonomous() ? Constants.Shooter.AUTO_SHOOTER_TIME : Constants.Shooter.SHOOTER_TIME)) {
                 shooterTimer.stop();
@@ -171,7 +173,7 @@ public class Manager {
             shooter.setState(ShootingStates.SCORING_AMP);
             ampBar.setState(AmpBarStates.OUT);
             intake.setState(IntakeStates.OFF);
-            if (ampBar.nearSetpoint() && shooter.atSetPoint()) {
+            if (ampBar.nearSetpoint() && shooter.atSetPoint(Constants.Shooter.AMP_SPEED)) {
                 intake.setState(IntakeStates.FEEDING);
                 shooterTimer.start();
                 if (shooterTimer.get() > Constants.Shooter.AMP_TIME) {
@@ -180,16 +182,15 @@ public class Manager {
                     state = ManagerStates.IDLE;
                     reset();
                 }
-            }
-            stateString = "Amp Scoring";
+            } 
+            stateString = "Amp Scoring"; 
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);
-            ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.OFF);
             stateString = "Spinning up";
 
             if (autoShoot) {
-                if (shooter.atSetPoint()) { // Ensures the shooter motors are at setpoint before shooting.
+                if (shooter.atSetPoint(Constants.Shooter.SPEED)) { // Ensures the shooter motors are at setpoint before shooting.
                     state = ManagerStates.SHOOTING;
                     reset();
                     System.out.println("It switched to shooting");
@@ -197,7 +198,6 @@ public class Manager {
             } else if (robot.controller.getAButtonPressed()) {
                 autoShoot = true;
                 reset();
-                
             }
         } else if (state == ManagerStates.INTAKE_STUCK) {
             intake.setState(IntakeStates.INTAKE_STUCK);
@@ -221,9 +221,6 @@ public class Manager {
         shooter.putSmartDashValues();
         ampBar.putSmartDashValues();
         
-        ampBar.periodic();
-        intake.periodic();
-        shooter.periodic();
         SmartDashboard.putString("Manager State", stateString);
     }
 
