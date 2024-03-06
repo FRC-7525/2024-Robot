@@ -44,8 +44,11 @@ public class AmpBar {
             pivotMotorSetpoint = Constants.AmpBar.IN;
             stateString = "Amp Bar In";
         }
-        
-        leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
+        if (pivotEncoder.getAbsolutePosition() > 0.1) {
+            leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
+        } else {
+            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzz amp bar mid");
+        }
         SmartDashboard.putNumber("Amp motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getAbsolutePosition());
         SmartDashboard.putString("Amp Bar State", stateString);

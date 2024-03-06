@@ -182,12 +182,7 @@ public class Manager {
                     state = ManagerStates.IDLE;
                     reset();
                 }
-            } else if (robot.secondaryController.getYButtonPressed()) {
-                state = ManagerStates.IDLE;
-                ampBar.setState(AmpBarStates.IN);
-                reset();
             }
-            
             stateString = "Amp Scoring";
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);
