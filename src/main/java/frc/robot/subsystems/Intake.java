@@ -9,7 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -25,7 +25,7 @@ enum IntakeStates {
     INTAKE_STUCK
 }
 
-public class Intake extends SubsystemBase {
+public class Intake {
     IntakeStates states = IntakeStates.OFF;
     Robot robot = null;
     private CANSparkMax pivotMotor = new CANSparkMax(32, MotorType.kBrushless);
