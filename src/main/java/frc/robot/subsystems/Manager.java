@@ -19,7 +19,7 @@ enum ManagerStates {
     WAIT_FOR_BACK,
     SCORING_AMP,
     START_SPINNING,
-    INTAKE_STUCK
+    INTAKE_STUCK,
     SPINNING_AND_INTAKING
 }
 
@@ -167,7 +167,6 @@ public class Manager {
                 state = ManagerStates.IDLE;
                 reset();
             }
-              
             stateString = "Shooting";
         } else if (state == ManagerStates.SCORING_AMP) {
             shooter.setState(ShootingStates.SCORING_AMP);
@@ -205,12 +204,10 @@ public class Manager {
             intake.setState(IntakeStates.INTAKE_STUCK);
             shooter.setState(ShootingStates.OFF);
             stateString = "Intaking stuck note";
-
             if (robot.controller.getBButtonPressed() || robot.secondaryController.getBButtonPressed()) {
                 state = ManagerStates.IDLE; 
                 reset();
             }
-        }
         } else if (state == ManagerStates.SPINNING_AND_INTAKING) {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.INTAKING);
