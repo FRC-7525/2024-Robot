@@ -98,7 +98,7 @@ public class Climber {
                 stateString = "Climber contracted";
             }
 
-            if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN) {
+            if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN && leftMotorSetpoint == Constants.Climber.DOWN && rightMotorSetpoint == Constants.Climber.DOWN) {
                 climbingInProgress = false;
             }
 
