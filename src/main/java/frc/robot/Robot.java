@@ -12,15 +12,12 @@ import frc.robot.commands.AutoCommands;
 import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -28,7 +25,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {

@@ -1,10 +1,9 @@
 package frc.robot.subsystems;
 
-import java.security.cert.TrustAnchor;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Robot;
 import frc.robot.subsystems.AmpBar.AmpBarStates;
 import frc.robot.Constants;
@@ -220,9 +219,12 @@ public class Manager {
         
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
-        SmartDashboard.putString("Manager State", stateString);
+        ampBar.putSmartDashValues();
         
         ampBar.periodic();
+        intake.periodic();
+        shooter.periodic();
+        SmartDashboard.putString("Manager State", stateString);
     }
 
     public Boolean isIdle() {

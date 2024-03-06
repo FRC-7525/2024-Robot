@@ -1,17 +1,13 @@
 package frc.robot.subsystems;
-import java.beans.Encoder;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.AbsoluteEncoder;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants;
-import swervelib.motors.TalonSRXSwerve;
 
 public class AmpBar {
     enum AmpBarStates {
@@ -47,8 +43,11 @@ public class AmpBar {
         if (pivotEncoder.getAbsolutePosition() > 0.1) {
             leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
         } else {
-            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzz amp bar mid");
+            System.out.println("Amp Bar Encoder Unplugged zzzzz");
         }
+    }
+
+    public void putSmartDashValues() {
         SmartDashboard.putNumber("Amp motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getAbsolutePosition());
         SmartDashboard.putString("Amp Bar State", stateString);

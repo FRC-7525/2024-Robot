@@ -1,19 +1,17 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-
-import javax.swing.text.TabExpander;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,7 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
+
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
@@ -53,10 +51,6 @@ public class Drive extends SubsystemBase {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
             swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
             pathPlannerInit();
-
-            // UNTESTED (with changes)
-            //swerveDrive.setHeadingCorrection(true, 0.01);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,8 +103,6 @@ public class Drive extends SubsystemBase {
             yMovement *= -1;
         }
         
-
-
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
             fieldRelative = false;
@@ -144,8 +136,6 @@ public class Drive extends SubsystemBase {
             rotation *= Constants.Drive.fastRotationMultiplier;
         }
 
-        
-
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
         double actualAngle = swerveDrive.getModules()[0].getAngleMotor().getPosition();
@@ -161,7 +151,6 @@ public class Drive extends SubsystemBase {
     }
 
     public double calculateAcceleration(Optional<Translation3d> acceleration) {
-
         if (acceleration.isPresent()) {
             Translation3d presentAcceleration = acceleration.get();
             return Math.sqrt(
@@ -176,7 +165,6 @@ public class Drive extends SubsystemBase {
     public double calculateVelocity(ChassisSpeeds velocity) {
         double x = velocity.vxMetersPerSecond;
         double y = velocity.vyMetersPerSecond;
-        double angularVelocity = velocity.omegaRadiansPerSecond;
         return Math.sqrt(
             Math.pow(x, 2) + 
             Math.pow(y, 2)
