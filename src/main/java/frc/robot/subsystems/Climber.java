@@ -37,8 +37,6 @@ public class Climber {
     LinearFilter leftFilter = LinearFilter.movingAverage(5);
     LinearFilter rightFilter = LinearFilter.movingAverage(5);
 
-    public boolean isClimbing = false;
-
     public Climber(Robot robot) {
         this.robot = robot;
         rightMotor.setInverted(true);
