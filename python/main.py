@@ -5,7 +5,7 @@ import time
 import csv
 from pathlib import Path
 
-SLEEP_TIME = 0.05
+SLEEP_TIME = 0.1
 CSV_FOLDER = "logs"
 
 class LogLevels:
