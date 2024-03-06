@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     }
 
     public boolean isClimbing() {
-        return climber.isClimbing();
+        return climber.climbingInProgress;
     }
 
     @Override
