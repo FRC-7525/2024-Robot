@@ -47,6 +47,9 @@ public class Manager {
         robot.controller.getBButtonPressed();
         robot.controller.getAButtonPressed();
         robot.controller.getRightBumper();
+        robot.secondaryController.getYButtonPressed();
+        robot.secondaryController.getXButtonPressed();
+        robot.secondaryController.getAButtonPressed();
         resetIntakeTimer.stop();
         resetIntakeTimer.reset();
     }
@@ -182,6 +185,7 @@ public class Manager {
             } else if (robot.secondaryController.getYButtonPressed()) {
                 state = ManagerStates.IDLE;
                 ampBar.setState(AmpBarStates.IN);
+                reset();
             }
             
             stateString = "Amp Scoring";
@@ -216,6 +220,11 @@ public class Manager {
             shooter.setState(ShootingStates.SHOOTING);
             intake.setState(IntakeStates.INTAKING);
         } 
+        
+        if (robot.secondaryController.getXButtonPressed()) {
+            state = ManagerStates.IDLE;
+            reset();
+        }
         
         intake.putSmartDashValues();
         shooter.putSmartDashValues();
