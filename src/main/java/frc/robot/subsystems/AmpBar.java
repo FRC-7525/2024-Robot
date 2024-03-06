@@ -60,7 +60,7 @@ public class AmpBar {
         return Math.abs(pivotEncoder.getAbsolutePosition() - pivotMotorSetpoint) < 0.1;
     }
 
-	public void setState(AmpBarStates state) {
+    public void setState(AmpBarStates state) {
         if (!robot.isClimbing()) {
             this.state = state;
         } else {
