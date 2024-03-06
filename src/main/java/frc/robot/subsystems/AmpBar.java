@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 import java.beans.Encoder;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.AbsoluteEncoder;
 import edu.wpi.first.math.controller.PIDController;
@@ -22,24 +24,31 @@ public class AmpBar {
     private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(45);
     private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(9);
     double pivotMotorSetpoint = Constants.AmpBar.IN;
+    String stateString = "";
     
     public AmpBar() {
         rightMotor.follow(leftMotor);
         leftMotor.setInverted(true);
+
+        leftMotor.setNeutralMode(NeutralMode.Coast);
+        rightMotor.setNeutralMode(NeutralMode.Coast);
+
         pivotEncoder.reset();
     }
 
     public void periodic() {
         if (state == AmpBarStates.OUT) {
             pivotMotorSetpoint = Constants.AmpBar.OUT;
+            stateString = "Amp Bar Out";
         } else if (state == AmpBarStates.IN) {
             pivotMotorSetpoint = Constants.AmpBar.IN;
+            stateString = "Amp Bar In";
         }
         
         leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
         SmartDashboard.putNumber("Amp motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getAbsolutePosition());
-
+        SmartDashboard.putString("Amp Bar State", stateString);
     }
 
     public boolean nearSetpoint() {

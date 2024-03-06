@@ -57,8 +57,8 @@ public final class Constants {
         public static final double RETURN_CENTER_NOTE_TIME = 1.0;
         public static final double GO_OUT_TIME = 1.1;
         public static final double SHOOTER_TIME = 1;
-        public static final double AMP_SPEED = 15;
-        public static final double AMP_TIME = 1;
+        public static final double AMP_SPEED = 17.5;
+        public static final double AMP_TIME = 1.5;
         public static final double REVERSE_SLOW_SPEED = -0.20;
         public static final double AUTO_SHOOTER_TIME = 0.6;
     }
@@ -84,7 +84,7 @@ public final class Constants {
 
     public static final class AmpBar {
         public static final double IN = 0.45;
-        public static final double OUT = IN + 0.26;
+        public static final double OUT = IN + 0.2506;
     }
   
     public static final class Vision {

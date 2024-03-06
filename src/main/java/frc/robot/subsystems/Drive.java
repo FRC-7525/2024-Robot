@@ -37,7 +37,7 @@ enum DriveStates {
 
 public class Drive extends SubsystemBase {
     SwerveDrive swerveDrive;
-    DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
+    DriveStates driveStates = DriveStates.FIELD_RELATIVE;
     Robot robot = null;
     boolean fieldRelative = false;
 
