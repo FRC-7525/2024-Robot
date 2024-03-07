@@ -72,10 +72,10 @@ public class Robot extends TimedRobot {
         // TODO: 5 note auto (all 3 close and 1 far) (3-2)
 
         // Misc Autos
-        chooser.addOption("Drive Forwards", "Drive Forwards");
+        chooser.addOption("0: start anywhere no vision, cross line", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
-        chooser.addOption("Drive backwards, score preload", "Drive Backwards + Score");
-        chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
+        chooser.addOption("1: Start Mid, score preload, cross line", "Drive Backwards + Score");
+        //chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
         //Choreo Autos (not running these)
         /* 
         chooser.addOption("2 Note Choreo", "Optimized 2 Note");
@@ -83,10 +83,11 @@ public class Robot extends TimedRobot {
         chooser.addOption("4 Note Choreo", "Optimized 4 Note");
         */
         // 2 Note Autos
-        chooser.addOption("Preload + Left Note", "Left Note");
-        chooser.addOption("Preload + Middle Note", "Middle Note");
-        chooser.addOption("Preload + Right Note", "Right Note");
+        chooser.addOption("2: Start Left (angled), Close Left", "Left Note");
+        chooser.addOption("2: Start Mid, Close Middle", "Middle Note");
+        chooser.addOption("2: Start Right (angled), Close Right", "Right Note");
         // 3 Note Autos
+        // 4: Start Mid, Close Left, Close Mid, Far Left
         chooser.addOption("Left + Mid", "Left + Mid");
         chooser.addOption("Mid + Right", "Mid + Right");
         chooser.addOption("Center Left + Left", "Center Left + Left");

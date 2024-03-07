@@ -45,7 +45,7 @@ public final class Constants {
         public static final double AMP_SCORING = -16.7;
         public static final double ON_SLOW_AMP = -0.4;
         public static final double SUPPLY_CURRENT_MINIMUM = 25;
-        public static final double CURRENT_SENSING_TIMER = 0.2;
+        public static final double CURRENT_SENSING_TIMER = 0.5;
     }
 
     public static final class Shooter {
