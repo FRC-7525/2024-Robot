@@ -23,9 +23,9 @@ public class Manager {
     public ManagerStates state = ManagerStates.IDLE;
     String stateString;
     Robot robot = null;
-    public Shooter shooter = new Shooter(robot);
-    public Intake intake = new Intake(robot);
-    AmpBar ampBar = new AmpBar(robot);
+    public Shooter shooter = null;
+    public Intake intake = null;
+    AmpBar ampBar = null;
     Timer shooterTimer = new Timer();
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
@@ -34,6 +34,9 @@ public class Manager {
 
     public Manager(Robot robot) {
         this.robot = robot;
+        this.shooter = new Shooter(robot);
+        this.intake = new Intake(robot);
+        this.ampBar = new AmpBar(robot);
     }
 
     public void reset() {

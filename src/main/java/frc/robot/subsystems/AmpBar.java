@@ -47,6 +47,13 @@ public class AmpBar {
             leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
         } else {
             System.out.println("Amp Bar Encoder Unplugged zzzzz");
+            if (robot.secondaryController.getPOV() == Constants.DPAD_LEFT) {
+                leftMotor.set(-0.2);
+            } else if (robot.secondaryController.getPOV() == Constants.DPAD_RIGHT) {
+                leftMotor.set(0.2);
+            } else {
+                leftMotor.set(0);
+            }
         }
     }
 
@@ -61,9 +68,10 @@ public class AmpBar {
     }
 
     public void setState(AmpBarStates state) {
+        if (robot == null) return;
         if (!robot.isClimbing()) {
             this.state = state;
-        } else {
+        } else { 
             this.state = AmpBarStates.OUT;
             System.out.println("Cannot pull in amp bar, currently climbing (zzzz)");
         }
