@@ -44,7 +44,7 @@ class Logger:
             print(f"{time.strftime('%H:%M:%S')}: Subscripted to {string_name}")
 
     def log_double_array(self, array_name: str):
-        sub = self.table.getDoubleArrayTopic(array_name).subscribe([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        sub = self.table.getDoubleArrayTopic(array_name).subscribe([0.0, 0.0, 0.0])
         self.subscriptions.append(sub)
         if self.logging >= LogLevels.INFO: 
             print(f"{time.strftime('%H:%M:%S')}: Subscripted to {array_name}")
@@ -95,9 +95,9 @@ def log_smart_dashboard():
     log.log_double("Left Climber Current")
     log.log_double("Left Encoder Position")
     log.log_double("Left Encoder Setpoint")
-    log.log_double("Right Climber Current")
-    log.log_double("Right Encoder Position")
-    log.log_double("Right Encoder Setpoint")
+    #log.log_double("Right Climber Current")
+    #log.log_double("Right Encoder Position")
+    #log.log_double("Right Encoder Setpoint")
     log.log_boolean("Climb In Progress")
 
     # log intake stuff
