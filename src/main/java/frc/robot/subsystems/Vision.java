@@ -38,7 +38,7 @@ public class Vision {
         SmartDashboard.putBoolean("Front Vision", seesFrontVision); 
         if (frontBotpose3d.isPresent()) {
             var tempPose = frontBotpose3d.get().estimatedPose;
-            double[] frontPose = {tempPose.getX(), tempPose.getY()};
+            double[] frontPose = {tempPose.getX(), tempPose.getY(), Units.radiansToDegrees(tempPose.getRotation().getAngle())};
 
             SmartDashboard.putNumberArray("Front Pose", frontPose);
         }
