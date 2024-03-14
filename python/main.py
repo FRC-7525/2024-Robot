@@ -126,6 +126,9 @@ def log_smart_dashboard():
     # battery volatage
     log.log_double("Battery Voltage")
 
+    #controler input
+    log.log_string("Last Controller Input")
+
     return log
 
 if __name__ == "__main__":
