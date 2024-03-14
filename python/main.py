@@ -129,6 +129,9 @@ def log_smart_dashboard():
     #controler input
     log.log_string("Last Controller Input")
 
+    # Path Planner Logging
+    log.log_double_array("Target PP Pose")
+
     return log
 
 if __name__ == "__main__":

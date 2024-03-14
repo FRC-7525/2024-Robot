@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -68,6 +70,7 @@ public class Drive extends SubsystemBase {
         swerveDrive.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d()));
     }
 
+
     public void pathPlannerInit() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose, // Robot pose supplier
@@ -91,6 +94,14 @@ public class Drive extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
         );
+    }
+
+    public void pathPlannerLogging() { 
+        // Target Pose
+        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+            double[] targetPose = {pose.getX(), pose.getY(), pose.getRotation().getDegrees()};
+            SmartDashboard.putNumberArray("Target PP Pose", targetPose);
+        });
     }
 
     public void periodic() {
