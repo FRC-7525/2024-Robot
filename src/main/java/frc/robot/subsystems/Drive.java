@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import swervelib.SwerveDrive;
@@ -34,7 +36,8 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
-    FIELD_RELATIVE
+    FIELD_RELATIVE,
+    TELEOP_ALIGNING
 }
 
 public class Drive extends SubsystemBase {
@@ -42,6 +45,8 @@ public class Drive extends SubsystemBase {
     DriveStates driveStates = DriveStates.FIELD_RELATIVE;
     Robot robot = null;
     boolean fieldRelative = false;
+    Pose2d currentPose = new Pose2d(0, 0, new Rotation2d(0, 0));
+    DriveStates lastDriveState = DriveStates.FIELD_RELATIVE;
 
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
@@ -68,25 +73,27 @@ public class Drive extends SubsystemBase {
         swerveDrive.zeroGyro();
     }
     
+    public void driveToPosePID(Pose2d targetPose) {
+        currentPose = swerveDrive.getPose();
+
+        swerveDrive.drive(
+            new Translation2d(
+                Constants.Drive.alignmentDrivePID.calculate(currentPose.getX(), targetPose.getX()), 
+                Constants.Drive.alignmentDrivePID.calculate(currentPose.getY(), targetPose.getY())), 
+            Constants.Drive.alignmentRotationPID.calculate(
+                currentPose.getRotation().getRadians(), 
+                targetPose.getRotation().getRadians()), 
+            false, false);
+    }
+
     public void resetOdometry() {
         swerveDrive.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d()));
     }
 
-    public Command driveToPose(Pose2d pose) {
-        // Create the constraints to use while pathfinding
-        PathConstraints constraints = new PathConstraints(
-            swerveDrive.getMaximumVelocity(), 3.5,
-            swerveDrive.getMaximumAngularVelocity(), Units.degreesToRadians(180));
-
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        return AutoBuilder.pathfindToPose(
-            pose,
-            constraints,
-            0.0, // Goal end velocity in meters/sec
-            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-        );
+    public void cacheState() {
+        lastDriveState = driveStates;
     }
-
+ 
     public void pathPlannerInit() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose, // Robot pose supplier
@@ -110,6 +117,16 @@ public class Drive extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
         );
+    }
+
+    public boolean nearSetPose(Pose2d targetPose) {
+        currentPose = swerveDrive.getPose();
+        return 
+        Math.abs(currentPose.getX() - targetPose.getX()) < Constants.Drive.translationErrorMargin &&
+        Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
+        Math.abs(
+            currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()
+        ) < Constants.Drive.rotationErrorMargin;
     }
 
     public void periodic() {
@@ -138,24 +155,39 @@ public class Drive extends SubsystemBase {
                 driveStates = DriveStates.FIELD_ABSOLUTE;
                 System.out.println("FIELD Relative OFF");
             }
+        } else if (driveStates == DriveStates.TELEOP_ALIGNING) {
+            driveToPosePID(robot.manager.targetPose);
+            if (nearSetPose(robot.manager.targetPose) && robot.manager.state != ManagerStates.SCORING_AMP) {
+                robot.manager.scoreAmp(); 
+            }
+
+            if (robot.manager.completedScore) {
+                driveStates = lastDriveState;
+            }
         }
 
-        if (robot.controller.getStartButtonPressed()) {
-            swerveDrive.zeroGyro();
-            System.out.println("Gyro Zeroed");
-        } else if (robot.controller.getBackButton()) {
-            swerveDrive.lockPose();
-        } else if (robot.controller.getLeftBumper()) {
-            xMovement *= Constants.Drive.slowTranslationMultiplier;
-            yMovement *= Constants.Drive.slowTranslationMultiplier;
-            rotation *= Constants.Drive.slowRotationMultiplier;
-        } else{
-            xMovement *= Constants.Drive.fastTranslationMultiplier;
-            yMovement *= Constants.Drive.fastTranslationMultiplier;
-            rotation *= Constants.Drive.fastRotationMultiplier;
-        }
+        if (driveStates != DriveStates.TELEOP_ALIGNING) {
+            if (robot.controller.getStartButtonPressed()) {
+                swerveDrive.zeroGyro();
+                System.out.println("Gyro Zeroed");
+            }
+            
+            if (robot.controller.getBackButton()) {
+                swerveDrive.lockPose();
+            } 
 
-        swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
+            if (robot.controller.getLeftBumper()) {
+                xMovement *= Constants.Drive.slowTranslationMultiplier;
+                yMovement *= Constants.Drive.slowTranslationMultiplier;
+                rotation *= Constants.Drive.slowRotationMultiplier;
+            } else {
+                xMovement *= Constants.Drive.fastTranslationMultiplier;
+                yMovement *= Constants.Drive.fastTranslationMultiplier;
+                rotation *= Constants.Drive.fastRotationMultiplier;
+            }
+            swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
+        }   
+
         SmartDashboard.putString("Drive State", state);
         double actualAngle = swerveDrive.getModules()[0].getAngleMotor().getPosition();
         double desiredAngle = SwerveDriveTelemetry.desiredStates[0];
@@ -188,6 +220,14 @@ public class Drive extends SubsystemBase {
             Math.pow(x, 2) + 
             Math.pow(y, 2)
         );
+    }
+
+    public void teleopAlign() {
+        this.driveStates = DriveStates.TELEOP_ALIGNING;
+    }
+
+    public void fieldRel() {
+        driveStates = DriveStates.FIELD_RELATIVE;
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {

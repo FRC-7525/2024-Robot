@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,8 +35,9 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
+    public Pose2d targetPose = new Pose2d(0, 0, new Rotation2d(0, 0));
+    public Boolean completedScore = false;
     
-
     public Manager(Robot robot) {
         this.robot = robot;
         this.shooter = new Shooter(robot);
@@ -143,6 +148,7 @@ public class Manager {
                     shooterTimer.stop();
                     shooterTimer.reset(); 
                     state = ManagerStates.IDLE;
+                    completedScore = true;
                     reset();
                 }
             } 
@@ -180,32 +186,16 @@ public class Manager {
         
         if (robot.secondaryController.getXButtonPressed()) {
             state = ManagerStates.IDLE;
-            robot.clearCommands();
+            robot.drive.fieldRel();
             reset();
-        }
-
-        // Schedules commands for scoring alignment
-
-        if (robot.secondaryController.getRightBumperPressed()) {
-            robot.clearCommands();
-            CommandScheduler.getInstance().schedule(
-                robot.driveToPose(Constants.Drive.sourceSpeakerPose)
-            );
-            reset();
-        }
-
-        if (robot.secondaryController.getLeftBumperPressed()) {
-            robot.clearCommands();
-            CommandScheduler.getInstance().schedule(
-                robot.driveToPose(Constants.Drive.ampSpeakerPose)
-            );
         }
 
         if (robot.secondaryController.getStartButtonPressed()) {
-            robot.clearCommands();
-            CommandScheduler.getInstance().schedule(
-                robot.driveToPose(Constants.Drive.ampPose)
-            );
+            state = ManagerStates.IDLE;
+            completedScore = false;
+            targetPose = Constants.Drive.ampPose;
+            robot.drive.cacheState();
+            robot.drive.teleopAlign();
         }
         
         intake.putSmartDashValues();
@@ -232,6 +222,11 @@ public class Manager {
         reset();
         state = ManagerStates.START_SPINNING;
         autoShoot = true;
+    }
+
+    public void scoreAmp() {
+        reset();
+        state = ManagerStates.SCORING_AMP;
     }
 
     public void spinningUp() {

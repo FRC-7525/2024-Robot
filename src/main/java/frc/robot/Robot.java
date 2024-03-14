@@ -27,12 +27,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
-    Drive drive = new Drive(this);
+    public Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
     Climber climber = new Climber(this);
@@ -53,12 +54,8 @@ public class Robot extends TimedRobot {
         return climber.climbingInProgress;
     }
 
-    public Command driveToPose(Pose2d pose) {
-        return drive.driveToPose(pose);
-    }
-
-    public void clearCommands() {
-        CommandScheduler.getInstance().cancelAll();
+    public void driveToPose(Pose2d pose) {
+        drive.driveToPosePID(pose);
     }
 
     @Override

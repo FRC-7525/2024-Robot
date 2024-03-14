@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -48,6 +49,14 @@ public final class Constants {
             DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
             new Pose2d(14.7, 7.7, new Rotation2d(Math.toRadians(90))) :
             new Pose2d(1.85, 7.7, new Rotation2d(Math.toRadians(-90)));
+
+        // TODO: Test and Tune 
+
+        public static final PIDController alignmentDrivePID = new PIDController(6, 0, 0.1);
+        public static final PIDController alignmentRotationPID = new PIDController(4, 0, 0.4);
+
+        public static final double translationErrorMargin = 0.1;
+        public static final double rotationErrorMargin = Math.toRadians(10);
     }
     public static final class Intake {
         // Motor setpoints for the intake motors.
