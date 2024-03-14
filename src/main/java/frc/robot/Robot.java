@@ -87,21 +87,25 @@ public class Robot extends TimedRobot {
         chooser.addOption("2: Start Mid, Close Middle", "Middle Note");
         chooser.addOption("2: Start Right (angled), Close Right", "Right Note");
         // 3 Note Autos
+        // chooser.addOption("Left + Mid", "Left + Mid"); (Un-used)
+        //chooser.addOption("Mid + Right", "Mid + Right"); (Un- used)
+        // chooser.addOption("Center Left + Left", "Center Left + Left"); (Un-used)
+        // chooser.addOption("Right + Center Right", "Right + Center Right"); (Un-used)
+        // chooser.addOption("Start Left", "Mid + Center Left"); (Un-used)
+        chooser.addOption("Start Right, Far Right, Far Right-ish", "2 Far Right");
+        chooser.addOption("Start Left, Left Close, Mid Close", "CloseTwoLeft");
+        chooser.addOption("Start Left, Close Left, Far Left", "All Left");
+        
         // 4: Start Mid, Close Left, Close Mid, Far Left
-        chooser.addOption("Left + Mid", "Left + Mid");
-        chooser.addOption("Mid + Right", "Mid + Right");
-        chooser.addOption("Center Left + Left", "Center Left + Left");
-        chooser.addOption("Right + Center Right", "Right + Center Right");
-        chooser.addOption("Mid + Center Left", "Mid + Center Left");
-        chooser.addOption("2 Left Close", "CloseTwoLeft");
-        chooser.addOption("All Left", "All Left");
+
         // 4 Note Autos
         chooser.addOption("All Close", "All Close");
-        chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
-        chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
-        chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line");
+        // chooser.addOption("2 Close + Right Far", "2 Close + Right Far"); (Impossible)
+        chooser.addOption("Start Mid, Left Close, Mid Close, Left Far", "2 Close + Left Far");
+        // chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line"); (Impossible)
+        chooser.addOption("Start Mid, Close left, Close Mid, Far Left", "Optimized 4 Note Auto");
         // 5 Note Auto
-        chooser.addOption("5 Note Auto", "5 Note Auto");
+        chooser.addOption("5 Note Auto", "Optimized 5 Note Auto");
 
         SmartDashboard.putData("Path Chooser", chooser);
     }

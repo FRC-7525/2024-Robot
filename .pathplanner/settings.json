@@ -6,14 +6,17 @@
     "2 Note Paths",
     "3 Note Paths",
     "4 Note Paths",
-    "Misc Paths"
+    "5 Note Paths",
+    "Misc Paths",
+    "2 Far Paths"
   ],
   "autoFolders": [
     "2 Notes",
     "3 Notes",
     "4 Notes",
+    "Choreo Autos",
     "MISC",
-    "Choreo Autos"
+    "Autos That Need Testing"
   ],
   "defaultMaxVel": 4.2,
   "defaultMaxAccel": 3.5,
