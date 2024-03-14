@@ -62,10 +62,6 @@ public class Vision {
         }
     }
 
-    public void tagAt90Deg() {
-        frontEstimator.getTagModel();
-    }
-
     public Optional<Pose2d> getFrontPose2d() {
         if (frontBotpose3d.isPresent()) {
             seesFrontVision = true;
