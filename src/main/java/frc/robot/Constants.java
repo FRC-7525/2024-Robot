@@ -37,10 +37,16 @@ public final class Constants {
         public static final double fastRotationMultiplier = Units.feetToMeters(25);
         
         public static final Pose2d ampSpeakerPose = 
-            new Pose2d(0.8, 6.67, new Rotation2d(Math.toRadians(-130)));
+            DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
+            new Pose2d(15.75, 6.67, new Rotation2d(Math.toRadians(-54.5))) :
+            new Pose2d(0.8, 6.67, new Rotation2d(Math.toRadians(54.5)));
         public static final Pose2d sourceSpeakerPose = 
-            new Pose2d(0.8, 4.38, new Rotation2d(Math.toRadians(130)));
+            DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
+            new Pose2d(15.7, 4.38, new Rotation2d(Math.toRadians(45))) :
+            new Pose2d(0.8, 4.38, new Rotation2d(Math.toRadians(-45)));
         public static final Pose2d ampPose = 
+            DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
+            new Pose2d(14.7, 7.7, new Rotation2d(Math.toRadians(90))) :
             new Pose2d(1.85, 7.7, new Rotation2d(Math.toRadians(-90)));
     }
     public static final class Intake {
