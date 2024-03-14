@@ -91,15 +91,18 @@ public class Climber {
                 leftMotorSetpoint = Constants.Climber.MAX_SETPOINT;
                 isExtended = true;
                 stateString = "Climber extended";
+                robot.manager.lastControllerInput = "Driver DPAD Up";
             } else if (dPad == Constants.DPAD_DOWN) {
                 rightMotorSetpoint = Constants.Climber.DOWN;
                 leftMotorSetpoint = Constants.Climber.DOWN;
                 isExtended = false;
+                robot.manager.lastControllerInput = "Driver DPAD Down";
                 stateString = "Climber contracted";
             }
 
             if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN && leftMotorSetpoint == Constants.Climber.DOWN && rightMotorSetpoint == Constants.Climber.DOWN) {
                 climbingInProgress = false;
+                robot.manager.lastControllerInput = "Operator DPAD Down";
             }
 
             if (isExtended && MathUtil.applyDeadband(leftTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {

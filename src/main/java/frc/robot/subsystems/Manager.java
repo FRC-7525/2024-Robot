@@ -30,7 +30,7 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
-    String lastControllerInput = "";
+    public String lastControllerInput = "";
     
 
     public Manager(Robot robot) {
