@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +17,9 @@ import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.proto.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,6 +32,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class Vision {
+
     Optional<EstimatedRobotPose> frontBotpose3d;
 
     PhotonCamera frontCamera = new PhotonCamera("Front Camera");
@@ -33,20 +41,40 @@ public class Vision {
             new Translation3d(Units.inchesToMeters(-14.25), 0, Units.inchesToMeters(6)),
             new Rotation3d(0, Units.degreesToRadians(-67), Units.degreesToRadians(180)));
 
-    List<AprilTag> aprilTags = Arrays.asList(
-            new AprilTag(3, new Pose3d(8.308467, 0.877443, 1.451102, new Rotation3d(0.0, 0.0, -90.0))),
-            new AprilTag(4, new Pose3d(8.308467, 1.442593, 1.451102, new Rotation3d(0.0, 0.0, -90.0))),
-            new AprilTag(7, new Pose3d(-8.308975, 1.442593, 1.451102, new Rotation3d(0.0, 0.0, 90.0))),
-            new AprilTag(8, new Pose3d(-8.308975, 0.877443, 1.451102, new Rotation3d(0.0, 0.0, 90.0))),
-            new AprilTag(5, new Pose3d(6.429883, 4.098925, 1.355852, new Rotation3d(0.0, 0.0, -180.0))),
-            new AprilTag(6, new Pose3d(-6.429375, 4.098925, 1.355852, new Rotation3d(0.0, 0.0, 0.0))));
-    AprilTagFieldLayout layout2 = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags, layout2.getFieldLength(), layout2.getFieldWidth());
+    AprilTagFieldLayout layout;
+
+    public Vision() {
+        try {
+            String deployDirectoryPath = Filesystem.getDeployDirectory().getAbsolutePath();
+            System.out.println("Deploy dir:" + deployDirectoryPath);
+            layout = new AprilTagFieldLayout(deployDirectoryPath + "/CrescendoFieldLayout.json");
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    // List<AprilTag> aprilTags = Arrays.asList(
+    // new AprilTag(3, new Pose3d(8.308467, 0.877443, 1.451102, new Rotation3d(0.0,
+    // 0.0, -90.0))),
+    // new AprilTag(4, new Pose3d(8.308467, 1.442593, 1.451102, new Rotation3d(0.0,
+    // 0.0, -90.0))),
+    // new AprilTag(7, new Pose3d(-8.308975, 1.442593, 1.451102, new Rotation3d(0.0,
+    // 0.0, 90.0))),
+    // new AprilTag(8, new Pose3d(-8.308975, 0.877443, 1.451102, new Rotation3d(0.0,
+    // 0.0, 90.0))),
+    // new AprilTag(5, new Pose3d(6.429883, 4.098925, 1.355852, new Rotation3d(0.0,
+    // 0.0, -180.0))),
+    // new AprilTag(6, new Pose3d(-6.429375, 4.098925, 1.355852, new Rotation3d(0.0,
+    // 0.0, 0.0))));
+    // AprilTagFieldLayout layout2 =
+    // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    // AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags,
+    // layout2.getFieldLength(), layout2.getFieldWidth());
 
     PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(layout,
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
-            frontrobotToCam
-    );
+            frontrobotToCam);
+
     Boolean seesFrontVision = false;
     Timer frontVisionTimer = new Timer();
 
