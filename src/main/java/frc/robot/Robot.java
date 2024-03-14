@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        manager.shooter.shooterFaults();
+        manager.shooter.checkFaults();
         manager.intake.checkFaults();
         manager.ampBar.checkFaults();
         climber.checkFaults();
