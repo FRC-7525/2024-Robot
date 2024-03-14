@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -14,6 +16,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 
 import org.photonvision.PhotonPoseEstimator;
@@ -35,11 +40,13 @@ public class Vision {
             new AprilTag(8, new Pose3d(-8.308975, 0.877443, 1.451102, new Rotation3d(0.0, 0.0, 90.0))),
             new AprilTag(5, new Pose3d(6.429883, 4.098925, 1.355852, new Rotation3d(0.0, 0.0, -180.0))),
             new AprilTag(6, new Pose3d(-6.429375, 4.098925, 1.355852, new Rotation3d(0.0, 0.0, 0.0))));
-    AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags);
+    AprilTagFieldLayout layout2 = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags, layout2.getFieldLength(), layout2.getFieldWidth());
 
     PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(layout,
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
-            frontrobotToCam);
+            frontrobotToCam
+    );
     Boolean seesFrontVision = false;
     Timer frontVisionTimer = new Timer();
 
@@ -53,6 +60,10 @@ public class Vision {
 
             SmartDashboard.putNumberArray("Front Pose", frontPose);
         }
+    }
+
+    public void tagAt90Deg() {
+        frontEstimator.getTagModel();
     }
 
     public Optional<Pose2d> getFrontPose2d() {
