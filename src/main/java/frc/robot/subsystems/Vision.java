@@ -53,24 +53,6 @@ public class Vision {
         }
     }
 
-    // List<AprilTag> aprilTags = Arrays.asList(
-    // new AprilTag(3, new Pose3d(8.308467, 0.877443, 1.451102, new Rotation3d(0.0,
-    // 0.0, -90.0))),
-    // new AprilTag(4, new Pose3d(8.308467, 1.442593, 1.451102, new Rotation3d(0.0,
-    // 0.0, -90.0))),
-    // new AprilTag(7, new Pose3d(-8.308975, 1.442593, 1.451102, new Rotation3d(0.0,
-    // 0.0, 90.0))),
-    // new AprilTag(8, new Pose3d(-8.308975, 0.877443, 1.451102, new Rotation3d(0.0,
-    // 0.0, 90.0))),
-    // new AprilTag(5, new Pose3d(6.429883, 4.098925, 1.355852, new Rotation3d(0.0,
-    // 0.0, -180.0))),
-    // new AprilTag(6, new Pose3d(-6.429375, 4.098925, 1.355852, new Rotation3d(0.0,
-    // 0.0, 0.0))));
-    // AprilTagFieldLayout layout2 =
-    // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    // AprilTagFieldLayout layout = new AprilTagFieldLayout(aprilTags,
-    // layout2.getFieldLength(), layout2.getFieldWidth());
-
     PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(layout,
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
             frontrobotToCam);
