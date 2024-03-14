@@ -39,6 +39,7 @@ public class Intake {
 
     double pivotMotorSetpoint = 0.0;
     double intakeMotorSetpoint = 0.0;
+    boolean currentSensingOn = true;
 
     LinearFilter currentFilter = LinearFilter.movingAverage(10);
 
@@ -66,7 +67,7 @@ public class Intake {
     public boolean overCurrentLimit() {
         double currentCurrent = currentFilter.calculate(intakeMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Current Intake Current", currentCurrent);
-        return currentCurrent > Constants.Intake.SUPPLY_CURRENT_MINIMUM;
+        return currentCurrent > (currentSensingOn ? Constants.Intake.SUPPLY_CURRENT_MINIMUM : 10000);
     }
 
     String currentState = "State not set.";
@@ -117,6 +118,10 @@ public class Intake {
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.ON;
             currentState = "INTAKING STUCK NOTE";
+        }
+
+        if (robot.secondaryController.getBackButtonPressed()) {
+            currentSensingOn = !currentSensingOn;
         }
 
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
