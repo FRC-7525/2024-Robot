@@ -68,6 +68,11 @@ public class Climber {
         leftFilter.reset();
         rightFilter.reset();
     }
+
+    public void checkFaults() {
+        SmartDashboard.putBoolean("Left Climb Motor Good", leftMotor.getMotorTemperature() > 0);
+        SmartDashboard.putBoolean("Right Climb Motor Good", rightMotor.getMotorTemperature() > 0);
+    }
     
     //Positive power goes in, negative goes out
 

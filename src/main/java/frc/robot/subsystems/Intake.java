@@ -120,4 +120,9 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
         SmartDashboard.putNumber("Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
     }
+
+    public void checkFaults() {
+        SmartDashboard.putBoolean("Intake Motor good", intakeMotor.getFaultField().getValue() == 0);
+        SmartDashboard.putBoolean("Pivot Intake Motor Good", pivotMotor.getMotorTemperature() > 0);
+    }
 }

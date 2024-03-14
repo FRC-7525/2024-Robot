@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
     Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
-    //Climber climber = new Climber(this);
+    Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
@@ -53,8 +53,8 @@ public class Robot extends TimedRobot {
         DataLogManager.start();
         DriverStation.startDataLog(DataLogManager.getLog());
 
-        // climber.zeroClimber();
-        //CameraServer.startAutomaticCapture();
+        //climber.zeroClimber();
+        CameraServer.startAutomaticCapture();
 
         NamedCommands.registerCommand("Intaking",  autoCommands.intaking());
         NamedCommands.registerCommand("Shooting", new Shooting(this));
@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         rgb.periodic();
         manager.periodic();
-        // climber.periodic();
+        climber.periodic();
         CommandScheduler.getInstance().run();
         /* 
         vision.periodic();
@@ -145,6 +145,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
+        manager.shooter.shooterFaults();
+        manager.intake.checkFaults();
+        manager.ampBar.checkFaults();
+        climber.checkFaults();
+        drive.checkFaults();
     }
 
     @Override

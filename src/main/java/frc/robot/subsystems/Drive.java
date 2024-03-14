@@ -8,6 +8,7 @@ import java.io.IOException;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,6 +25,7 @@ import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.SwerveModule;
 
 import edu.wpi.first.util.datalog.*;
 
@@ -45,8 +47,10 @@ public class Drive extends SubsystemBase {
     DoubleLogEntry robotPoseY;
     DoubleLogEntry robotPoseRotation;
 
+    SwerveModule[] modules;
+
     public Drive (Robot robot) {
-        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.LOW;
         this.robot = robot;
 
         double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
@@ -56,6 +60,7 @@ public class Drive extends SubsystemBase {
         try {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
             swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
+            modules = swerveDrive.getModules();
             pathPlannerInit();
 
             // UNTESTED (with changes)
@@ -109,6 +114,17 @@ public class Drive extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
         );
+    }
+
+    public void checkFaults() {
+        for (int i = 0; i < modules.length; i++) {
+            CANSparkMax driveMotor = (CANSparkMax) modules[i].getDriveMotor().getMotor();
+            CANSparkMax angleMotor = (CANSparkMax) modules[i].getAngleMotor().getMotor();
+
+            SmartDashboard.putBoolean("Drive Encoder " + i + " Good", !modules[i].getAbsoluteEncoderReadIssue());
+            SmartDashboard.putBoolean("Drive motor " + i + " reachable", driveMotor.getMotorTemperature() > 0);
+            SmartDashboard.putBoolean("Angle motor " + i + " reachable", angleMotor.getMotorTemperature() > 0);
+        }
     }
 
     public void periodic() {

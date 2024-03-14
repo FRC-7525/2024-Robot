@@ -30,7 +30,7 @@ public class Manager {
     Robot robot = null;
     public Shooter shooter = new Shooter(robot);
     public Intake intake = new Intake(robot);
-    AmpBar ampBar = new AmpBar();
+    public AmpBar ampBar = new AmpBar();
     Timer shooterTimer = new Timer();
     Timer resetIntakeTimer = new Timer();
     Timer goOutTimer = new Timer();
@@ -219,5 +219,9 @@ public class Manager {
     public void returnToIdle() {
         reset();
         state = ManagerStates.IDLE;
+    }
+
+    public void checkFaults() {
+        
     }
 }

@@ -26,6 +26,11 @@ public class AmpBar {
         rightMotor.follow(leftMotor);
     }
 
+    public void checkFaults() {
+        SmartDashboard.putBoolean("Left Amp Bar Working", leftMotor.getTemperature() > 0); // returns 0 if no signal 
+        SmartDashboard.putBoolean("Right Amp Bar Working", rightMotor.getTemperature() > 0);
+    }
+
     public void periodic() {
         if (state == AmpBarStates.OUT) {
             pivotMotorSetpoint = 0.5;
@@ -42,4 +47,4 @@ public class AmpBar {
 	public void setState(AmpBarStates state) {
         this.state = state;
     }
-}
+} 
