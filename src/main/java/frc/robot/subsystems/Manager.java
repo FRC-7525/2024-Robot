@@ -3,7 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Robot;
 import frc.robot.subsystems.AmpBar.AmpBarStates;
 import frc.robot.Constants;
@@ -179,7 +180,32 @@ public class Manager {
         
         if (robot.secondaryController.getXButtonPressed()) {
             state = ManagerStates.IDLE;
+            robot.clearCommands();
             reset();
+        }
+
+        // Schedules commands for scoring alignment
+
+        if (robot.secondaryController.getRightBumperPressed()) {
+            robot.clearCommands();
+            CommandScheduler.getInstance().schedule(
+                robot.driveToPose(Constants.Drive.sourceSpeakerPose)
+            );
+            reset();
+        }
+
+        if (robot.secondaryController.getLeftBumperPressed()) {
+            robot.clearCommands();
+            CommandScheduler.getInstance().schedule(
+                robot.driveToPose(Constants.Drive.ampSpeakerPose)
+            );
+        }
+
+        if (robot.secondaryController.getStartButtonPressed()) {
+            robot.clearCommands();
+            CommandScheduler.getInstance().schedule(
+                robot.driveToPose(Constants.Drive.ampPose)
+            );
         }
         
         intake.putSmartDashValues();

@@ -2,7 +2,10 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public final class Constants {
     public static final int DPAD_UP = 0;
@@ -32,8 +35,14 @@ public final class Constants {
         public static final double slowRotationMultiplier = Units.feetToMeters(15);
         public static final double fastTranslationMultiplier = Units.feetToMeters(16.6);
         public static final double fastRotationMultiplier = Units.feetToMeters(25);
+        
+        public static final Pose2d ampSpeakerPose = 
+            new Pose2d(0.8, 6.67, new Rotation2d(Math.toRadians(-130)));
+        public static final Pose2d sourceSpeakerPose = 
+            new Pose2d(0.8, 4.38, new Rotation2d(Math.toRadians(130)));
+        public static final Pose2d ampPose = 
+            new Pose2d(1.85, 7.7, new Rotation2d(Math.toRadians(-90)));
     }
-
     public static final class Intake {
         // Motor setpoints for the intake motors.
         public static final double OFF = 0.0;

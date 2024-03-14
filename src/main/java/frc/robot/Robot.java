@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
@@ -49,6 +51,14 @@ public class Robot extends TimedRobot {
 
     public boolean isClimbing() {
         return climber.climbingInProgress;
+    }
+
+    public Command driveToPose(Pose2d pose) {
+        return drive.driveToPose(pose);
+    }
+
+    public void clearCommands() {
+        CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
