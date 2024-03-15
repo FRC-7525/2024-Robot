@@ -42,7 +42,9 @@ public class Robot extends TimedRobot {
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
     private final SendableChooser<String> chooser = new SendableChooser<>();
-    
+    Timer logVarTimer = new Timer();
+    Timer logFreqTimer = new Timer();
+    final double loggingInterval = 0.2;
 
     public Command getAutonomousCommand(String autoName) {
         return new PathPlannerAuto(autoName);
@@ -50,6 +52,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        logVarTimer.start();
+        logFreqTimer.start();
         DataLogManager.start();
         DriverStation.startDataLog(DataLogManager.getLog());
 
@@ -102,14 +106,26 @@ public class Robot extends TimedRobot {
         manager.periodic();
         climber.periodic();
         CommandScheduler.getInstance().run();
-        /* 
-        vision.periodic();
-        intake.putSmartDashValues();
-        if (vision.getPose2d().isPresent()) {
-            drive.addVisionMeasurement(vision.getPose2d().get(), Timer.getFPGATimestamp());
-        } 
-        */
-   }
+
+        if (logFreqTimer.get() > loggingInterval) {
+            lessPeriodic();
+            logFreqTimer.reset();
+        }
+    }
+
+    public void lessPeriodic() {
+         if (logVarTimer.get() < loggingInterval) {
+            manager.shooter.checkFaults();
+        } else if (logVarTimer.get() < loggingInterval * 2) {
+            manager.intake.checkFaults();
+        } else if (logVarTimer.get() < loggingInterval * 3) {
+            manager.ampBar.checkFaults();
+        } else if (logVarTimer.get() < loggingInterval * 4) {
+            climber.checkFaults();
+        } else if (logVarTimer.get() < loggingInterval * 5) {
+            drive.checkFaults();
+        }
+    }
 
     @Override
     public void autonomousInit() {
@@ -145,11 +161,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        manager.shooter.checkFaults();
-        manager.intake.checkFaults();
-        manager.ampBar.checkFaults();
-        climber.checkFaults();
-        drive.checkFaults();
+        
     }
 
     @Override
