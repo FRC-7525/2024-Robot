@@ -35,8 +35,6 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
-    public Pose2d targetPose = new Pose2d(0, 0, new Rotation2d(0, 0));
-    public Boolean completedScore = false;
     
     public Manager(Robot robot) {
         this.robot = robot;
@@ -148,7 +146,6 @@ public class Manager {
                     shooterTimer.stop();
                     shooterTimer.reset(); 
                     state = ManagerStates.IDLE;
-                    completedScore = true;
                     reset();
                 }
             } 
@@ -188,14 +185,6 @@ public class Manager {
             state = ManagerStates.IDLE;
             robot.drive.fieldRel();
             reset();
-        }
-
-        if (robot.secondaryController.getStartButtonPressed()) {
-            state = ManagerStates.IDLE;
-            completedScore = false;
-            targetPose = Constants.Drive.ampPose;
-            robot.drive.cacheState();
-            robot.drive.teleopAlign();
         }
         
         intake.putSmartDashValues();

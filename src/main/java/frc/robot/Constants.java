@@ -52,8 +52,9 @@ public final class Constants {
 
         // TODO: Test and Tune 
 
-        public static final PIDController alignmentDrivePID = new PIDController(6, 0, 0.1);
-        public static final PIDController alignmentRotationPID = new PIDController(4, 0, 0.4);
+        public static final PIDConstants alignmentXTranslationPID = new PIDConstants(6, 0, 0.1);
+        public static final PIDConstants alignmentYTranslationPID = new PIDConstants(6, 0, 0.1);
+        public static final PIDConstants alignmentRotationPID = new PIDConstants(4, 0, 0.4);
 
         public static final double translationErrorMargin = 0.1;
         public static final double rotationErrorMargin = Math.toRadians(10);

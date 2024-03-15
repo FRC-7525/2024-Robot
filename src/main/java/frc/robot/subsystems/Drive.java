@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -45,8 +43,24 @@ public class Drive extends SubsystemBase {
     DriveStates driveStates = DriveStates.FIELD_RELATIVE;
     Robot robot = null;
     boolean fieldRelative = false;
-    Pose2d currentPose = new Pose2d(0, 0, new Rotation2d(0, 0));
     DriveStates lastDriveState = DriveStates.FIELD_RELATIVE;
+    Pose2d targetPose = new Pose2d(0, 0, new Rotation2d(0, 0));
+
+    PIDController alignmentXTranslationPID = new PIDController(
+        Constants.Drive.alignmentXTranslationPID.kP, 
+        Constants.Drive.alignmentXTranslationPID.kI,
+        Constants.Drive.alignmentXTranslationPID.kD
+    );
+    PIDController alignmentRotationPID = new PIDController(
+        Constants.Drive.alignmentRotationPID.kP, 
+        Constants.Drive.alignmentRotationPID.kI,
+        Constants.Drive.alignmentRotationPID.kD
+    );
+    PIDController alignmentYTranslationPID = new PIDController(
+        Constants.Drive.alignmentYTranslationPID.kP, 
+        Constants.Drive.alignmentYTranslationPID.kI,
+        Constants.Drive.alignmentYTranslationPID.kD
+    );
 
     public Drive (Robot robot) {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
@@ -74,13 +88,12 @@ public class Drive extends SubsystemBase {
     }
     
     public void driveToPosePID(Pose2d targetPose) {
-        currentPose = swerveDrive.getPose();
-
+        Pose2d currentPose = swerveDrive.getPose();
         swerveDrive.drive(
             new Translation2d(
-                Constants.Drive.alignmentDrivePID.calculate(currentPose.getX(), targetPose.getX()), 
-                Constants.Drive.alignmentDrivePID.calculate(currentPose.getY(), targetPose.getY())), 
-            Constants.Drive.alignmentRotationPID.calculate(
+                alignmentXTranslationPID.calculate(currentPose.getX(), targetPose.getX()), 
+                alignmentYTranslationPID.calculate(currentPose.getY(), targetPose.getY())), 
+            alignmentRotationPID.calculate(
                 currentPose.getRotation().getRadians(), 
                 targetPose.getRotation().getRadians()), 
             false, false);
@@ -120,7 +133,7 @@ public class Drive extends SubsystemBase {
     }
 
     public boolean nearSetPose(Pose2d targetPose) {
-        currentPose = swerveDrive.getPose();
+        Pose2d currentPose = swerveDrive.getPose();
         return 
         Math.abs(currentPose.getX() - targetPose.getX()) < Constants.Drive.translationErrorMargin &&
         Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
@@ -156,12 +169,9 @@ public class Drive extends SubsystemBase {
                 System.out.println("FIELD Relative OFF");
             }
         } else if (driveStates == DriveStates.TELEOP_ALIGNING) {
-            driveToPosePID(robot.manager.targetPose);
-            if (nearSetPose(robot.manager.targetPose) && robot.manager.state != ManagerStates.SCORING_AMP) {
+            driveToPosePID(targetPose);
+            if (nearSetPose(targetPose)) {
                 robot.manager.scoreAmp(); 
-            }
-
-            if (robot.manager.completedScore) {
                 driveStates = lastDriveState;
             }
         }
@@ -187,6 +197,13 @@ public class Drive extends SubsystemBase {
             }
             swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         }   
+
+        if (robot.secondaryController.getStartButtonPressed()) {
+            robot.manager.returnToIdle();
+            targetPose = Constants.Drive.ampPose;
+            cacheState();
+            teleopAlign();
+        }
 
         SmartDashboard.putString("Drive State", state);
         double actualAngle = swerveDrive.getModules()[0].getAngleMotor().getPosition();

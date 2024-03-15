@@ -54,10 +54,6 @@ public class Robot extends TimedRobot {
         return climber.climbingInProgress;
     }
 
-    public void driveToPose(Pose2d pose) {
-        drive.driveToPosePID(pose);
-    }
-
     @Override
     public void robotInit() {
         matchState = "ON";
