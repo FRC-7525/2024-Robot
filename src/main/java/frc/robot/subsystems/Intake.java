@@ -134,5 +134,6 @@ public class Intake {
         SmartDashboard.putNumber("pivot motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
         SmartDashboard.putNumber("Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putBoolean("Current Sensing Enabled?", currentSensingOn);
     }
 }
