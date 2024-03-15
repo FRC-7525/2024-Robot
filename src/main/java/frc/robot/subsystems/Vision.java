@@ -46,7 +46,6 @@ public class Vision {
     public Vision() {
         try {
             String deployDirectoryPath = Filesystem.getDeployDirectory().getAbsolutePath();
-            System.out.println("Deploy dir:" + deployDirectoryPath);
             layout = new AprilTagFieldLayout(deployDirectoryPath + "/CrescendoFieldLayout.json");
         } catch (IOException e) {
             System.out.println(e);
