@@ -28,6 +28,7 @@ public final class Constants {
         public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 4.5;
         public static final double maxSpeed = Units.feetToMeters(16.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+        public static final double maxAlignmentSpeed = Units.feetToMeters(14);
 
         public static final PIDConstants translationPID = new PIDConstants(6, 0, 0.1);
         public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.4);
@@ -52,12 +53,12 @@ public final class Constants {
 
         // TODO: Test and Tune 
 
-        public static final PIDConstants alignmentXTranslationPID = new PIDConstants(6, 0, 0.1);
-        public static final PIDConstants alignmentYTranslationPID = new PIDConstants(6, 0, 0.1);
-        public static final PIDConstants alignmentRotationPID = new PIDConstants(4, 0, 0.4);
+        public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
+        public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
+        public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
 
         public static final double translationErrorMargin = 0.1;
-        public static final double rotationErrorMargin = Math.toRadians(10);
+        public static final double rotationErrorMargin = Math.toRadians(3);
     }
     public static final class Intake {
         // Motor setpoints for the intake motors.

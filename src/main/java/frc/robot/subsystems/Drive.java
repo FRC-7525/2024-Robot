@@ -92,12 +92,23 @@ public class Drive extends SubsystemBase {
         swerveDrive.drive(
             new Translation2d(
                 alignmentXTranslationPID.calculate(currentPose.getX(), targetPose.getX()), 
-                alignmentYTranslationPID.calculate(currentPose.getY(), targetPose.getY())), 
-            alignmentRotationPID.calculate(
-                currentPose.getRotation().getRadians(), 
-                targetPose.getRotation().getRadians()), 
-            false, false);
+                alignmentYTranslationPID.calculate(currentPose.getY(), targetPose.getY())),       
+                alignmentRotationPID.calculate(
+                    currentPose.getRotation().getRadians(), 
+                    targetPose.getRotation().getRadians()), 
+                false, 
+                false);
     }
+
+    // public void rotateToPosePID(Pose2d targetPose) {
+    //     Pose2d currentPose = swerveDrive.getPose();
+    //     swerveDrive.drive(
+    //         new Translation2d(0, 0),    
+    //         alignmentRotationPID.calculate(
+    //             currentPose.getRotation().getRadians(), 
+    //             targetPose.getRotation().getRadians()), 
+    //         false, false);
+    // }
 
     public void resetOdometry() {
         swerveDrive.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d()));
@@ -134,13 +145,18 @@ public class Drive extends SubsystemBase {
 
     public boolean nearSetPose(Pose2d targetPose) {
         Pose2d currentPose = swerveDrive.getPose();
+        //System.out.println(Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()));
         return 
         Math.abs(currentPose.getX() - targetPose.getX()) < Constants.Drive.translationErrorMargin &&
         Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
-        Math.abs(
-            currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()
-        ) < Constants.Drive.rotationErrorMargin;
+        Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < Constants.Drive.rotationErrorMargin
+        ; 
     }
+
+    // public boolean nearSetRotation(Pose2d targetPose) {
+    //     Pose2d currentPose = swerveDrive.getPose();
+        
+    // }
 
     public void periodic() {
         String state = "";
@@ -171,9 +187,18 @@ public class Drive extends SubsystemBase {
         } else if (driveStates == DriveStates.TELEOP_ALIGNING) {
             driveToPosePID(targetPose);
             if (nearSetPose(targetPose)) {
-                robot.manager.scoreAmp(); 
+                System.out.println("near target pose");
                 driveStates = lastDriveState;
             }
+            
+            // driveToPosePID(targetPose);
+            // if (nearSetPose(targetPose)) {
+            //     driveStates = lastDriveState;
+            // }
+            // if (nearSetPose(targetPose)) {
+            //     // robot.manager.scoreAmp(); 
+            //     driveStates = lastDriveState;
+            // }
         }
 
         if (driveStates != DriveStates.TELEOP_ALIGNING) {
