@@ -29,6 +29,7 @@ public class Manager {
     Timer shooterTimer = new Timer();
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
+    Timer speedUpTimer = new Timer();
     boolean autoShoot = false;
     
 
@@ -159,6 +160,13 @@ public class Manager {
             } else if (robot.controller.getAButtonPressed()) {
                 autoShoot = true;
                 reset();
+            } 
+            if (!autoShoot && DriverStation.isAutonomous()) {
+                speedUpTimer.start();
+                intake.setState(IntakeStates.INTAKING);
+                if (speedUpTimer.get() > Constants.Intake.SPINNING_UP_INTAKE_TIME) {
+                    intake.setState(IntakeStates.OFF);
+                }
             }
             stateString = "Spinning up";
         } else if (state == ManagerStates.INTAKE_STUCK) {
@@ -211,6 +219,7 @@ public class Manager {
     public void spinningUp() {
         reset();
         state = ManagerStates.START_SPINNING;
+        speedUpTimer.reset();
         autoShoot = false;
     }
 

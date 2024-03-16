@@ -25,7 +25,7 @@ public final class Constants {
         public static final double maxModuleSpeed = 4.5;
         public static final double maxSpeed = Units.feetToMeters(16.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
 
-        public static final PIDConstants translationPID = new PIDConstants(6, 0, 0.1);
+        public static final PIDConstants translationPID = new PIDConstants(7, 0, 0.25);
         public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.4);
 
         public static final double slowTranslationMultiplier = Units.feetToMeters(4);
@@ -46,6 +46,7 @@ public final class Constants {
         public static final double ON_SLOW_AMP = -0.4;
         public static final double SUPPLY_CURRENT_MINIMUM = 25;
         public static final double CURRENT_SENSING_TIMER = 0.5;
+        public static final double SPINNING_UP_INTAKE_TIME = 0.2;
     }
 
     public static final class Shooter {
