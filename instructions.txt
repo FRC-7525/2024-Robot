@@ -1,0 +1,3 @@
+If it makes no sense and keeps flashing and stuff, check PDH
+If one motor is red but it doesn't break the chain, check the sensor 
+Just because everything'

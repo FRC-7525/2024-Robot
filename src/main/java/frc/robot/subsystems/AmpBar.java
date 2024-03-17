@@ -27,8 +27,8 @@ public class AmpBar {
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Left Amp Bar Working", leftMotor.getTemperature() > 0); // returns 0 if no signal 
-        SmartDashboard.putBoolean("Right Amp Bar Working", rightMotor.getTemperature() > 0);
+        SmartDashboard.putBoolean("Left Amp Bar Working", leftMotor.getTemperature() > 1); // returns 0 if no signal 
+        SmartDashboard.putBoolean("Right Amp Bar Working", rightMotor.getTemperature() > 1);
     }
 
     public void periodic() {

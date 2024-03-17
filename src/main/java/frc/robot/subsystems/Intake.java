@@ -122,7 +122,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Intake Motor good", intakeMotor.getFaultField().getValue() == 0 && intakeMotor.getDeviceTemp().getValue() > 0);
-        SmartDashboard.putBoolean("Pivot Intake Motor Good", pivotMotor.getMotorTemperature() > 0 && pivotMotor.getFaults() == 0);
+        SmartDashboard.putBoolean("Intake Motor good", intakeMotor.getFaultField().getValue() == 0 && intakeMotor.getDeviceTemp().getValue() > 1);
+        SmartDashboard.putBoolean("Pivot Intake Motor Good", pivotMotor.getMotorTemperature() > 1 && pivotMotor.getFaults() == 0);
     }
 }
