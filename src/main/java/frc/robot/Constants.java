@@ -61,7 +61,7 @@ public final class Constants {
         public static final double AMP_SPEED = 21;
         public static final double AMP_TIME = 1.5;
         public static final double REVERSE_SLOW_SPEED = -0.20;
-        public static final double AUTO_SHOOTER_TIME = 0.3;
+        public static final double AUTO_SHOOTER_TIME = 0.4;
     }
 
     public static final class RGB {

@@ -50,12 +50,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
