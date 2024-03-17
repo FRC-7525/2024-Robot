@@ -228,6 +228,16 @@ public class Drive extends SubsystemBase {
             targetPose = Constants.Drive.ampPose;
             cacheState();
             teleopAlign();
+        }  else if (robot.secondaryController.getRightBumperPressed()) {
+            robot.manager.returnToIdle();
+            targetPose = Constants.Drive.sourceSpeakerPose;
+            cacheState();
+            teleopAlign();
+        } else if (robot.secondaryController.getLeftBumperPressed()) {
+            robot.manager.returnToIdle();
+            targetPose = Constants.Drive.ampSpeakerPose;
+            cacheState();
+            teleopAlign();
         }
 
         SmartDashboard.putString("Drive State", state);
