@@ -122,8 +122,8 @@ public class Drive extends SubsystemBase {
             CANSparkMax angleMotor = (CANSparkMax) modules[i].getAngleMotor().getMotor();
 
             SmartDashboard.putBoolean("Encoder " + i + " Good", !modules[i].getAbsoluteEncoderReadIssue());
-            SmartDashboard.putBoolean("Drive motor " + i + " reachable", driveMotor.getFirmwareVersion() > 0);
-            SmartDashboard.putBoolean("Angle motor " + i + " reachable", angleMotor.getFirmwareVersion() > 0);
+            SmartDashboard.putBoolean("Drive motor " + i + " reachable", driveMotor.getFirmwareVersion() > 0 && driveMotor.getFaults() == 0);
+            SmartDashboard.putBoolean("Angle motor " + i + " reachable", angleMotor.getFirmwareVersion() > 0 && angleMotor.getFaults() == 0);
         }
     }
 
