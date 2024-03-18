@@ -30,8 +30,10 @@ public class Manager {
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
+
     public String lastControllerInput = "";
-    
+    public double[] leftJoystickValue = new double[] {0.0, 0.0};
+    public double[] rightJoystickValue = new double[] {0.0, 0.0};
 
     public Manager(Robot robot) {
         this.robot = robot;

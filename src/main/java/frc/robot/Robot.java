@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
     boolean hasFrontPose;
     boolean hasSidePose;
     Command autoCommand = null;
-    String currentSelected = "";
+    String currentSelected = ""; 
     String matchState = "";
 
     public Command getAutonomousCommand(String autoName) {
@@ -152,6 +152,10 @@ public class Robot extends TimedRobot {
         manager.returnToIdle();
         manager.reset();
         manager.intake.setPivotMotorMode(IdleMode.kBrake);
+
+        manager.lastControllerInput = "";
+        manager.leftJoystickValue[0] = 0; manager.leftJoystickValue[1] = 0; 
+        manager.rightJoystickValue[0] = 0; manager.rightJoystickValue[1] = 0;
     }
 
     @Override
@@ -159,6 +163,14 @@ public class Robot extends TimedRobot {
         autoCommand = null;
         climber.periodic();
         drive.periodic();
+        
+        manager.leftJoystickValue[0] = this.controller.getLeftX();
+        manager.leftJoystickValue[1] = this.controller.getLeftY();
+        manager.rightJoystickValue[0] = this.controller.getRightX();
+        manager.rightJoystickValue[1] = this.controller.getRightY();
+
+        SmartDashboard.putNumberArray("Left joystick value", manager.leftJoystickValue);
+        SmartDashboard.putNumberArray("Right joystick value", manager.rightJoystickValue);
     }
 
     @Override

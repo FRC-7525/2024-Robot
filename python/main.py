@@ -128,9 +128,13 @@ def log_smart_dashboard():
 
     #controler input
     log.log_string("Last Controller Input")
+    log.log_double_array("Left joystick value")
+    log.log_double_array("Right joystick value")
 
     # Path Planner Logging
     log.log_double_array("Target PP Pose")
+
+    # Controller stuff
 
     return log
 
