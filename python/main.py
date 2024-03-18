@@ -133,6 +133,7 @@ def log_smart_dashboard():
 
     # Path Planner Logging
     log.log_double_array("Target PP Pose")
+    log.log_double_array("First PP Pose")
 
     # Controller stuff
 
