@@ -19,7 +19,7 @@ enum ClimberStates {
 public class Climber {
 
     Robot robot = null;
-    //CANSparkMax rightMotor = new CANSparkMax(34, MotorType.kBrushless);
+    CANSparkMax rightMotor = new CANSparkMax(34, MotorType.kBrushless);
     CANSparkMax leftMotor = new CANSparkMax(33, MotorType.kBrushless);
 
     PIDController rightMotorPID = new PIDController(0.2, 0, 0); // TODO: tune
@@ -40,9 +40,9 @@ public class Climber {
 
     public Climber(Robot robot) {
         this.robot = robot;
-        //rightMotor.setInverted(true);
+        rightMotor.setInverted(true);
         leftMotor.setInverted(false);
-        //rightMotor.setIdleMode(IdleMode.kBrake);
+        rightMotor.setIdleMode(IdleMode.kBrake);
         leftMotor.setIdleMode(IdleMode.kBrake);
     }
 
@@ -62,7 +62,7 @@ public class Climber {
         double rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
         
         if (state == ClimberStates.ZEROING) {
-            //double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
+            double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
             double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
             if (leftCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the left motor.
                 leftMotor.getEncoder().setPosition(0);
@@ -70,18 +70,18 @@ public class Climber {
                 System.out.println("LEFT SPEED ZERO");
             }
 
-            /*if (rightCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the right motor.
+            if (rightCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the right motor.
                 rightMotor.getEncoder().setPosition(0);
                 rightSpeed = 0;
                 System.out.println("RIGHT SPEED ZERO");
-            }*/
+            }
 
             if (rightSpeed == 0 && leftSpeed == 0) { // Hacky solution to switch to the climbing state when both are zeroed.
                 System.out.println("TRANSITION");
                 state = ClimberStates.CLIMB_READY;
             }
             stateString = "Zeroing";
-            //rightMotor.set(rightSpeed);
+            rightMotor.set(rightSpeed);
             leftMotor.set(leftSpeed);
         } else if (state == ClimberStates.CLIMB_READY) {
             stateString = "Climber ready";
@@ -114,14 +114,14 @@ public class Climber {
             if (rightMotorSetpoint == Constants.Climber.DOWN && leftMotorSetpoint == Constants.Climber.DOWN) {
                 isExtended = false;
             }
-            //rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
+            rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
             leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint)); 
         }
 
         SmartDashboard.putString("Climber State", stateString);
         SmartDashboard.putNumber("Left Climber Current", leftMotor.getOutputCurrent());
-        //SmartDashboard.putNumber("Right Climber Current", rightMotor.getOutputCurrent());
-        //SmartDashboard.putNumber("Right Encoder Position", rightMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("Right Climber Current", rightMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Right Encoder Position", rightMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
         SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
