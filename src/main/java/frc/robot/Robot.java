@@ -149,7 +149,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         matchState = "TELEOP";
-        // climber.zeroClimber();
         drive.setHeadingCorrection(true);
         manager.returnToIdle();
         manager.reset();

@@ -51,8 +51,6 @@ public final class Constants {
             new Pose2d(14.7, 7.7, new Rotation2d(Math.toRadians(90))) :
             new Pose2d(1.85, 7.7, new Rotation2d(Math.toRadians(-90)));
 
-        // TODO: Test and Tune 
-
         public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
