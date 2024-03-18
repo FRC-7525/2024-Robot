@@ -24,57 +24,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intaking"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Shoot to left note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Speeding Up"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left note to Shoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
                   "name": "Spin and Intake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
                 }
               },
               {
@@ -118,51 +68,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intaking"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Shoot to Right Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intaking"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right Note to Shoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intaking"
+                  "name": "Speeding Up"
                 }
               },
               {
@@ -179,15 +85,59 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Center to Shoot"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Speeding Up"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intaking"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Center to Shoot"
+                  "pathName": "ShootToLeftIshCenter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intaking"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftIshCenterToShoot"
                 }
               }
             ]
@@ -202,6 +152,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "4 Notes",
   "choreoAuto": false
 }

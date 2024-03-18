@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -14,20 +16,19 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
+
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.SwerveModule;
-
-import edu.wpi.first.util.datalog.*;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
@@ -36,16 +37,9 @@ enum DriveStates {
 
 public class Drive extends SubsystemBase {
     SwerveDrive swerveDrive;
-    DriveStates driveStates = DriveStates.FIELD_ABSOLUTE;
+    DriveStates driveStates = DriveStates.FIELD_RELATIVE;
     Robot robot = null;
     boolean fieldRelative = false;
-   
-    StringLogEntry stateStringLog;
-    BooleanLogEntry fieldRelativeLog;
-
-    DoubleLogEntry robotPoseX;
-    DoubleLogEntry robotPoseY;
-    DoubleLogEntry robotPoseRotation;
 
     SwerveModule[] modules;
 
@@ -62,21 +56,9 @@ public class Drive extends SubsystemBase {
             swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
             modules = swerveDrive.getModules();
             pathPlannerInit();
-
-            // UNTESTED (with changes)
-            //swerveDrive.setHeadingCorrection(true, 0.01);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        DataLog dataLog = DataLogManager.getLog();
-        stateStringLog = new StringLogEntry(dataLog, "/drive/stateString");
-        fieldRelativeLog = new BooleanLogEntry(dataLog, "/drive/fieldRelative");
-
-        robotPoseX = new DoubleLogEntry(dataLog, "/drive/pose/x");
-        robotPoseY = new DoubleLogEntry(dataLog, "/drive/pose/y");
-        robotPoseRotation = new DoubleLogEntry(dataLog, "/drive/pose/rotation");
     }
 
     public void setHeadingCorrection(boolean headingCorrection) {
@@ -96,7 +78,7 @@ public class Drive extends SubsystemBase {
             swerveDrive::getPose, // Robot pose supplier
             swerveDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            swerveDrive::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 // More PID tuning would be nice
                 Constants.Drive.translationPID, // Translation PID constants
@@ -129,12 +111,14 @@ public class Drive extends SubsystemBase {
 
     public void periodic() {
         String state = "";
-        
         double xMovement = MathUtil.applyDeadband(-robot.controller.getLeftY(), Constants.STICK_DEADBAND);
         double rotation = MathUtil.applyDeadband(-robot.controller.getRightX(), Constants.STICK_DEADBAND);
         double yMovement = MathUtil.applyDeadband(robot.controller.getLeftX() * Constants.Drive.leftXSign, Constants.STICK_DEADBAND);
-
-
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red && fieldRelative) {
+            xMovement *= -1;
+            yMovement *= -1;
+        }
+        
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
             fieldRelative = false;
@@ -156,24 +140,51 @@ public class Drive extends SubsystemBase {
         if (robot.controller.getStartButtonPressed()) {
             swerveDrive.zeroGyro();
             System.out.println("Gyro Zeroed");
-        } else if (robot.controller.getYButton()) {
+        } else if (robot.controller.getBackButton()) {
             swerveDrive.lockPose();
         } else if (robot.controller.getLeftBumper()) {
-            xMovement *= Constants.Drive.slowSpeedMultiplier;
+            xMovement *= Constants.Drive.slowTranslationMultiplier;
+            yMovement *= Constants.Drive.slowTranslationMultiplier;
             rotation *= Constants.Drive.slowRotationMultiplier;
-            yMovement *= Constants.Drive.slowSpeedMultiplier;
+        } else{
+            xMovement *= Constants.Drive.fastTranslationMultiplier;
+            yMovement *= Constants.Drive.fastTranslationMultiplier;
+            rotation *= Constants.Drive.fastRotationMultiplier;
         }
 
         swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         SmartDashboard.putString("Drive State", state);
-        
-        fieldRelativeLog.append(fieldRelative);
-        stateStringLog.append(state);
+        double actualAngle = swerveDrive.getModules()[0].getAngleMotor().getPosition();
+        double desiredAngle = SwerveDriveTelemetry.desiredStates[0];
+        SmartDashboard.putNumber("Angle position error", Units.radiansToDegrees(MathUtil.angleModulus(Units.degreesToRadians(desiredAngle - actualAngle))));
+        SmartDashboard.putNumber("Acceleration", Units.metersToFeet(calculateAcceleration(swerveDrive.getAccel())));
+        SmartDashboard.putNumber("Robot Velocity", Units.metersToFeet(calculateVelocity(swerveDrive.getRobotVelocity())));
 
         Pose2d robotPose = swerveDrive.field.getRobotPose();
-        robotPoseX.append(robotPose.getX());
-        robotPoseY.append(robotPose.getY());
-        robotPoseRotation.append(robotPose.getRotation().getDegrees());
+        SmartDashboard.putNumber("Robot X", robotPose.getX());
+        SmartDashboard.putNumber("Robot Y", robotPose.getY());
+        SmartDashboard.putNumber("Robot Theta (deg)", robotPose.getRotation().getDegrees());
+    }
+
+    public double calculateAcceleration(Optional<Translation3d> acceleration) {
+        if (acceleration.isPresent()) {
+            Translation3d presentAcceleration = acceleration.get();
+            return Math.sqrt(
+                Math.pow(presentAcceleration.getX(), 2) +
+                Math.pow(presentAcceleration.getY(), 2)
+            );
+        } else {
+            return 0;
+        }
+    }
+
+    public double calculateVelocity(ChassisSpeeds velocity) {
+        double x = velocity.vxMetersPerSecond;
+        double y = velocity.vyMetersPerSecond;
+        return Math.sqrt(
+            Math.pow(x, 2) + 
+            Math.pow(y, 2)
+        );
     }
 
     public void addVisionMeasurement(Pose2d pose, double timestamp) {
