@@ -138,8 +138,7 @@ public class Drive extends SubsystemBase {
         return 
         Math.abs(currentPose.getX() - targetPose.getX()) < Constants.Drive.translationErrorMargin &&
         Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
-        Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < Constants.Drive.rotationErrorMargin
-        ; 
+        Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < Constants.Drive.rotationErrorMargin; 
     }
 
     public void periodic() {
@@ -172,7 +171,7 @@ public class Drive extends SubsystemBase {
             driveToPosePID(targetPose);
             if (nearSetPose(targetPose)) {
                 System.out.println("near target pose");
-                if (targetPose == Constants.Drive.ampPose) {
+                if (targetPose == Constants.Drive.redAmpPose || targetPose == Constants.Drive.blueAmpPose) {
                     robot.manager.scoreAmp();
                 } else {
                     robot.manager.shooting();
@@ -205,17 +204,26 @@ public class Drive extends SubsystemBase {
 
         if (robot.secondaryController.getStartButtonPressed()) {
             robot.manager.returnToIdle();
-            targetPose = Constants.Drive.ampPose;
+            targetPose = 
+                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ?
+                Constants.Drive.redAmpPose : 
+                Constants.Drive.blueAmpPose;
             cacheState();
             teleopAlign();
         }  else if (robot.secondaryController.getRightBumperPressed()) {
             robot.manager.returnToIdle();
-            targetPose = Constants.Drive.sourceSpeakerPose;
+            targetPose = 
+                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ?
+                Constants.Drive.redSourceSpeakerPose : 
+                Constants.Drive.blueSourceSpeakerPose;
             cacheState();
             teleopAlign();
         } else if (robot.secondaryController.getLeftBumperPressed()) {
             robot.manager.returnToIdle();
-            targetPose = Constants.Drive.ampSpeakerPose;
+            targetPose = 
+                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ?
+                Constants.Drive.redAmpSpeakerPose : 
+                Constants.Drive.blueAmpSpeakerPose;
             cacheState();
             teleopAlign();
         }
