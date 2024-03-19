@@ -144,7 +144,8 @@ public class Drive extends SubsystemBase {
         Math.abs(currentPose.getX() - targetPose.getX()) < Constants.Drive.translationErrorMargin &&
         Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
         Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < Constants.Drive.rotationErrorMargin; 
-
+    }
+    
     public void checkFaults() {
         for (int i = 0; i < modules.length; i++) {
             CANSparkMax driveMotor = (CANSparkMax) modules[i].getDriveMotor().getMotor();
