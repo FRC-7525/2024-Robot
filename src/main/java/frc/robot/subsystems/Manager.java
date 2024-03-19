@@ -26,7 +26,7 @@ public class Manager {
 
     public Shooter shooter = null;
     public Intake intake = null;
-    AmpBar ampBar = null;
+    public AmpBar ampBar = null;
     Timer shooterTimer = new Timer();
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
@@ -224,9 +224,5 @@ public class Manager {
     public void returnToIdle() {
         reset();
         state = ManagerStates.IDLE;
-    }
-
-    public void checkFaults() {
-        
     }
 }

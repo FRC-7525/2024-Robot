@@ -46,11 +46,6 @@ public class Shooter {
         this.states = state;
     }
 
-    public void shooterFaults() {
-        SmartDashboard.putBoolean("Shooter motor 1 good", !(shooterMotor1.getFaultField().getValue() == 0));
-        SmartDashboard.putBoolean("Shooter motor 2 good", !(shooterMotor2.getFaultField().getValue() == 0));
-    }
-
     public void periodic() {
         if (states == ShootingStates.OFF) {
             bangBangEnabled = false;
@@ -91,7 +86,7 @@ public class Shooter {
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Shooter Motor 1 working", shooterMotor1.getDeviceTemp().getValueAsDouble() > 0);
-        SmartDashboard.putBoolean("Shooter Motor 2 working", shooterMotor2.getDeviceTemp().getValueAsDouble() > 0);
+        SmartDashboard.putBoolean("Shooter Motor 1 working", shooterMotor1.getDeviceTemp().getValueAsDouble() > 0 && shooterMotor1.getFaultField().getValue() == 0);
+        SmartDashboard.putBoolean("Shooter Motor 2 working", shooterMotor2.getDeviceTemp().getValueAsDouble() > 0 && shooterMotor2.getFaultField().getValue() == 0);
     }
 }
