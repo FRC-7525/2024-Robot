@@ -109,8 +109,11 @@ public class Drive extends SubsystemBase {
         });
 
         PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            double[] firstPose = {poses.get(0).getX(), poses.get(1).getY()};
-            SmartDashboard.putNumberArray("First PP Pose", firstPose);
+            if (poses.size() > 1) {
+                double[] firstPose = { poses.get(0).getX(), poses.get(0).getY() };
+                SmartDashboard.putNumberArray("First PP Pose", firstPose);
+            } else {
+            }
         });
     }
       
