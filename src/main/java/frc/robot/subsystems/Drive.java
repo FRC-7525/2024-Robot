@@ -205,7 +205,7 @@ public class Drive extends SubsystemBase {
         if (robot.secondaryController.getStartButtonPressed()) {
             robot.manager.returnToIdle();
             targetPose = 
-                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ?
+                DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
                 Constants.Drive.redAmpPose : 
                 Constants.Drive.blueAmpPose;
             cacheState();
@@ -213,7 +213,7 @@ public class Drive extends SubsystemBase {
         }  else if (robot.secondaryController.getRightBumperPressed()) {
             robot.manager.returnToIdle();
             targetPose = 
-                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ?
+                DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
                 Constants.Drive.redSourceSpeakerPose : 
                 Constants.Drive.blueSourceSpeakerPose;
             cacheState();
@@ -221,7 +221,7 @@ public class Drive extends SubsystemBase {
         } else if (robot.secondaryController.getLeftBumperPressed()) {
             robot.manager.returnToIdle();
             targetPose = 
-                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red) ?
+                DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
                 Constants.Drive.redAmpSpeakerPose : 
                 Constants.Drive.blueAmpSpeakerPose;
             cacheState();
