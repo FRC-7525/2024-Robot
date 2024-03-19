@@ -171,6 +171,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
+        manager.shooter.checkFaults();
+        manager.intake.checkFaults();
+        manager.ampBar.checkFaults();
+        climber.checkFaults();
+        drive.checkFaults();
+
         if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs to be made
             autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
             currentSelected = chooser.getSelected();

@@ -23,14 +23,14 @@ public class Manager {
     public ManagerStates state = ManagerStates.IDLE;
     String stateString;
     Robot robot = null;
+
     public Shooter shooter = null;
     public Intake intake = null;
-    AmpBar ampBar = null;
+    public AmpBar ampBar = null;
     Timer shooterTimer = new Timer();
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
     boolean autoShoot = false;
-    
 
     public Manager(Robot robot) {
         this.robot = robot;
@@ -62,7 +62,7 @@ public class Manager {
         if (state == ManagerStates.IDLE) {
             resetIntakeTimer.start();
             ampBar.setState(AmpBarStates.IN);
-            
+
             if (resetIntakeTimer.get() > Constants.Shooter.RESET_INTAKE_TIME) {
                 intake.resetPivotMotor();
                 resetIntakeTimer.stop();
@@ -84,10 +84,12 @@ public class Manager {
                 shooterTimer.reset();
                 reset();
                 state = ManagerStates.SCORING_AMP;
+
             } else if (robot.secondaryController.getBButtonPressed()) {
                 reset();
                 state = ManagerStates.INTAKE_STUCK;
             }
+
             stateString = "Idle";
         } else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
@@ -159,6 +161,7 @@ public class Manager {
             } else if (robot.controller.getAButtonPressed()) {
                 autoShoot = true;
                 reset();
+                
             }
             stateString = "Spinning up";
         } else if (state == ManagerStates.INTAKE_STUCK) {
