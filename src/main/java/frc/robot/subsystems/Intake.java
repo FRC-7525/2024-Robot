@@ -39,6 +39,7 @@ public class Intake {
 
     double pivotMotorSetpoint = 0.0;
     double intakeMotorSetpoint = 0.0;
+    boolean currentSensingOn = true;
 
     LinearFilter currentFilter = LinearFilter.movingAverage(10);
 
@@ -66,7 +67,7 @@ public class Intake {
     public boolean overCurrentLimit() {
         double currentCurrent = currentFilter.calculate(intakeMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Current Intake Current", currentCurrent);
-        return currentCurrent > Constants.Intake.SUPPLY_CURRENT_MINIMUM;
+        return currentCurrent > (currentSensingOn ? Constants.Intake.SUPPLY_CURRENT_MINIMUM : 10000);
     }
 
     String currentState = "State not set.";
@@ -119,6 +120,10 @@ public class Intake {
             currentState = "INTAKING STUCK NOTE";
         }
 
+        if (robot.secondaryController.getBackButtonPressed()) {
+            currentSensingOn = !currentSensingOn;
+        }
+
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
         intakeMotor.set(intakeMotorSetpoint);
     }
@@ -129,5 +134,11 @@ public class Intake {
         SmartDashboard.putNumber("pivot motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
         SmartDashboard.putNumber("Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putBoolean("Current Sensing Enabled?", currentSensingOn);
+    }
+
+    public void checkFaults() {
+        SmartDashboard.putBoolean("Intake Motor good", intakeMotor.getFaultField().getValue() == 0 && intakeMotor.getDeviceTemp().getValue() > 1);
+        SmartDashboard.putBoolean("Pivot Intake Motor Good", pivotMotor.getMotorTemperature() > 1 && pivotMotor.getFaults() == 0);
     }
 }

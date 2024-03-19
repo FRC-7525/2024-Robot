@@ -95,9 +95,9 @@ def log_smart_dashboard():
     log.log_double("Left Climber Current")
     log.log_double("Left Encoder Position")
     log.log_double("Left Encoder Setpoint")
-    log.log_double("Right Climber Current")
-    log.log_double("Right Encoder Position")
-    log.log_double("Right Encoder Setpoint")
+    #log.log_double("Right Climber Current")
+    #log.log_double("Right Encoder Position")
+    #log.log_double("Right Encoder Setpoint")
     log.log_boolean("Climb In Progress")
 
     # log intake stuff
