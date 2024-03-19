@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -29,6 +30,7 @@ import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.SwerveModule;
 
 enum DriveStates {
     FIELD_ABSOLUTE,
@@ -41,8 +43,10 @@ public class Drive extends SubsystemBase {
     Robot robot = null;
     boolean fieldRelative = false;
 
+    SwerveModule[] modules;
+
     public Drive (Robot robot) {
-        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.MACHINE;
         this.robot = robot;
 
         double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
@@ -52,6 +56,7 @@ public class Drive extends SubsystemBase {
         try {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
             swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
+            modules = swerveDrive.getModules();
             pathPlannerInit();
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,6 +112,20 @@ public class Drive extends SubsystemBase {
             double[] firstPose = {poses.get(0).getX(), poses.get(1).getY()};
             SmartDashboard.putNumberArray("First PP Pose", firstPose);
         });
+    }
+      
+    public void checkFaults() {
+        for (int i = 0; i < modules.length; i++) {
+            CANSparkMax driveMotor = (CANSparkMax) modules[i].getDriveMotor().getMotor();
+            CANSparkMax angleMotor = (CANSparkMax) modules[i].getAngleMotor().getMotor();
+
+            int driveID = driveMotor.getDeviceId();
+            int angleID = angleMotor.getDeviceId();
+
+            SmartDashboard.putBoolean("Encoder " + i + " Good", !modules[i].getAbsoluteEncoderReadIssue());
+            SmartDashboard.putBoolean("Drive motor ID" + driveID + " reachable", driveMotor.getFirmwareVersion() > 0 && driveMotor.getFaults() == 0);
+            SmartDashboard.putBoolean("Angle motor ID" + angleID + " reachable", angleMotor.getFirmwareVersion() > 0 && angleMotor.getFaults() == 0);
+        }
     }
 
     public void periodic() {

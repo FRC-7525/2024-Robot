@@ -136,4 +136,9 @@ public class Intake {
         SmartDashboard.putNumber("Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putBoolean("Current Sensing Enabled?", currentSensingOn);
     }
+
+    public void checkFaults() {
+        SmartDashboard.putBoolean("Intake Motor good", intakeMotor.getFaultField().getValue() == 0 && intakeMotor.getDeviceTemp().getValue() > 1);
+        SmartDashboard.putBoolean("Pivot Intake Motor Good", pivotMotor.getMotorTemperature() > 1 && pivotMotor.getFaults() == 0);
+    }
 }
