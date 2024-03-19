@@ -93,7 +93,6 @@ public class Manager {
             stateString = "Idle";
         } else if (state == ManagerStates.INTAKING) {
             intake.setState(IntakeStates.INTAKING);
-            ampBar.setState(AmpBarStates.IN);
             shooter.setState(ShootingStates.OFF);
             currentSensingTimer.start();
             ampBar.setState(AmpBarStates.IN);
@@ -113,7 +112,6 @@ public class Manager {
             stateString = "Intaking";
         } else if (state == ManagerStates.OUTTAKING) {
             intake.setState(IntakeStates.OUTTAKING);
-            ampBar.setState(AmpBarStates.IN);
             shooter.setState(ShootingStates.OFF);
             ampBar.setState(AmpBarStates.IN);
 
@@ -125,7 +123,6 @@ public class Manager {
         } else if (state == ManagerStates.SHOOTING) {
             shooter.setState(ShootingStates.SHOOTING);
             shooterTimer.start();
-            ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.FEEDING);
             ampBar.setState(AmpBarStates.IN);
 
@@ -153,7 +150,6 @@ public class Manager {
             stateString = "Amp Scoring"; 
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);
-            ampBar.setState(AmpBarStates.IN);
             intake.setState(IntakeStates.OFF);
             ampBar.setState(AmpBarStates.IN);
 

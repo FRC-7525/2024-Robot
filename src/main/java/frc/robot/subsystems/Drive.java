@@ -44,7 +44,7 @@ public class Drive extends SubsystemBase {
     SwerveModule[] modules;
 
     public Drive (Robot robot) {
-        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.LOW;
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.MACHINE;
         this.robot = robot;
 
         double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(Constants.Drive.wheelDiameter),
