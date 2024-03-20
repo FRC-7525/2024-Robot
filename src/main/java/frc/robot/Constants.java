@@ -37,11 +37,11 @@ public final class Constants {
         public static final double slowRotationMultiplier = Units.feetToMeters(15);
         public static final double fastTranslationMultiplier = Units.feetToMeters(16.6);
         public static final double fastRotationMultiplier = Units.feetToMeters(25);
-
+        // TODO: Red Alliance Poses Later
         public static final Pose2d redAmpSpeakerPose = new Pose2d(15.75, 6.67, new Rotation2d(Math.toRadians(-54.5)));
-        public static final Pose2d blueAmpSpeakerPose = new Pose2d(15.75, 6.67, new Rotation2d(Math.toRadians(-54.5))); 
+        public static final Pose2d blueAmpSpeakerPose = new Pose2d(0.909, 6.644, new Rotation2d(Math.toRadians(55.5))); 
         public static final Pose2d redSourceSpeakerPose = new Pose2d(15.7, 4.38, new Rotation2d(Math.toRadians(45)));
-        public static final Pose2d blueSourceSpeakerPose = new Pose2d(0.8, 4.38, new Rotation2d(Math.toRadians(-45)));
+        public static final Pose2d blueSourceSpeakerPose = new Pose2d(0.864, 4.39, new Rotation2d(Math.toRadians(-62.5)));
         public static final Pose2d redAmpPose = new Pose2d(14.7, 7.7, new Rotation2d(Math.toRadians(90)));
         public static final Pose2d blueAmpPose = new Pose2d(1.85, 7.7, new Rotation2d(Math.toRadians(-90)));
 

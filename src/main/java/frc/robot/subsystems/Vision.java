@@ -42,19 +42,19 @@ public class Vision {
             new Rotation3d(0, Units.degreesToRadians(-67), Units.degreesToRadians(180)));
 
     AprilTagFieldLayout layout;
+    PhotonPoseEstimator frontEstimator;
 
     public Vision() {
         try {
             String deployDirectoryPath = Filesystem.getDeployDirectory().getAbsolutePath();
             layout = new AprilTagFieldLayout(deployDirectoryPath + "/CrescendoFieldLayout.json");
+            frontEstimator = new PhotonPoseEstimator(layout,
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
+                frontrobotToCam);
         } catch (IOException e) {
             System.out.println(e);
         }
     }
-
-    PhotonPoseEstimator frontEstimator = new PhotonPoseEstimator(layout,
-            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
-            frontrobotToCam);
 
     Boolean seesFrontVision = false;
     Timer frontVisionTimer = new Timer();
