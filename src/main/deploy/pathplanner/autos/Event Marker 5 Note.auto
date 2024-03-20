@@ -6,12 +6,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -37,7 +31,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note LCS"
+                  "pathName": "EM 5 Note LCS"
                 }
               },
               {
@@ -47,12 +41,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
           }
         },
         {
@@ -81,7 +69,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note MCS"
+                  "pathName": "EM 5 Note MCS"
                 }
               },
               {
@@ -94,9 +82,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Shooting"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 Note SRC"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin and Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "EM 5 Note RCS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speeding Up"
+                }
+              }
+            ]
           }
         },
         {
@@ -125,7 +145,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note FLS"
+                  "pathName": "EM Note FLS"
                 }
               },
               {
@@ -135,12 +155,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
           }
         }
       ]

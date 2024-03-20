@@ -50,6 +50,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -184,6 +190,6 @@
       ]
     }
   },
-  "folder": "Autos That Need Testing",
+  "folder": "New Autos",
   "choreoAuto": false
 }

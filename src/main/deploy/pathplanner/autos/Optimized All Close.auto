@@ -106,13 +106,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SFL"
+                  "pathName": "5 Note SRC"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intaking"
+                  "name": "Spin and Intake"
                 }
               }
             ]
@@ -125,7 +125,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note FLS"
+                  "pathName": "5 Note RCS"
                 }
               },
               {
