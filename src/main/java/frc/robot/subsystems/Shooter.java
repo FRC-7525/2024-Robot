@@ -84,4 +84,9 @@ public class Shooter {
         SmartDashboard.putNumber("Shooter Motor 2 velocity", shooterMotor2.getVelocity().getValueAsDouble());
         SmartDashboard.putString("Shooting States", stateString);
     }
+
+    public void checkFaults() {
+        SmartDashboard.putBoolean("Shooter Motor 1 working", shooterMotor1.getDeviceTemp().getValueAsDouble() > 0 && shooterMotor1.getFaultField().getValue() == 0);
+        SmartDashboard.putBoolean("Shooter Motor 2 working", shooterMotor2.getDeviceTemp().getValueAsDouble() > 0 && shooterMotor2.getFaultField().getValue() == 0);
+    }
 }

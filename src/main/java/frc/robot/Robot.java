@@ -95,9 +95,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("Start Right, Far Right, Far Right-ish", "2 Far Right");
         chooser.addOption("Start Left, Left Close, Mid Close", "CloseTwoLeft");
         chooser.addOption("Start Left, Close Left, Far Left", "All Left");
-        
-        // 4: Start Mid, Close Left, Close Mid, Far Left
-
+      
         // 4 Note Autos
         chooser.addOption("All Close", "All Close");
         // chooser.addOption("2 Close + Right Far", "2 Close + Right Far"); (Impossible)
@@ -175,6 +173,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
+        manager.shooter.checkFaults();
+        manager.intake.checkFaults();
+        manager.ampBar.checkFaults();
+        climber.checkFaults();
+        drive.checkFaults();
+
         if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs to be made
             autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
             currentSelected = chooser.getSelected();

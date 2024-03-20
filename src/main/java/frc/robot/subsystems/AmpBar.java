@@ -1,11 +1,10 @@
 package frc.robot.subsystems;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -15,6 +14,7 @@ public class AmpBar {
         IN,
         OUT
     }
+  
     PIDController pivotController = new PIDController(1.5, 0, 0);
     private AmpBarStates state = AmpBarStates.OUT;
     private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(40);
@@ -33,6 +33,11 @@ public class AmpBar {
         rightMotor.setNeutralMode(NeutralMode.Coast);
 
         pivotEncoder.reset();
+    }
+  
+    public void checkFaults() {
+        SmartDashboard.putBoolean("Left Amp Bar Working", leftMotor.getTemperature() > 1); // returns 0 if no signal 
+        SmartDashboard.putBoolean("Right Amp Bar Working", rightMotor.getTemperature() > 1);
     }
 
     public void periodic() {

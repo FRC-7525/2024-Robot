@@ -1,0 +1,8 @@
+The chain goes in a spiral starting in the top left
+The indexes of cans starts at 0
+If everything is red past a certain point, it's something that's important in the chain
+If it makes no sense and keeps flashing and stuff, check PDH
+If one motor is red but it doesn't break the chain, check the sensor 
+Just because everything's green doesn't mean it's actually good >:( I don't trust my code that much and neither should you, check it!!!
+
+TODO: make it easier to figure out whats what on the actual robot (in the meantime, check the swerve modules in /src/main/deploy/swerve/neo/modules) 
