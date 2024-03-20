@@ -233,7 +233,7 @@ public class Drive extends SubsystemBase {
             robot.manager.returnToIdle();
             targetPose = 
                 DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
-                Constants.Drive.redSourceSpeakerPose : 
+                Constants.Drive.redAmpSpeakerPose : 
                 Constants.Drive.blueSourceSpeakerPose;
             cacheState();
             teleopAlign();
@@ -241,7 +241,7 @@ public class Drive extends SubsystemBase {
             robot.manager.returnToIdle();
             targetPose = 
                 DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
-                Constants.Drive.redAmpSpeakerPose : 
+                Constants.Drive.redSourceSpeakerPose : 
                 Constants.Drive.blueAmpSpeakerPose;
             cacheState();
             teleopAlign();
