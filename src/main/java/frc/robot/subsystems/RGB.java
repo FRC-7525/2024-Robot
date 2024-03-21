@@ -4,6 +4,7 @@ import frc.robot.Constants;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Robot;
@@ -19,6 +20,7 @@ public class RGB {
     }
 
     public void periodic() {
+        SmartDashboard.putNumber("Total Current", pdh.getTotalCurrent());
         if (ledFiler.calculate(pdh.getVoltage()) < 10 || (robot.isDisabled() && ledFiler.calculate(pdh.getVoltage()) < 12)) { // low battery warning
             rgbControl.set(Constants.RGB.LED_MODE_HEARTBEAT_RED);
         } else if (robot.isDisabled()) { // robot disabled
