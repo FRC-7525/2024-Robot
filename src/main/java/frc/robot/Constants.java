@@ -2,7 +2,11 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public final class Constants {
     public static final int DPAD_UP = 0;
@@ -24,6 +28,7 @@ public final class Constants {
         public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 4.5;
         public static final double maxSpeed = Units.feetToMeters(16.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+        public static final double maxAlignmentSpeed = Units.feetToMeters(14);
 
         public static final PIDConstants translationPID = new PIDConstants(6, 0, 0.1);
         public static final PIDConstants rotationPID = new PIDConstants(4, 0, 0.4);
@@ -32,8 +37,21 @@ public final class Constants {
         public static final double slowRotationMultiplier = Units.feetToMeters(15);
         public static final double fastTranslationMultiplier = Units.feetToMeters(16.6);
         public static final double fastRotationMultiplier = Units.feetToMeters(25);
-    }
 
+        public static final Pose2d redAmpSpeakerPose = new Pose2d(15.59, 6.644, new Rotation2d(Math.toRadians(-55.5)));
+        public static final Pose2d blueAmpSpeakerPose = new Pose2d(0.909, 6.644, new Rotation2d(Math.toRadians(55.5))); 
+        public static final Pose2d redSourceSpeakerPose = new Pose2d(15.636, 4.39, new Rotation2d(Math.toRadians(62.5)));
+        public static final Pose2d blueSourceSpeakerPose = new Pose2d(0.864, 4.39, new Rotation2d(Math.toRadians(-62.5)));
+        public static final Pose2d redAmpPose = new Pose2d(14.7, 7.7, new Rotation2d(Math.toRadians(90)));
+        public static final Pose2d blueAmpPose = new Pose2d(1.85, 7.7, new Rotation2d(Math.toRadians(-90)));
+
+        public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
+        public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
+        public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
+
+        public static final double translationErrorMargin = 0.1;
+        public static final double rotationErrorMargin = Math.toRadians(3);
+    }
     public static final class Intake {
         // Motor setpoints for the intake motors.
         public static final double OFF = 0.0;
