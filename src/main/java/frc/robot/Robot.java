@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,13 +26,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
-    Drive drive = new Drive(this);
+    public Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
     Climber climber = new Climber(this);
@@ -87,21 +90,23 @@ public class Robot extends TimedRobot {
         chooser.addOption("2: Start Mid, Close Middle", "Middle Note");
         chooser.addOption("2: Start Right (angled), Close Right", "Right Note");
         // 3 Note Autos
-        // 4: Start Mid, Close Left, Close Mid, Far Left
-        chooser.addOption("Left + Mid", "Left + Mid");
-        chooser.addOption("Mid + Right", "Mid + Right");
-        chooser.addOption("Center Left + Left", "Center Left + Left");
-        chooser.addOption("Right + Center Right", "Right + Center Right");
-        chooser.addOption("Mid + Center Left", "Mid + Center Left");
-        chooser.addOption("2 Left Close", "CloseTwoLeft");
-        chooser.addOption("All Left", "All Left");
+        // chooser.addOption("Left + Mid", "Left + Mid"); (Un-used)
+        //chooser.addOption("Mid + Right", "Mid + Right"); (Un- used)
+        // chooser.addOption("Center Left + Left", "Center Left + Left"); (Un-used)
+        // chooser.addOption("Right + Center Right", "Right + Center Right"); (Un-used)
+        // chooser.addOption("Start Left", "Mid + Center Left"); (Un-used)
+        chooser.addOption("Start Right, Far Right, Far Right-ish", "2 Far Right");
+        chooser.addOption("Start Left, Left Close, Mid Close", "CloseTwoLeft");
+        chooser.addOption("Start Left, Close Left, Far Left", "All Left");
+      
         // 4 Note Autos
         chooser.addOption("All Close", "All Close");
-        chooser.addOption("2 Close + Right Far", "2 Close + Right Far");
-        chooser.addOption("2 Close + Left Far", "2 Close + Left Far");
-        chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line");
+        // chooser.addOption("2 Close + Right Far", "2 Close + Right Far"); (Impossible)
+        chooser.addOption("Start Mid, Left Close, Mid Close, Left Far", "2 Close + Left Far");
+        // chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line"); (Impossible)
+        chooser.addOption("Start Mid, Close left, Close Mid, Far Left", "Optimized 4 Note Auto");
         // 5 Note Auto
-        chooser.addOption("5 Note Auto", "5 Note Auto");
+        chooser.addOption("5 Note Auto", "Optimized 5 Note Auto");
 
         SmartDashboard.putData("Path Chooser", chooser);
     }
@@ -147,7 +152,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         matchState = "TELEOP";
-        // climber.zeroClimber();
         drive.setHeadingCorrection(true);
         manager.returnToIdle();
         manager.reset();
