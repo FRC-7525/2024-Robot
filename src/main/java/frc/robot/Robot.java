@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,13 +26,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
     public XboxController controller = new XboxController(0);
     public XboxController secondaryController = new XboxController(1);
-    Drive drive = new Drive(this);
+    public Drive drive = new Drive(this);
     Vision vision = new Vision();
     RGB rgb = new RGB(this);
     Climber climber = new Climber(this);
@@ -148,7 +151,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         matchState = "TELEOP";
-        // climber.zeroClimber();
         drive.setHeadingCorrection(true);
         manager.returnToIdle();
         manager.reset();
