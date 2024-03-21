@@ -107,6 +107,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("Start Mid, Close left, Close Mid, Far Left", "Optimized 4 Note Auto");
         // 5 Note Auto
         chooser.addOption("5 Note Auto", "Optimized 5 Note Auto");
+        chooser.addOption("Faster 5 Note Auto", "Event Marker 5 Note");
 
         SmartDashboard.putData("Path Chooser", chooser);
     }
