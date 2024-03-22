@@ -169,7 +169,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note FLS"
+                  "pathName": "EM Note FLS"
                 }
               },
               {
@@ -179,12 +179,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
           }
         }
       ]
