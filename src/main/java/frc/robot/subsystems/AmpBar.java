@@ -54,8 +54,10 @@ public class AmpBar {
             System.out.println("Amp Bar Encoder Unplugged zzzzz");
             if (robot.secondaryController.getPOV() == Constants.DPAD_LEFT) {
                 leftMotor.set(-0.2);
+                robot.manager.lastControllerInput = "Operator DPAD Left";
             } else if (robot.secondaryController.getPOV() == Constants.DPAD_RIGHT) {
                 leftMotor.set(0.2);
+                robot.manager.lastControllerInput = "Operator DPAD Right";
             } else {
                 leftMotor.set(0);
             }
@@ -78,7 +80,7 @@ public class AmpBar {
             this.state = state;
         } else { 
             this.state = AmpBarStates.OUT;
-            System.out.println("Cannot pull in amp bar, currently climbing (zzzz)");
+            // System.out.println("Cannot pull in amp bar, currently climbing (zzzz)");
         }
     }
 }

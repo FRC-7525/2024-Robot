@@ -126,6 +126,17 @@ def log_smart_dashboard():
     # battery volatage
     log.log_double("Battery Voltage")
 
+    #controler input
+    log.log_string("Last Controller Input")
+    log.log_double_array("Left joystick value")
+    log.log_double_array("Right joystick value")
+
+    # Path Planner Logging
+    log.log_double_array("Target PP Pose")
+    log.log_double_array("First PP Pose")
+
+    # Controller stuff
+
     return log
 
 if __name__ == "__main__":

@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -138,6 +139,21 @@ public class Drive extends SubsystemBase {
         );
     }
 
+    public void pathPlannerLogging() { 
+        // Target Pose
+        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+            double[] targetPose = {pose.getX(), pose.getY(), pose.getRotation().getDegrees()};
+            SmartDashboard.putNumberArray("Target PP Pose", targetPose);
+        });
+
+        PathPlannerLogging.setLogActivePathCallback((poses) -> {
+            if (poses.size() > 1) {
+                double[] firstPose = { poses.get(0).getX(), poses.get(0).getY() };
+                SmartDashboard.putNumberArray("First PP Pose", firstPose);
+            }
+        });
+    }
+      
     public boolean nearSetPose(Pose2d targetPose) {
         Pose2d currentPose = swerveDrive.getPose();
         return 

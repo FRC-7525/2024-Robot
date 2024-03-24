@@ -38,6 +38,10 @@ public class Manager {
     Timer currentSensingTimer = new Timer();
     Timer speedUpTimer = new Timer();
     boolean autoShoot = false;
+  
+    public String lastControllerInput = "";
+    public double[] leftJoystickValue = new double[] {0.0, 0.0};
+    public double[] rightJoystickValue = new double[] {0.0, 0.0};
 
     public Manager(Robot robot) {
         this.robot = robot;
@@ -78,22 +82,27 @@ public class Manager {
             shooter.setState(ShootingStates.OFF);
             if (robot.controller.getBButtonPressed()) {
                 state = ManagerStates.INTAKING;
+                lastControllerInput = "Driver B Button";
                 reset();
             } else if (robot.controller.getAButtonPressed()) {
                 state = ManagerStates.START_SPINNING;
                 autoShoot = true;
+                lastControllerInput = "Driver A Button";
                 reset();
             } else if (robot.secondaryController.getAButtonPressed()) {
                 state = ManagerStates.START_SPINNING;
+                lastControllerInput = "Operator A Button";
                 autoShoot = false;
                 reset();
             } else if (robot.controller.getYButtonPressed()) {
                 shooterTimer.reset();
+                lastControllerInput = "Driver Y Button";
                 reset();
                 state = ManagerStates.SCORING_AMP;
 
             } else if (robot.secondaryController.getBButtonPressed()) {
                 reset();
+                lastControllerInput = "Operator B Button";
                 state = ManagerStates.INTAKE_STUCK;
             }
 
@@ -113,6 +122,7 @@ public class Manager {
                     currentSensingTimer.reset();
                 } else if (robot.controller.getRightBumper()) {
                     state = ManagerStates.OUTTAKING;
+                    lastControllerInput = "Driver Right Bumper";
                     reset();
                 }
             }
@@ -125,6 +135,7 @@ public class Manager {
             if (robot.controller.getRightBumperReleased()) {
                 state = ManagerStates.INTAKING;
                 reset();
+                lastControllerInput = "Driver Right Bumber Released";
             }
             stateString = "Outtaking";
         } else if (state == ManagerStates.SHOOTING) {
@@ -167,6 +178,7 @@ public class Manager {
                 }  
             } else if (robot.controller.getAButtonPressed()) {
                 autoShoot = true;
+                lastControllerInput = "Driver A Button";
                 reset();
             } 
             if (!autoShoot && DriverStation.isAutonomous()) {
@@ -185,6 +197,7 @@ public class Manager {
             if (robot.controller.getBButtonPressed() || robot.secondaryController.getBButtonPressed()) {
                 state = ManagerStates.IDLE; 
                 reset();
+                lastControllerInput = "Either B Button";
             }
             stateString = "Intaking stuck note";
         } else if (state == ManagerStates.SPINNING_AND_INTAKING) {
@@ -197,6 +210,7 @@ public class Manager {
             state = ManagerStates.IDLE;
             robot.drive.fieldRel();
             reset();
+            lastControllerInput = "Operator X Button";
         }
         
         intake.putSmartDashValues();
@@ -204,6 +218,7 @@ public class Manager {
         ampBar.putSmartDashValues();
         
         SmartDashboard.putString("Manager State", stateString);
+        SmartDashboard.putString("Last Controller Input", lastControllerInput);
     }
 
     public Boolean isIdle() {
