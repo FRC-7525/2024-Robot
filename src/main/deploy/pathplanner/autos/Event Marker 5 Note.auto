@@ -6,6 +6,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -69,7 +75,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EM 5 Note MCS"
+                  "pathName": "5 Note SMC"
                 }
               },
               {
@@ -79,6 +85,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
           }
         },
         {

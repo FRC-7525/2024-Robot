@@ -123,8 +123,9 @@ def log_smart_dashboard():
     # front camera vision pose
     log.log_double_array("Front Pose")
 
-    # battery volatage
+    # battery voltage
     log.log_double("Battery Voltage")
+    log.log_double("Total Current")
 
     return log
 

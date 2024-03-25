@@ -69,7 +69,9 @@ public class Climber {
         if (state == ClimberStates.ZEROING) {
             double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
             double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
-            if (leftCurrent > Constants.Climber.CURRENT_MAX) { // Current sensing to automatically shut off the left motor.
+            SmartDashboard.putNumber("right climber current", rightCurrent);
+            SmartDashboard.putNumber("left climber current", leftCurrent);
+            if (leftCurrent > Constants.Climber.CURRENT_MAX + 5) { // Current sensing to automatically shut off the left motor.
                 leftMotor.getEncoder().setPosition(0);
                 leftSpeed = 0;
                 System.out.println("LEFT SPEED ZERO");
