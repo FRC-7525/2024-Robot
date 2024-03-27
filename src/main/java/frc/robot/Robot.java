@@ -121,8 +121,11 @@ public class Robot extends TimedRobot {
         if (Constants.Vision.VISION_ENABLED) {
             vision.periodic();
             hasFrontPose = vision.getFrontPose2d().isPresent();
+            hasSidePose = vision.getSidePose2d().isPresent();
             if (hasFrontPose) {
                 drive.addVisionMeasurement(vision.getFrontPose2d().get(), Timer.getFPGATimestamp());
+            } else if (hasSidePose) {
+                drive.addVisionMeasurement(vision.getSidePose2d().get(), Timer.getFPGATimestamp());
             }
         }
 

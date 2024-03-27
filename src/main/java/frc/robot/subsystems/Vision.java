@@ -46,7 +46,7 @@ public class Vision {
 
     Transform3d siderobotToCam = new Transform3d(
             new Translation3d(Units.inchesToMeters(-9.25), Units.inchesToMeters(9.75), Units.inchesToMeters(15.25)),
-            new Rotation3d(0, Units.degreesToRadians(-9.5), Units.degreesToRadians(90)));
+            new Rotation3d(0, Units.degreesToRadians(-25), Units.degreesToRadians(90)));
 
     AprilTagFieldLayout layout;
     PhotonPoseEstimator frontEstimator;
@@ -76,6 +76,7 @@ public class Vision {
         frontBotpose3d = frontEstimator.update();
         sideBotpose3d = sideEstimator.update();
         SmartDashboard.putBoolean("Front Vision", seesFrontVision);
+        SmartDashboard.putBoolean("Side Vision", seesSideVision);
         if (frontBotpose3d.isPresent()) {
             var frontTempPose = frontBotpose3d.get().estimatedPose;
             double[] frontPose = { frontTempPose.getX(), frontTempPose.getY(),
@@ -111,6 +112,7 @@ public class Vision {
             seesSideVision = true;
             sideVisionTimer.reset();
             sideVisionTimer.start();
+
             return Optional.of(sideBotpose3d.get().estimatedPose.toPose2d());
         } else {
             if (sideVisionTimer.get() > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
