@@ -96,7 +96,8 @@ public final class Constants {
     public static final class Climber {
         public static final double MAX_SETPOINT = 120;
         public static final double ZEROING_SPEED = -0.15;
-        public static final double CURRENT_MAX = 7;
+        public static final double RIGHT_CURRENT_MAX = 7;
+        public static final double LEFT_CURRENT_MAX = 12;
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
         public static final double DOWN = 13;
     }
