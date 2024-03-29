@@ -45,8 +45,17 @@ public class Vision {
             new Rotation3d(0, Units.degreesToRadians(-67), Units.degreesToRadians(180)));
 
     Transform3d siderobotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-9.25), Units.inchesToMeters(9.75), Units.inchesToMeters(15.25)),
-            new Rotation3d(0, Units.degreesToRadians(-25), Units.degreesToRadians(90)));
+            new Translation3d(
+                Units.inchesToMeters(-9.25),
+                Units.inchesToMeters(11), 
+                Units.inchesToMeters(15.25)
+            ),
+            new Rotation3d(
+                0,
+                Units.degreesToRadians(-20),
+                Units.degreesToRadians(90)
+            )
+        );
 
     AprilTagFieldLayout layout;
     PhotonPoseEstimator frontEstimator;
