@@ -24,7 +24,7 @@ public final class Constants {
         public static final double falconDriveGearRatio = 6.75;
         public static final boolean isNeo = true; // SET TO FALSE FOR FALCON
         public static final int leftXSign = isNeo ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
-        public static final String pathPlannerFile = isNeo ? "swerve/neo" : "swerve/falcon";
+        public static final String pathPlannerFile = isNeo ? "swerve/neokraken" : "swerve/falcon";
         public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 4.5;
         public static final double maxSpeed = Units.feetToMeters(16.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
