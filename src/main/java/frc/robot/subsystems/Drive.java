@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -148,14 +149,14 @@ public class Drive extends SubsystemBase {
     
     public void checkFaults() {
         for (int i = 0; i < modules.length; i++) {
-            CANSparkMax driveMotor = (CANSparkMax) modules[i].getDriveMotor().getMotor();
+            TalonFX driveMotor = (TalonFX) modules[i].getDriveMotor().getMotor();
             CANSparkMax angleMotor = (CANSparkMax) modules[i].getAngleMotor().getMotor();
 
-            int driveID = driveMotor.getDeviceId();
+            int driveID = driveMotor.getDeviceID();
             int angleID = angleMotor.getDeviceId();
 
             SmartDashboard.putBoolean("Encoder " + i + " Good", !modules[i].getAbsoluteEncoderReadIssue());
-            SmartDashboard.putBoolean("Drive motor ID" + driveID + " reachable", driveMotor.getFirmwareVersion() > 0 && driveMotor.getFaults() == 0);
+            SmartDashboard.putBoolean("Drive motor ID" + driveID + " reachable", driveMotor.getDeviceTemp().getValueAsDouble() > 0 && driveMotor.getFaultField().getValue() == 0);
             SmartDashboard.putBoolean("Angle motor ID" + angleID + " reachable", angleMotor.getFirmwareVersion() > 0 && angleMotor.getFaults() == 0);
         }
     }
