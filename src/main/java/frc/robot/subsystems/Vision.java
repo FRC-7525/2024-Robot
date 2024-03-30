@@ -41,8 +41,17 @@ public class Vision {
     PhotonCamera sideCamera = new PhotonCamera("Side Camera");
 
     Transform3d frontrobotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-14.25), 0, Units.inchesToMeters(6)),
-            new Rotation3d(0, Units.degreesToRadians(-67), Units.degreesToRadians(180)));
+            new Translation3d(
+                Units.inchesToMeters(-14.25),
+                0,
+                Units.inchesToMeters(6)
+            ),
+            new Rotation3d(
+                0, 
+                Units.degreesToRadians(-67), 
+                Units.degreesToRadians(180)
+            )
+        );
 
     Transform3d siderobotToCam = new Transform3d(
             new Translation3d(

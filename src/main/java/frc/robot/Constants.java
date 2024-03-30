@@ -2,9 +2,12 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -109,5 +112,7 @@ public final class Constants {
     public static final class Vision {
         public static final double LAST_VISION_MEASURMENT_TIMER = 0.5;
         public static final boolean VISION_ENABLED = true;
+        // Tune Please
+        public static final Vector<N3> ERROR_MARGINS = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(10));
     }
 }
