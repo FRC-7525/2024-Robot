@@ -19,13 +19,14 @@ public final class Constants {
         // Drive Constants
         public static final int wheelDiameter = 4;
         public static final double neoDriveGearRatio = 6.12;
+        public static final double krakenDriveGearRatio = 5.357;
         public static final double angleGearRatio = 21.4286;
         public static final double encoderResolution = 42;
         public static final double falconDriveGearRatio = 6.75;
-        public static final boolean isNeo = true; // SET TO FALSE FOR FALCON
-        public static final int leftXSign = isNeo ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
-        public static final String pathPlannerFile = isNeo ? "swerve/neokraken" : "swerve/falcon";
-        public static final double driveGearRatio = isNeo ? neoDriveGearRatio : falconDriveGearRatio;
+        public static final boolean isKraken = true; // SET TO FALSE FOR FALCON
+        public static final int leftXSign = isKraken ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
+        public static final String pathPlannerFile = isKraken ? "swerve/neokraken" : "swerve/falcon";
+        public static final double driveGearRatio = isKraken ? krakenDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 4.5;
         public static final double maxSpeed = Units.feetToMeters(16.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
         public static final double maxAlignmentSpeed = Units.feetToMeters(14);
