@@ -18,9 +18,9 @@
     "MISC",
     "New Autos"
   ],
-  "defaultMaxVel": 4.2,
-  "defaultMaxAccel": 3.5,
+  "defaultMaxVel": 6.0,
+  "defaultMaxAccel": 3.8,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 180.0,
-  "maxModuleSpeed": 4.5
+  "maxModuleSpeed": 6.0
 }

@@ -27,7 +27,7 @@ public final class Constants {
         public static final int leftXSign = isKraken ? -1 : 1; // Inverts the controllers leftX sign if we're using a Neo
         public static final String pathPlannerFile = isKraken ? "swerve/neokraken" : "swerve/falcon";
         public static final double driveGearRatio = isKraken ? krakenDriveGearRatio : falconDriveGearRatio;
-        public static final double maxModuleSpeed = 4.5;
+        public static final double maxModuleSpeed = 6.0;
         public static final double maxSpeed = Units.feetToMeters(19.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
         public static final double maxAlignmentSpeed = Units.feetToMeters(14);
 
