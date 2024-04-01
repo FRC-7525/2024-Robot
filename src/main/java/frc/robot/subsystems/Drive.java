@@ -152,12 +152,9 @@ public class Drive extends SubsystemBase {
             TalonFX driveMotor = (TalonFX) modules[i].getDriveMotor().getMotor();
             CANSparkMax angleMotor = (CANSparkMax) modules[i].getAngleMotor().getMotor();
 
-            int driveID = driveMotor.getDeviceID();
-            int angleID = angleMotor.getDeviceId();
-
             SmartDashboard.putBoolean("Encoder " + i + " Good", !modules[i].getAbsoluteEncoderReadIssue());
-            SmartDashboard.putBoolean("Drive motor ID" + driveID + " reachable", driveMotor.getDeviceTemp().getValueAsDouble() > 0 && driveMotor.getFaultField().getValue() == 0);
-            SmartDashboard.putBoolean("Angle motor ID" + angleID + " reachable", angleMotor.getFirmwareVersion() > 0 && angleMotor.getFaults() == 0);
+            SmartDashboard.putBoolean("Drive motor " + i + " reachable", driveMotor.getFirmwareVersion() > 0 && driveMotor.getFaults() == 0);
+            SmartDashboard.putBoolean("Angle motor " + i + " reachable", angleMotor.getFirmwareVersion() > 0 && angleMotor.getFaults() == 0);
         }
     }
 
@@ -188,6 +185,7 @@ public class Drive extends SubsystemBase {
                 System.out.println("FIELD Relative OFF");
             }
         } else if (driveStates == DriveStates.TELEOP_ALIGNING) {
+            state = "Teleop Aligning";
             driveToPosePID(targetPose);
             if (nearSetPose(targetPose)) {
                 System.out.println("near target pose");

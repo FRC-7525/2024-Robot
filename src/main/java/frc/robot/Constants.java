@@ -39,18 +39,18 @@ public final class Constants {
         public static final double fastTranslationMultiplier = Units.feetToMeters(19.6);
         public static final double fastRotationMultiplier = Units.feetToMeters(25);
 
-        public static final Pose2d redAmpSpeakerPose = new Pose2d(15.59, 6.644, new Rotation2d(Math.toRadians(-55.5)));
+        public static final Pose2d redAmpSpeakerPose = new Pose2d(15.59, 6.644, new Rotation2d(Math.toRadians(120.5)));
         public static final Pose2d blueAmpSpeakerPose = new Pose2d(0.909, 6.644, new Rotation2d(Math.toRadians(55.5))); 
-        public static final Pose2d redSourceSpeakerPose = new Pose2d(15.636, 4.39, new Rotation2d(Math.toRadians(62.5)));
+        public static final Pose2d redSourceSpeakerPose = new Pose2d(15.636, 4.39, new Rotation2d(Math.toRadians(-122.5)));
         public static final Pose2d blueSourceSpeakerPose = new Pose2d(0.864, 4.39, new Rotation2d(Math.toRadians(-62.5)));
-        public static final Pose2d redAmpPose = new Pose2d(14.7, 7.7, new Rotation2d(Math.toRadians(90)));
-        public static final Pose2d blueAmpPose = new Pose2d(1.85, 7.7, new Rotation2d(Math.toRadians(-90)));
+        public static final Pose2d redAmpPose = new Pose2d(14.7, 7.72, new Rotation2d(Math.toRadians(-90)));
+        public static final Pose2d blueAmpPose = new Pose2d(1.85, 7.72, new Rotation2d(Math.toRadians(-90)));
 
         public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
 
-        public static final double translationErrorMargin = 0.1;
+        public static final double translationErrorMargin = 0.05;
         public static final double rotationErrorMargin = Math.toRadians(3);
     }
     public static final class Intake {
@@ -97,9 +97,10 @@ public final class Constants {
     public static final class Climber {
         public static final double MAX_SETPOINT = 120;
         public static final double ZEROING_SPEED = -0.15;
-        public static final double CURRENT_MAX = 7;
+        public static final double RIGHT_CURRENT_MAX = 7;
+        public static final double LEFT_CURRENT_MAX = 12;
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
-        public static final double DOWN = 20;
+        public static final double DOWN = 13;
     }
 
     public static final class AmpBar {
