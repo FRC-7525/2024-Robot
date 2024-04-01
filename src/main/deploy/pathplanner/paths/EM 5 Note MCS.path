@@ -61,7 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "5 Note Event Marker",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

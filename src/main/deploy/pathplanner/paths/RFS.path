@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "5 Note Regular",
+  "folder": null,
   "previewStartingState": {
     "rotation": -18.366253760400497,
     "velocity": 0
