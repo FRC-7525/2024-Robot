@@ -28,7 +28,7 @@ public final class Constants {
         public static final String pathPlannerFile = isKraken ? "swerve/neokraken" : "swerve/falcon";
         public static final double driveGearRatio = isKraken ? krakenDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 4.5;
-        public static final double maxSpeed = Units.feetToMeters(16.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+        public static final double maxSpeed = Units.feetToMeters(19.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
         public static final double maxAlignmentSpeed = Units.feetToMeters(14);
 
         public static final PIDConstants translationPID = new PIDConstants(7, 0, 0.25);
@@ -36,7 +36,7 @@ public final class Constants {
 
         public static final double slowTranslationMultiplier = Units.feetToMeters(4);
         public static final double slowRotationMultiplier = Units.feetToMeters(15);
-        public static final double fastTranslationMultiplier = Units.feetToMeters(16.6);
+        public static final double fastTranslationMultiplier = Units.feetToMeters(19.6);
         public static final double fastRotationMultiplier = Units.feetToMeters(25);
 
         public static final Pose2d redAmpSpeakerPose = new Pose2d(15.59, 6.644, new Rotation2d(Math.toRadians(-55.5)));
