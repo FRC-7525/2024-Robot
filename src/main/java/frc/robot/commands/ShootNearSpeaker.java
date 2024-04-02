@@ -7,13 +7,10 @@ import frc.robot.Robot;
 
 public class ShootNearSpeaker extends Command {
     Robot robot = null;
+    public boolean shot = false;
 
     public ShootNearSpeaker(Robot robot) {
         this.robot = robot;
-    }
-
-    public void finishedShooting() {
-        robot.manager.finishedShooting = true;
     }
 
     @Override
@@ -28,11 +25,12 @@ public class ShootNearSpeaker extends Command {
                         : Constants.Drive.redSpeakerPose),
                 Constants.Drive.autoTranslationErrorMargin, Constants.Drive.autoTranslationErrorMargin)) {
             robot.manager.shooting();
+            shot = true;
         }
     }
 
     @Override
     public boolean isFinished() {
-        return robot.manager.finishedShooting && robot.manager.currentlySpinningUp();
+        return shot && robot.manager.currentlySpinningUp();
     }
 }
