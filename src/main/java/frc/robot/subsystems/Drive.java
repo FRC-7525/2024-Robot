@@ -139,19 +139,14 @@ public class Drive extends SubsystemBase {
         );
     }
 
-    public boolean nearSetPose(Pose2d targetPose) {
+    public boolean nearSetPose(Pose2d targetPose, Double translationErrorMargin, Double rotationErrorMargin) {
         Pose2d currentPose = swerveDrive.getPose();
+        Translation2d translationDifference = currentPose.minus(targetPose).getTranslation();
+        Rotation2d rotationDifference = currentPose.minus(targetPose).getRotation();
         return 
-        Math.abs(currentPose.getX() - targetPose.getX()) < Constants.Drive.translationErrorMargin &&
-        Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
-        Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < Constants.Drive.rotationErrorMargin; 
-    }
-
-    public boolean closeToShoot(Pose2d targetPose) {
-        Pose2d currentPose = swerveDrive.getPose();
-        return 
-        (Math.abs(currentPose.getX() - targetPose.getX()) + 
-        Math.abs(currentPose.getY() - targetPose.getY())) < Constants.Drive.maximumShootingDistance;
+            Math.abs(translationDifference.getX()) < translationErrorMargin &&
+            Math.abs(translationDifference.getY()) < translationErrorMargin &&
+            Math.abs(rotationDifference.getRadians()) < rotationErrorMargin; 
     }
     
     public void checkFaults() {
@@ -194,7 +189,7 @@ public class Drive extends SubsystemBase {
         } else if (driveStates == DriveStates.TELEOP_ALIGNING) {
             state = "Teleop Aligning";
             driveToPosePID(targetPose);
-            if (nearSetPose(targetPose)) {
+            if (nearSetPose(targetPose, Constants.Drive.rotationErrorMargin, Constants.Drive.rotationErrorMargin)) {
                 System.out.println("near target pose");
                 if (targetPose == Constants.Drive.redAmpPose || targetPose == Constants.Drive.blueAmpPose) {
                     robot.manager.scoreAmp();

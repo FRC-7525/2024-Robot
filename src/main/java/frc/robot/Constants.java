@@ -52,9 +52,11 @@ public final class Constants {
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
 
-        public static final double translationErrorMargin = 0.05;
+        public static final double translationErrorMargin = 0.05; // In Meters
         public static final double rotationErrorMargin = Math.toRadians(3);
-        public static final double maximumShootingDistance = 1; // In Meters
+        
+        public static final double autoTranslationErrorMargin = 0.5; // In Meters
+        public static final double autoRotationErrorMargin = Math.toRadians(10);
     }
     public static final class Intake {
         // Motor setpoints for the intake motors.
