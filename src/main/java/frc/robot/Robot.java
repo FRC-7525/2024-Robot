@@ -5,12 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.ShootNearSpeaker;
 import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
@@ -28,8 +27,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
@@ -66,15 +63,7 @@ public class Robot extends TimedRobot {
         NamedCommands.registerCommand("Return To Idle", autoCommands.returnToIdle());
         NamedCommands.registerCommand("Speeding Up", autoCommands.startSpinningUp());
         NamedCommands.registerCommand("Spin and Intake", autoCommands.spinAndIntake());
-
-        // TODO: Score Drive Backwards (2-17)
-        // TODO: 2 note autos (score any close note) (2-21)
-        // TODO: 3 note autos (score any 2 close notes) (2-23)
-        // TODO: 3 note autos (score 1 close, 1 far) (2-24)
-        // TODO: 4 note auto (all 3 close) (2-28)
-        // TODO: 4 note auto (2 close and 1 far on the left) (2-28)
-        // TODO: 4 note auto (2 close and 1 far on the right) (2-28)
-        // TODO: 5 note auto (all 3 close and 1 far) (3-2)
+        NamedCommands.registerCommand("Shoot Near Speaker", new ShootNearSpeaker(this));
 
         // Misc Autos
         chooser.addOption("0: start anywhere no vision, cross line", "Drive Forwards");
@@ -111,6 +100,7 @@ public class Robot extends TimedRobot {
         // 5 Note Auto
         chooser.addOption("5 Note Auto", "Optimized 5 Note Auto");
         chooser.addOption("Faster 5 Note Auto", "Event Marker 5 Note");
+        chooser.addOption("Shoot Near Speaker 5 Note", "OffbrandEventMarkers");
 
         SmartDashboard.putData("Path Chooser", chooser);
     }

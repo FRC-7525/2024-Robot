@@ -149,6 +149,13 @@ public class Drive extends SubsystemBase {
         Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
         Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < Constants.Drive.rotationErrorMargin; 
     }
+
+    public boolean closeToShoot(Pose2d targetPose) {
+        Pose2d currentPose = swerveDrive.getPose();
+        return 
+        (Math.abs(currentPose.getX() - targetPose.getX()) + 
+        Math.abs(currentPose.getY() - targetPose.getY())) < Constants.Drive.maximumShootingDistance;
+    }
     
     public void checkFaults() {
         for (int i = 0; i < modules.length; i++) {
