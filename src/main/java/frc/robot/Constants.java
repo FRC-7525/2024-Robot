@@ -2,11 +2,9 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 
 public final class Constants {
     public static final int DPAD_UP = 0;
@@ -46,12 +44,17 @@ public final class Constants {
         public static final Pose2d redAmpPose = new Pose2d(14.7, 7.72, new Rotation2d(Math.toRadians(-90)));
         public static final Pose2d blueAmpPose = new Pose2d(1.85, 7.72, new Rotation2d(Math.toRadians(-90)));
 
+        // TODO: Test
+        public static final Pose2d blueSpeakerPose = new Pose2d(1.45, 5.50, new Rotation2d(Math.toRadians(0)));
+        public static final Pose2d redSpeakerPose = new Pose2d(15.1, 5.50, new Rotation2d(Math.toRadians(180)));
+
         public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
 
         public static final double translationErrorMargin = 0.05;
         public static final double rotationErrorMargin = Math.toRadians(3);
+        public static final double maximumShootingDistance = 1; // In Meters
     }
     public static final class Intake {
         // Motor setpoints for the intake motors.

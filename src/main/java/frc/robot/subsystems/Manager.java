@@ -29,6 +29,8 @@ public class Manager {
     String stateString;
     Robot robot = null;
 
+    public boolean finishedShooting = false;
+
     public Shooter shooter = null;
     public Intake intake = null;
     public AmpBar ampBar = null;
@@ -133,12 +135,20 @@ public class Manager {
             intake.setState(IntakeStates.FEEDING);
             ampBar.setState(AmpBarStates.IN);
 
-            if (shooterTimer.get() > (DriverStation.isAutonomous() ? Constants.Shooter.AUTO_SHOOTER_TIME : Constants.Shooter.SHOOTER_TIME)) {
+            if (DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.AUTO_SHOOTER_TIME) {
+                shooterTimer.stop();
+                shooterTimer.reset();
+                finishedShooting = true;
+                state = ManagerStates.START_SPINNING;
+                autoShoot = false;
+                reset();
+            } else if (!DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
                 reset();
             }
+    
             stateString = "Shooting";
         } else if (state == ManagerStates.SCORING_AMP) {
             shooter.setState(ShootingStates.SCORING_AMP);
