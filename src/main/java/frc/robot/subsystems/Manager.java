@@ -29,8 +29,6 @@ public class Manager {
     String stateString;
     Robot robot = null;
 
-    public boolean finishedShooting = false;
-
     public Shooter shooter = null;
     public Intake intake = null;
     public AmpBar ampBar = null;
@@ -138,7 +136,6 @@ public class Manager {
             if (DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.AUTO_SHOOTER_TIME) {
                 shooterTimer.stop();
                 shooterTimer.reset();
-                finishedShooting = true;
                 state = ManagerStates.START_SPINNING;
                 autoShoot = false;
                 reset();
