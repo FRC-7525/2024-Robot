@@ -12,10 +12,13 @@ public class ShootNearSpeaker extends Command {
         this.robot = robot;
     }
 
+    public void finishedShooting() {
+        robot.manager.finishedShooting = true;
+    }
+
     @Override
     public void initialize() {
         robot.manager.spinningUp();
-        robot.manager.finishedShooting = false;
     }
 
     @Override
@@ -30,6 +33,6 @@ public class ShootNearSpeaker extends Command {
 
     @Override
     public boolean isFinished() {
-        return robot.manager.finishedShooting;
+        return robot.manager.finishedShooting && robot.manager.currentlySpinningUp();
     }
 }
