@@ -247,6 +247,10 @@ public class Manager {
         autoShoot = false;
     }
 
+    public boolean currentlySpinningUp() {
+        return state == ManagerStates.START_SPINNING;
+    }
+
     public void returnToIdle() {
         reset();
         state = ManagerStates.IDLE;
