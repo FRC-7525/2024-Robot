@@ -124,13 +124,23 @@ public class Robot extends TimedRobot {
         if (Constants.Vision.VISION_ENABLED) { // duplicate this for side cam lol hehehehawhaw
             vision.periodic();
             Optional<Pose2d> frontPoseOption = vision.getFrontPose2d();
+            Optional<Pose2d> sidePoseOption = vision.getSidePose2d();
+
             hasFrontPose = frontPoseOption.isPresent();
+            hasSidePose = sidePoseOption.isPresent();
             if (hasFrontPose) {
                 var frontPipeline = vision.frontCamera.getLatestResult();
                 drive.addVisionMeasurement(
                         vision.getFrontPose2d().get(),
                         Timer.getFPGATimestamp(),
                         vision.getEstimationStdDevs(frontPoseOption.get(), frontPipeline));
+            }
+            if (hasSidePose) {
+                var sidePipeline = vision.sideCamera.getLatestResult();
+                drive.addVisionMeasurement(
+                        vision.getSidePose2d().get(),
+                        Timer.getFPGATimestamp(),
+                        vision.getEstimationStdDevs(sidePoseOption.get(), sidePipeline));
             }
         }
 

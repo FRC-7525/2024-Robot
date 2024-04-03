@@ -41,15 +41,27 @@ import org.photonvision.targeting.PhotonPipelineResult;
 public class Vision {
 
     Optional<EstimatedRobotPose> frontBotpose3d;
+    Optional<EstimatedRobotPose> sideBotpose3d;
 
     public PhotonCamera frontCamera = new PhotonCamera("Front Camera");
+    public PhotonCamera sideCamera = new PhotonCamera("Side Camera");
 
     Transform3d frontrobotToCam = new Transform3d(
             new Translation3d(Units.inchesToMeters(-14.25), 0, Units.inchesToMeters(6)),
             new Rotation3d(0, Units.degreesToRadians(-67), Units.degreesToRadians(180)));
+    Transform3d siderobotToCam = new Transform3d(
+            new Translation3d(
+                    Units.inchesToMeters(-9.25),
+                    Units.inchesToMeters(11),
+                    Units.inchesToMeters(15.25)),
+            new Rotation3d(
+                    0,
+                    Units.degreesToRadians(-20),
+                    Units.degreesToRadians(90)));
 
     AprilTagFieldLayout layout;
     PhotonPoseEstimator frontEstimator;
+    PhotonPoseEstimator sideEstimator;
 
     public Vision() {
         try {
@@ -58,23 +70,38 @@ public class Vision {
             frontEstimator = new PhotonPoseEstimator(layout,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
                     frontrobotToCam);
+            sideEstimator = new PhotonPoseEstimator(layout,
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, sideCamera,
+                    siderobotToCam);
         } catch (IOException e) {
             System.out.println(e);
         }
-    } 
+    }
 
     Boolean seesFrontVision = false;
+    Boolean seesSideVision = false;
     Timer frontVisionTimer = new Timer();
+    Timer sideVisionTimer = new Timer();
 
     public void periodic() {
         frontBotpose3d = frontEstimator.update();
+        sideBotpose3d = sideEstimator.update();
         SmartDashboard.putBoolean("Front Vision", seesFrontVision);
+        SmartDashboard.putBoolean("Side Vision", seesSideVision);
+
         if (frontBotpose3d.isPresent()) {
             var tempPose = frontBotpose3d.get().estimatedPose;
             double[] frontPose = { tempPose.getX(), tempPose.getY(),
                     Units.radiansToDegrees(tempPose.getRotation().getZ()) };
 
             SmartDashboard.putNumberArray("Front Pose", frontPose);
+        }
+        if (sideBotpose3d.isPresent()) {
+            var sideTempPose = sideBotpose3d.get().estimatedPose;
+            double[] sidePose = { sideTempPose.getX(), sideTempPose.getY(),
+                    Units.radiansToDegrees(sideTempPose.getRotation().getZ()) };
+
+            SmartDashboard.putNumberArray("Side Pose", sidePose);
         }
     }
 
@@ -92,6 +119,21 @@ public class Vision {
         return Optional.empty();
     }
 
+    public Optional<Pose2d> getSidePose2d() {
+        if (sideBotpose3d.isPresent()) {
+            seesSideVision = true;
+            sideVisionTimer.reset();
+            sideVisionTimer.start();
+
+            return Optional.of(sideBotpose3d.get().estimatedPose.toPose2d());
+        } else {
+            if (sideVisionTimer.get() > Constants.Vision.LAST_VISION_MEASURMENT_TIMER) {
+                seesSideVision = false;
+            }
+        }
+        return Optional.empty();
+    }
+
     public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, PhotonPipelineResult pipelineResult) {
         var estStdDevs = Constants.Vision.SINGLE_STD; // automatically assume one tag seen MIGHT BE SLOWER THAN GETTING
                                                       // PIPELINE VALUE AND DECIDING????????
@@ -104,7 +146,13 @@ public class Vision {
             if (tagPose.isEmpty())
                 continue;
             numTags++;
-            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation()); // distance from bot to what tag should be 
+            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation()); // distance
+                                                                                                              // from
+                                                                                                              // bot to
+                                                                                                              // what
+                                                                                                              // tag
+                                                                                                              // should
+                                                                                                              // be
             avgWeight += Constants.Vision.TAG_WEIGHTS[itag.getFiducialId() - 1]; // -1 bc coders coding
         }
         if (numTags == 0)
