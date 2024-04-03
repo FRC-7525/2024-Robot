@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
 import frc.robot.subsystems.AmpBar.AmpBarStates;
 import frc.robot.Constants;
@@ -132,11 +133,11 @@ public class Manager {
             shooterTimer.start();
             intake.setState(IntakeStates.FEEDING);
             ampBar.setState(AmpBarStates.IN);
-
+            System.out.println("shooting");
             if (DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.AUTO_SHOOTER_TIME) {
                 shooterTimer.stop();
                 shooterTimer.reset();
-                state = ManagerStates.START_SPINNING;
+                state = ManagerStates.IDLE;
                 autoShoot = false;
                 reset();
             } else if (!DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
@@ -167,11 +168,14 @@ public class Manager {
             intake.setState(IntakeStates.OFF);
             ampBar.setState(AmpBarStates.IN);
 
+            System.out.println("It be spinning");
             if (autoShoot) {
+                System.out.println("Auto shooting");
                 if (shooter.atSetPoint(Constants.Shooter.SPEED)) { // Ensures the shooter motors are at setpoint before shooting.
                     state = ManagerStates.SHOOTING;
+                    System.out.println("Leaving spinning");
                     reset();
-                }  
+                }
             } else if (robot.controller.getAButtonPressed()) {
                 autoShoot = true;
                 reset();
@@ -220,6 +224,7 @@ public class Manager {
     // Functions for Auto Commands
     public void intakingWhileSpinning() {
         state = ManagerStates.SPINNING_AND_INTAKING;
+        autoShoot = true;
     }
 
     public void intaking() {
