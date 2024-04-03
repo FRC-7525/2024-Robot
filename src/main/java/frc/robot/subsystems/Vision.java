@@ -17,11 +17,17 @@ import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.proto.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.apriltag.AprilTag;
@@ -30,10 +36,13 @@ import edu.wpi.first.apriltag.AprilTagFields;
 
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision {
 
     Optional<EstimatedRobotPose> frontBotpose3d;
+
+    private SwerveDrivePoseEstimator poseEstimator;
 
     PhotonCamera frontCamera = new PhotonCamera("Front Camera");
 
@@ -49,8 +58,8 @@ public class Vision {
             String deployDirectoryPath = Filesystem.getDeployDirectory().getAbsolutePath();
             layout = new AprilTagFieldLayout(deployDirectoryPath + "/CrescendoFieldLayout.json");
             frontEstimator = new PhotonPoseEstimator(layout,
-                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
-                frontrobotToCam);
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
+                    frontrobotToCam);
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -64,7 +73,8 @@ public class Vision {
         SmartDashboard.putBoolean("Front Vision", seesFrontVision);
         if (frontBotpose3d.isPresent()) {
             var tempPose = frontBotpose3d.get().estimatedPose;
-            double[] frontPose = {tempPose.getX(), tempPose.getY(), Units.radiansToDegrees(tempPose.getRotation().getZ())};
+            double[] frontPose = { tempPose.getX(), tempPose.getY(),
+                    Units.radiansToDegrees(tempPose.getRotation().getZ()) };
 
             SmartDashboard.putNumberArray("Front Pose", frontPose);
         }
@@ -82,5 +92,47 @@ public class Vision {
             }
         }
         return Optional.empty();
+    }
+
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, PhotonPipelineResult pipelineResult) {
+        var estStdDevs = Constants.Vision.SINGLE_STD; // automatically assume one tag seen MIGHT BE SLOWER THAN GETTING
+                                                      // PIPELINE VALUE AND DECIDING????????
+        var targets = pipelineResult.getTargets();
+        int numTags = 0; // MIGHT BE SLOWER THAN GETTING PIPELINE VALUE AND DECIDING????????
+        double avgDist = 0;
+        double avgWeight = 0;
+        for (var itag : targets) { // goes through all tags and calculates distance away from the target to bot
+            var tagPose = layout.getTagPose(itag.getFiducialId());
+            if (tagPose.isEmpty())
+                continue;
+            numTags++;
+            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation()); // distance from bot to what tag should be 
+            avgWeight += Constants.Vision.TAG_WEIGHTS[itag.getFiducialId() - 1]; // -1 bc coders coding
+        }
+        if (numTags == 0)
+            return estStdDevs; // if you don't see don't change/keep the normal one
+
+        avgDist /= numTags; // making it an average
+        avgWeight /= numTags; // making it an average
+
+        if (numTags > 1) {
+            estStdDevs = Constants.Vision.MULTI_STD; // more trust in vision if mutliple tags
+        }
+        if (numTags == 1 && avgDist > 4) { // other team thought 4 (meters) was a safe distance to trust vision need to
+                                           // check excel sheet bc i think error was linear so we can get rid of that fr
+                                           // fr
+            estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE); // less trust in vision
+                                                                                                // if one tag
+        } else
+            estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30)); // random goofy numbers from other team? but
+                                                                         // basically gets weight from distance so
+                                                                         // distance important but we have consistent i
+                                                                         // think
+
+        estStdDevs = estStdDevs.times(avgWeight); // dynamic portion where matrix is updated based on how confident we
+                                                  // are in the tags we can see
+
+        return estStdDevs; // need to figure out how to put this into swerveDrive in drive or else we have
+                           // to make a swerve estimator and do silly goofy stuff
     }
 }
