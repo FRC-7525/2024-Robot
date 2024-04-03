@@ -43,6 +43,7 @@ public class Vision {
 
     AprilTagFieldLayout layout;
     PhotonPoseEstimator frontEstimator;
+    Timer lastVisionTimer = new Timer();
 
     public Vision() {
         try {
@@ -51,6 +52,8 @@ public class Vision {
             frontEstimator = new PhotonPoseEstimator(layout,
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCamera,
                 frontrobotToCam);
+            lastVisionTimer.start();
+            
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -58,16 +61,18 @@ public class Vision {
 
     Boolean seesFrontVision = false;
     Timer frontVisionTimer = new Timer();
-
+  
     public void periodic() {
         frontBotpose3d = frontEstimator.update();
         SmartDashboard.putBoolean("Front Vision", seesFrontVision);
         if (frontBotpose3d.isPresent()) {
             var tempPose = frontBotpose3d.get().estimatedPose;
             double[] frontPose = {tempPose.getX(), tempPose.getY(), Units.radiansToDegrees(tempPose.getRotation().getZ())};
+            lastVisionTimer.reset();
 
             SmartDashboard.putNumberArray("Front Pose", frontPose);
         }
+        SmartDashboard.putDouble("Last Vision Update", lastVisionTimer.get())
     }
 
     public Optional<Pose2d> getFrontPose2d() {
