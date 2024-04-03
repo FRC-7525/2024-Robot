@@ -15,12 +15,15 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -288,7 +291,7 @@ public class Drive extends SubsystemBase {
         driveStates = DriveStates.FIELD_RELATIVE;
     }
 
-    public void addVisionMeasurement(Pose2d pose, double timestamp) {
-        swerveDrive.addVisionMeasurement(pose, timestamp);
+    public void addVisionMeasurement(Pose2d pose, double timestamp, Matrix<N3,N1> visionMeasurementStdDevs) {
+        swerveDrive.addVisionMeasurement(pose, timestamp, visionMeasurementStdDevs);
     }
 }

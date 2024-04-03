@@ -42,9 +42,7 @@ public class Vision {
 
     Optional<EstimatedRobotPose> frontBotpose3d;
 
-    private SwerveDrivePoseEstimator poseEstimator;
-
-    PhotonCamera frontCamera = new PhotonCamera("Front Camera");
+    public PhotonCamera frontCamera = new PhotonCamera("Front Camera");
 
     Transform3d frontrobotToCam = new Transform3d(
             new Translation3d(Units.inchesToMeters(-14.25), 0, Units.inchesToMeters(6)),
@@ -63,7 +61,7 @@ public class Vision {
         } catch (IOException e) {
             System.out.println(e);
         }
-    }
+    } 
 
     Boolean seesFrontVision = false;
     Timer frontVisionTimer = new Timer();
