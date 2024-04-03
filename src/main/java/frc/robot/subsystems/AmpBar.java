@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
+import swervelib.motors.SparkMaxSwerve;
 
 public class AmpBar {
     enum AmpBarStates {
@@ -17,9 +19,10 @@ public class AmpBar {
     }
     PIDController pivotController = new PIDController(1.5, 0, 0);
     private AmpBarStates state = AmpBarStates.OUT;
-    private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(40);
-    private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(45);
-    private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(9);
+    private final SparkMaxSwerve leftMotor = new SparkMaxSwerve();
+    private final SparkMaxSwerve rightMotor = new SparkMaxSwerve();
+    private final WPI_TalonFX wheelsMotor = new WPI_TalonFX();
+    private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
     String stateString = "";
     Robot robot = null;
@@ -34,7 +37,6 @@ public class AmpBar {
 
         pivotEncoder.reset();
     }
-
     public void periodic() {
         if (state == AmpBarStates.OUT) {
             pivotMotorSetpoint = Constants.AmpBar.OUT;
@@ -46,7 +48,7 @@ public class AmpBar {
         if (pivotEncoder.getAbsolutePosition() > 0.1) {
             leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
         } else {
-            System.out.println("Amp Bar Encoder Unplugged zzzzz");
+        System.out.println("Amp Bar Encoder Unplugged zzz");
             if (robot.secondaryController.getPOV() == Constants.DPAD_LEFT) {
                 leftMotor.set(-0.2);
             } else if (robot.secondaryController.getPOV() == Constants.DPAD_RIGHT) {
