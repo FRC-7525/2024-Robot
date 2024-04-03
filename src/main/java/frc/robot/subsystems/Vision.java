@@ -72,7 +72,7 @@ public class Vision {
 
             SmartDashboard.putNumberArray("Front Pose", frontPose);
         }
-        SmartDashboard.putDouble("Last Vision Update", lastVisionTimer.get())
+        SmartDashboard.putNumber("Last Vision Update", lastVisionTimer.get());
     }
 
     public Optional<Pose2d> getFrontPose2d() {
