@@ -81,7 +81,20 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot Near Speaker"
+                  "name": "Speeding Up"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shooting"
                 }
               }
             ]
