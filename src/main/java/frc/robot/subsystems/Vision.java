@@ -164,17 +164,18 @@ public class Vision {
         if (numTags > 1) {
             estStdDevs = Constants.Vision.MULTI_STD; // more trust in vision if mutliple tags
         }
-        if (numTags == 1 && avgDist > 4) { // other team thought 4 (meters) was a safe distance to trust vision need to
+        if (numTags == 1 && avgDist > 6) { // other team thought 4 (meters) was a safe distance to trust vision need to
                                            // check excel sheet bc i think error was linear so we can get rid of that fr
                                            // fr
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE); // less trust in vision
                                                                                                 // if one tag
-        } else
+        } else {
             estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30)); // random goofy numbers from other team? but
                                                                          // basically gets weight from distance so
                                                                          // distance important but we have consistent i
                                                                          // think
-
+        }
+        
         estStdDevs = estStdDevs.times(avgWeight); // dynamic portion where matrix is updated based on how confident we
                                                   // are in the tags we can see
 
