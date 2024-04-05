@@ -104,8 +104,11 @@ public final class Constants {
     }
 
     public static final class AmpBar {
-        public static final double IN = 0.45;
+        public static final double IN = 0;
         public static final double OUT = IN + 0.2506;
+        public static final double WHEEL_SPEED = 0.1;
+        public static final double ERROR_OF_MARGIN = 0.1;
+        public static final double AMP_SHOOTING_TIME = 2.0;
     }
   
     public static final class Vision {

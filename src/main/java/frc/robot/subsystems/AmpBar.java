@@ -1,84 +1,93 @@
 package frc.robot.subsystems;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import swervelib.motors.SparkMaxSwerve;
 
 public class AmpBar {
-    enum AmpBarStates {
+    public enum AmpBarStates {
         IN,
-        OUT
+        SHOOTING,
+        OUT,
     }
-  
-    PIDController pivotController = new PIDController(1.5, 0, 0);
-    private AmpBarStates state = AmpBarStates.OUT;
-    private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(40);
-    private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(45);
-    private DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(9);
+
+    private AmpBarStates state = AmpBarStates.SHOOTING;
+    private final CANSparkMax rightMotor = new CANSparkMax(31, MotorType.kBrushless);
+    private final CANSparkMax leftMotor = new CANSparkMax(30, MotorType.kBrushless);
+    private final TalonFX wheelsMotor = new TalonFX(4); // what is the import bro???
+
+    RelativeEncoder pivotEncoder = leftMotor.getEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
     String stateString = "";
     Robot robot = null;
-    
+
+    PIDController controller = new PIDController(1, 0, 0); // TODO: tune PID
+
     public AmpBar(Robot robot) {
         this.robot = robot;
         rightMotor.follow(leftMotor);
         leftMotor.setInverted(true);
-
-        leftMotor.setNeutralMode(NeutralMode.Coast);
-        rightMotor.setNeutralMode(NeutralMode.Coast);
-
-        pivotEncoder.reset();
+        pivotEncoder.setPosition(0.0);
+        leftMotor.setIdleMode(IdleMode.kCoast);
+        rightMotor.setIdleMode(IdleMode.kCoast);
     }
-  
-    public void checkFaults() {
-        SmartDashboard.putBoolean("Left Amp Bar Working", leftMotor.getTemperature() > 1); // returns 0 if no signal 
-        SmartDashboard.putBoolean("Right Amp Bar Working", rightMotor.getTemperature() > 1);
+
+    public void setState(AmpBarStates state) {
+
+        if (robot.isClimbing()) {
+            state = AmpBarStates.OUT;
+        } else {
+            this.state = state;
+        }
+    }
+
+    public boolean atSetPoint() {
+        double motor1Vel = pivotEncoder.getPosition();
+        return Math.abs(motor1Vel - pivotMotorSetpoint) <= Constants.AmpBar.ERROR_OF_MARGIN;
     }
 
     public void periodic() {
-        if (state == AmpBarStates.OUT) {
+        if (state == AmpBarStates.SHOOTING) {
             pivotMotorSetpoint = Constants.AmpBar.OUT;
-            stateString = "Amp Bar Out";
+            wheelsMotor.set(Constants.AmpBar.WHEEL_SPEED);
+            stateString = "Shooting Amp";
+
         } else if (state == AmpBarStates.IN) {
             pivotMotorSetpoint = Constants.AmpBar.IN;
+            wheelsMotor.set(0);
             stateString = "Amp Bar In";
+        } else if (state == AmpBarStates.OUT) {
+            pivotMotorSetpoint = Constants.AmpBar.IN;
+            wheelsMotor.set(0);
+            stateString = "Amp Bar Out";
         }
-        if (pivotEncoder.getAbsolutePosition() > 0.1) {
-            leftMotor.set(pivotController.calculate(pivotEncoder.getAbsolutePosition(), pivotMotorSetpoint));
-        } else {
-            System.out.println("Amp Bar Encoder Unplugged zzzzz");
-            if (robot.secondaryController.getPOV() == Constants.DPAD_LEFT) {
-                leftMotor.set(-0.2);
-            } else if (robot.secondaryController.getPOV() == Constants.DPAD_RIGHT) {
-                leftMotor.set(0.2);
-            } else {
-                leftMotor.set(0);
-            }
-        }
+
+        leftMotor.set(controller.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
+    }
+
+    public void checkFaults() {
+        SmartDashboard.putBoolean("left ampbar motor good",
+                leftMotor.getMotorTemperature() > 1 && leftMotor.getFaults() == 0);
+        SmartDashboard.putBoolean("right ampbar motor good",
+                rightMotor.getMotorTemperature() > 1 && rightMotor.getFaults() == 0);
+        SmartDashboard.putBoolean("amp wheel motor good", wheelsMotor.getDeviceTemp().getValueAsDouble() > 0);
     }
 
     public void putSmartDashValues() {
         SmartDashboard.putNumber("Amp motor setpoint", pivotMotorSetpoint);
-        SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getPosition());
         SmartDashboard.putString("Amp Bar State", stateString);
     }
 
-    public boolean nearSetpoint() {
-        return Math.abs(pivotEncoder.getAbsolutePosition() - pivotMotorSetpoint) < 0.1;
-    }
-
-    public void setState(AmpBarStates state) {
-        if (robot == null) return;
-        if (!robot.isClimbing()) {
-            this.state = state;
-        } else { 
-            this.state = AmpBarStates.OUT;
-            System.out.println("Cannot pull in amp bar, currently climbing (zzzz)");
-        }
-    }
 }

@@ -141,19 +141,19 @@ public class Manager {
             }
             stateString = "Shooting";
         } else if (state == ManagerStates.SCORING_AMP) {
-            shooter.setState(ShootingStates.SCORING_AMP);
-            ampBar.setState(AmpBarStates.OUT);
+            ampBar.setState(AmpBarStates.SHOOTING);
             intake.setState(IntakeStates.OFF);
-            if (ampBar.nearSetpoint() && shooter.atSetPoint(Constants.Shooter.AMP_SPEED)) {
+            shooter.setState(ShootingStates.SCORING_AMP);
+            if (ampBar.atSetPoint()) {
                 intake.setState(IntakeStates.FEEDING);
                 shooterTimer.start();
-                if (shooterTimer.get() > Constants.Shooter.AMP_TIME) {
-                    shooterTimer.stop();
-                    shooterTimer.reset(); 
+
+                if (shooterTimer.get()> Constants.AmpBar.AMP_SHOOTING_TIME) {
                     state = ManagerStates.IDLE;
                     reset();
                 }
-            } 
+            }
+
             stateString = "Amp Scoring"; 
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);

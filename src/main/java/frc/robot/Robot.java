@@ -172,6 +172,7 @@ public class Robot extends TimedRobot {
         manager.intake.setPivotMotorMode(IdleMode.kCoast);
         autoCommand = null;
         currentSelected = "";
+    
     }
 
     @Override
