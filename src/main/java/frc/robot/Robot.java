@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
         manager.periodic();
         CommandScheduler.getInstance().run();
 
-        if (Constants.Vision.VISION_ENABLED) { // duplicate this for side cam lol hehehehawhaw
+        if (Constants.Vision.VISION_ENABLED) { 
             vision.periodic();
             Optional<Pose2d> frontPoseOption = vision.getFrontPose2d();
             Optional<Pose2d> sidePoseOption = vision.getSidePose2d();

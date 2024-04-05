@@ -146,14 +146,9 @@ public class Vision {
             if (tagPose.isEmpty())
                 continue;
             numTags++;
-            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation()); // distance
-                                                                                                              // from
-                                                                                                              // bot to
-                                                                                                              // what
-                                                                                                              // tag
-                                                                                                              // should
-                                                                                                              // be
-            avgWeight += Constants.Vision.TAG_WEIGHTS[itag.getFiducialId() - 1]; // -1 bc coders coding
+            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation()); // distance from bot to what tag should be 
+                                                                                                    
+            avgWeight += Constants.Vision.TAG_WEIGHTS[itag.getFiducialId() - 1];
         }
         if (numTags == 0)
             return estStdDevs; // if you don't see don't change/keep the normal one
@@ -164,9 +159,7 @@ public class Vision {
         if (numTags > 1) {
             estStdDevs = Constants.Vision.MULTI_STD; // more trust in vision if mutliple tags
         }
-        if (numTags == 1 && avgDist > 6) { // other team thought 4 (meters) was a safe distance to trust vision need to
-                                           // check excel sheet bc i think error was linear so we can get rid of that fr
-                                           // fr
+        if (numTags == 1 && avgDist > Constants.Vision.STD_TRUSTABLE_DISTANCE) {
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE); // less trust in vision
                                                                                                 // if one tag
         } else {
@@ -179,7 +172,7 @@ public class Vision {
         estStdDevs = estStdDevs.times(avgWeight); // dynamic portion where matrix is updated based on how confident we
                                                   // are in the tags we can see
 
-        return estStdDevs; // need to figure out how to put this into swerveDrive in drive or else we have
-                           // to make a swerve estimator and do silly goofy stuff
+        return estStdDevs;
+                           
     }
 }
