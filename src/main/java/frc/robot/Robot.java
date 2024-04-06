@@ -2,15 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// alex was here >:3
+
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.ShootNearSpeaker;
 import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
@@ -18,6 +19,8 @@ import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;
 
+import com.ctre.phoenix.music.Orchestra;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -26,8 +29,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
@@ -64,15 +65,7 @@ public class Robot extends TimedRobot {
         NamedCommands.registerCommand("Return To Idle", autoCommands.returnToIdle());
         NamedCommands.registerCommand("Speeding Up", autoCommands.startSpinningUp());
         NamedCommands.registerCommand("Spin and Intake", autoCommands.spinAndIntake());
-
-        // TODO: Score Drive Backwards (2-17)
-        // TODO: 2 note autos (score any close note) (2-21)
-        // TODO: 3 note autos (score any 2 close notes) (2-23)
-        // TODO: 3 note autos (score 1 close, 1 far) (2-24)
-        // TODO: 4 note auto (all 3 close) (2-28)
-        // TODO: 4 note auto (2 close and 1 far on the left) (2-28)
-        // TODO: 4 note auto (2 close and 1 far on the right) (2-28)
-        // TODO: 5 note auto (all 3 close and 1 far) (3-2)
+        NamedCommands.registerCommand("Shoot Near Speaker", new ShootNearSpeaker(this));
 
         // Misc Autos
         chooser.addOption("0: start anywhere no vision, cross line", "Drive Forwards");
@@ -113,6 +106,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("Left 5 Note", "Left 5 Note");
         chooser.addOption("5 Note, all close, far middle", "All Close + FM");
         chooser.addOption("Center 5 Note", "Center 5 Note");
+        chooser.addOption("Shoot Near Speaker 5 Note", "OffbrandEventMarkers");
 
         SmartDashboard.putData("Path Chooser", chooser);
     }

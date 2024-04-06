@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 
@@ -24,8 +24,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import swervelib.SwerveDrive;
@@ -47,6 +45,9 @@ public class Drive extends SubsystemBase {
     boolean fieldRelative = false;
     DriveStates lastDriveState = DriveStates.FIELD_RELATIVE;
     Pose2d targetPose = new Pose2d(0, 0, new Rotation2d(0, 0));
+
+    // Orchestra sans;
+    // String megalovania = "full.chrp";
 
     PIDController alignmentXTranslationPID = new PIDController(
         Constants.Drive.alignmentXTranslationPID.kP, 
@@ -77,7 +78,8 @@ public class Drive extends SubsystemBase {
         try {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
             swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
-            modules = swerveDrive.getModules();
+            modules = swerveDrive.getModules();  
+            
             pathPlannerInit();
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,24 +140,24 @@ public class Drive extends SubsystemBase {
         );
     }
 
-    public boolean nearSetPose(Pose2d targetPose) {
+    public boolean nearSetPose(Pose2d targetPose, Double translationErrorMargin, Double rotationErrorMargin) {
         Pose2d currentPose = swerveDrive.getPose();
+        Translation2d translationDifference = currentPose.minus(targetPose).getTranslation();
+        Rotation2d rotationDifference = currentPose.minus(targetPose).getRotation();
         return 
-        Math.abs(currentPose.getX() - targetPose.getX()) < Constants.Drive.translationErrorMargin &&
-        Math.abs(currentPose.getY() - targetPose.getY()) < Constants.Drive.translationErrorMargin &&
-        Math.abs(currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians()) < Constants.Drive.rotationErrorMargin; 
+            Math.abs(translationDifference.getX()) < translationErrorMargin &&
+            Math.abs(translationDifference.getY()) < translationErrorMargin &&
+            Math.abs(rotationDifference.getRadians()) < rotationErrorMargin; 
     }
     
     public void checkFaults() {
         for (int i = 0; i < modules.length; i++) {
-            CANSparkMax driveMotor = (CANSparkMax) modules[i].getDriveMotor().getMotor();
+            TalonFX driveMotor = (TalonFX) modules[i].getDriveMotor().getMotor();
             CANSparkMax angleMotor = (CANSparkMax) modules[i].getAngleMotor().getMotor();
 
-            // int driveID = driveMotor.getDeviceId();
-            // int angleID = angleMotor.getDeviceId();
 
             SmartDashboard.putBoolean("Encoder " + i + " Good", !modules[i].getAbsoluteEncoderReadIssue());
-            SmartDashboard.putBoolean("Drive motor " + i + " reachable", driveMotor.getFirmwareVersion() > 0 && driveMotor.getFaults() == 0);
+            SmartDashboard.putBoolean("Drive motor " + i + " reachable", driveMotor.getDeviceTemp().getValueAsDouble() > 0 && driveMotor.getFaultField().getValue() == 0);
             SmartDashboard.putBoolean("Angle motor " + i + " reachable", angleMotor.getFirmwareVersion() > 0 && angleMotor.getFaults() == 0);
         }
     }
@@ -189,7 +191,7 @@ public class Drive extends SubsystemBase {
         } else if (driveStates == DriveStates.TELEOP_ALIGNING) {
             state = "Teleop Aligning";
             driveToPosePID(targetPose);
-            if (nearSetPose(targetPose)) {
+            if (nearSetPose(targetPose, Constants.Drive.rotationErrorMargin, Constants.Drive.rotationErrorMargin)) {
                 System.out.println("near target pose");
                 if (targetPose == Constants.Drive.redAmpPose || targetPose == Constants.Drive.blueAmpPose) {
                     robot.manager.scoreAmp();
