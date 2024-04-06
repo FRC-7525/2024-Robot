@@ -106,13 +106,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SRC"
+                  "pathName": "5 Note SFL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Spin and Intake"
+                  "name": "Intaking"
                 }
               }
             ]
@@ -125,7 +125,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note RCS"
+                  "pathName": "5 Note FLS"
                 }
               },
               {
@@ -150,13 +150,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SFL"
+                  "pathName": "SFLI"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intaking"
+                  "name": "Spin and Intake"
                 }
               }
             ]
@@ -169,7 +169,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EM Note FLS"
+                  "pathName": "FLIS"
                 }
               },
               {
@@ -179,6 +179,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
           }
         }
       ]

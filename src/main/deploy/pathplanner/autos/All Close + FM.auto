@@ -150,13 +150,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SFL"
+                  "pathName": "SFM"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intaking"
+                  "name": "Spin and Intake"
                 }
               }
             ]
@@ -169,7 +169,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EM Note FLS"
+                  "pathName": "FMS"
                 }
               },
               {
@@ -179,6 +179,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
           }
         }
       ]

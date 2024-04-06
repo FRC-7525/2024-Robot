@@ -18,50 +18,6 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SLC"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Spin and Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "5 Note LCS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Speeding Up"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
                   "pathName": "5 Note SMC"
                 }
               },
@@ -150,13 +106,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SFL"
+                  "pathName": "SFM"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intaking"
+                  "name": "Spin and Intake"
                 }
               }
             ]
@@ -169,7 +125,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EM Note FLS"
+                  "pathName": "FMS"
                 }
               },
               {
@@ -179,6 +135,56 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SFLI"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin and Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FLIS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speeding Up"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
           }
         }
       ]

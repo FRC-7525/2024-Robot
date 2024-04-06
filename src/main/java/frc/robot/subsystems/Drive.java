@@ -158,6 +158,7 @@ public class Drive extends SubsystemBase {
             TalonFX driveMotor = (TalonFX) modules[i].getDriveMotor().getMotor();
             CANSparkMax angleMotor = (CANSparkMax) modules[i].getAngleMotor().getMotor();
 
+
             SmartDashboard.putBoolean("Encoder " + i + " Good", !modules[i].getAbsoluteEncoderReadIssue());
             SmartDashboard.putBoolean("Drive motor " + i + " reachable", driveMotor.getDeviceTemp().getValueAsDouble() > 0 && driveMotor.getFaultField().getValue() == 0);
             SmartDashboard.putBoolean("Angle motor " + i + " reachable", angleMotor.getFirmwareVersion() > 0 && angleMotor.getFaults() == 0);
