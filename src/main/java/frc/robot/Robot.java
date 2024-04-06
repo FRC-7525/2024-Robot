@@ -18,6 +18,8 @@ import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;
 
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -78,32 +80,33 @@ public class Robot extends TimedRobot {
         chooser.addOption("0: start anywhere no vision, cross line", "Drive Forwards");
         chooser.addOption("Do Nothing", "Do Nothing");
         chooser.addOption("1: Start Mid, score preload, cross line", "Drive Backwards + Score");
-        //chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
-        //Choreo Autos (not running these)
-        /* 
-        chooser.addOption("2 Note Choreo", "Optimized 2 Note");
-        chooser.addOption("3 Note Choreo", "Optimized 3 Note");
-        chooser.addOption("4 Note Choreo", "Optimized 4 Note");
-        */
+        // chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
+        // Choreo Autos (not running these)
+        /*
+         * chooser.addOption("2 Note Choreo", "Optimized 2 Note");
+         * chooser.addOption("3 Note Choreo", "Optimized 3 Note");
+         * chooser.addOption("4 Note Choreo", "Optimized 4 Note");
+         */
         // 2 Note Autos
         chooser.addOption("2: Start Left (angled), Close Left", "Left Note");
         chooser.addOption("2: Start Mid, Close Middle", "Middle Note");
         chooser.addOption("2: Start Right (angled), Close Right", "Right Note");
         // 3 Note Autos
         // chooser.addOption("Left + Mid", "Left + Mid"); (Un-used)
-        //chooser.addOption("Mid + Right", "Mid + Right"); (Un- used)
+        // chooser.addOption("Mid + Right", "Mid + Right"); (Un- used)
         // chooser.addOption("Center Left + Left", "Center Left + Left"); (Un-used)
         // chooser.addOption("Right + Center Right", "Right + Center Right"); (Un-used)
         // chooser.addOption("Start Left", "Mid + Center Left"); (Un-used)
         chooser.addOption("Start Right, Far Right, Far Right-ish", "2 Far Right");
         chooser.addOption("Start Left, Left Close, Mid Close", "CloseTwoLeft");
         chooser.addOption("Start Left, Close Left, Far Left", "All Left");
-      
+
         // 4 Note Autos
         chooser.addOption("All Close", "All Close");
         // chooser.addOption("2 Close + Right Far", "2 Close + Right Far"); (Impossible)
         chooser.addOption("Start Mid, Left Close, Mid Close, Left Far", "2 Close + Left Far");
-        // chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line"); (Impossible)
+        // chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line");
+        // (Impossible)
         chooser.addOption("Start Mid, Close left, Close Mid, Far Left", "Optimized 4 Note Auto");
         // 5 Note Auto
         chooser.addOption("5 Note Auto", "Optimized 5 Note Auto");
@@ -118,15 +121,31 @@ public class Robot extends TimedRobot {
         manager.periodic();
         CommandScheduler.getInstance().run();
 
-        if (Constants.Vision.VISION_ENABLED) {
+        if (Constants.Vision.VISION_ENABLED) { 
             vision.periodic();
-            hasFrontPose = vision.getFrontPose2d().isPresent();
+            Optional<Pose2d> frontPoseOption = vision.getFrontPose2d();
+            Optional<Pose2d> sidePoseOption = vision.getSidePose2d();
+
+            hasFrontPose = frontPoseOption.isPresent();
+            hasSidePose = sidePoseOption.isPresent();
             if (hasFrontPose) {
-                drive.addVisionMeasurement(vision.getFrontPose2d().get(), Timer.getFPGATimestamp());
+                var frontPipeline = vision.frontCamera.getLatestResult();
+                drive.addVisionMeasurement(
+                        vision.getFrontPose2d().get(),
+                        Timer.getFPGATimestamp(),
+                        vision.getEstimationStdDevs(frontPoseOption.get(), frontPipeline));
+            }
+            if (hasSidePose) {
+                var sidePipeline = vision.sideCamera.getLatestResult();
+                drive.addVisionMeasurement(
+                        vision.getSidePose2d().get(),
+                        Timer.getFPGATimestamp(),
+                        vision.getEstimationStdDevs(sidePoseOption.get(), sidePipeline));
             }
         }
 
-        SmartDashboard.putString("Currently selected autonomous", ((currentSelected != null) ? currentSelected : "None"));
+        SmartDashboard.putString("Currently selected autonomous",
+                ((currentSelected != null) ? currentSelected : "None"));
         SmartDashboard.putString("Match State", matchState);
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
     }
@@ -182,7 +201,8 @@ public class Robot extends TimedRobot {
         climber.checkFaults();
         drive.checkFaults();
 
-        if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs to be made
+        if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs
+                                                                                               // to be made
             autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
             currentSelected = chooser.getSelected();
         }
