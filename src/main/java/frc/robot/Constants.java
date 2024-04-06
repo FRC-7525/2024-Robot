@@ -2,13 +2,8 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
-<<<<<<< HEAD
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.controller.PIDController;
-=======
->>>>>>> e5deb0e (Adds shoot near speaker thing for auto)
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
