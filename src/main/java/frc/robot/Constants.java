@@ -59,7 +59,7 @@ public final class Constants {
         public static final double translationErrorMargin = 0.05; // In Meters
         public static final double rotationErrorMargin = Math.toRadians(3);
         
-        public static final double autoTranslationErrorMargin = 0.5; // In Meters
+        public static final double autoTranslationErrorMargin = 0.4; // In Meters
         public static final double autoRotationErrorMargin = Math.toRadians(10);
     }
     public static final class Intake {
