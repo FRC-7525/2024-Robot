@@ -1,19 +1,15 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import swervelib.motors.SparkMaxSwerve;
 
 public class AmpBar {
     public enum AmpBarStates {

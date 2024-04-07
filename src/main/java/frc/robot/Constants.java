@@ -2,11 +2,9 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 
 public final class Constants {
     public static final int DPAD_UP = 0;
@@ -98,7 +96,7 @@ public final class Constants {
         public static final double MAX_SETPOINT = 120;
         public static final double ZEROING_SPEED = -0.15;
         public static final double RIGHT_CURRENT_MAX = 7;
-        public static final double LEFT_CURRENT_MAX = 12;
+        public static final double LEFT_CURRENT_MAX = 17;
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
         public static final double DOWN = 13;
     }
