@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
     public XboxController secondaryController = new XboxController(1);
     public Drive drive = new Drive(this);
     Vision vision = new Vision();
-    RGB rgb = new RGB(this);
+    //RGB rgb = new RGB(this);
     Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        rgb.periodic();
+        //rgb.periodic();
         manager.periodic();
         CommandScheduler.getInstance().run();
 

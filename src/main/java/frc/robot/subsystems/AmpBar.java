@@ -21,9 +21,9 @@ public class AmpBar {
     private AmpBarStates state = AmpBarStates.SHOOTING;
     private final CANSparkMax rightMotor = new CANSparkMax(31, MotorType.kBrushless);
     private final CANSparkMax leftMotor = new CANSparkMax(30, MotorType.kBrushless);
-    private final TalonFX wheelsMotor = new TalonFX(4); // what is the import bro???
+    private final TalonFX wheelsMotor = new TalonFX(38); // what is the import bro???
 
-    RelativeEncoder pivotEncoder = leftMotor.getEncoder();
+    public RelativeEncoder pivotEncoder = leftMotor.getEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
     String stateString = "";
     Robot robot = null;
@@ -32,9 +32,9 @@ public class AmpBar {
 
     public AmpBar(Robot robot) {
         this.robot = robot;
-        rightMotor.follow(leftMotor);
-        leftMotor.setInverted(true);
-        pivotEncoder.setPosition(0.0);
+        rightMotor.follow(leftMotor, true);
+        leftMotor.setInverted(false);
+        pivotEncoder.setPosition(0);
         leftMotor.setIdleMode(IdleMode.kCoast);
         rightMotor.setIdleMode(IdleMode.kCoast);
     }
@@ -70,6 +70,7 @@ public class AmpBar {
         }
 
         leftMotor.set(controller.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
+        //System.out.println(pivotEncoder.getPosition());
     }
 
     public void checkFaults() {
@@ -83,6 +84,7 @@ public class AmpBar {
     public void putSmartDashValues() {
         SmartDashboard.putNumber("Amp motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getPosition());
+        SmartDashboard.putNumber("Right Motor", rightMotor.getEncoder().getPosition());
         SmartDashboard.putString("Amp Bar State", stateString);
     }
 
