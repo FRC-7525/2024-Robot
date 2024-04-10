@@ -142,7 +142,7 @@ public class Manager {
                 intake.setState(IntakeStates.FEEDING);
                 shooterTimer.start();
 
-                if (shooterTimer.get()> Constants.AmpBar.AMP_SHOOTING_TIME) {
+                if (shooterTimer.get() > Constants.AmpBar.AMP_SHOOTING_TIME) {
                     state = ManagerStates.IDLE;
                     reset();
                 }
