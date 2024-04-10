@@ -23,7 +23,7 @@ public class AmpBar {
     private final CANSparkMax leftMotor = new CANSparkMax(30, MotorType.kBrushless);
     private final TalonFX wheelsMotor = new TalonFX(38);
 
-    public RelativeEncoder pivotEncoder = leftMotor.getEncoder();
+    RelativeEncoder pivotEncoder = leftMotor.getEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
     String stateString = "";
     Robot robot = null;
@@ -77,7 +77,7 @@ public class AmpBar {
                 leftMotor.getMotorTemperature() > 1 && leftMotor.getFaults() == 0);
         SmartDashboard.putBoolean("right ampbar motor good",
                 rightMotor.getMotorTemperature() > 1 && rightMotor.getFaults() == 0);
-        SmartDashboard.putBoolean("amp wheel motor good", wheelsMotor.getDeviceTemp().getValueAsDouble() > 0);
+        SmartDashboard.putBoolean("amp wheel motor good", wheelsMotor.getFaultField().getValue() == 0 && wheelsMotor.getDeviceTemp().getValueAsDouble() > 0);
     }
 
     public void putSmartDashValues() {
