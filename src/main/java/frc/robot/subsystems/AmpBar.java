@@ -18,7 +18,7 @@ public class AmpBar {
         OUT,
     }
 
-    private AmpBarStates state = AmpBarStates.SHOOTING;
+    private AmpBarStates state = AmpBarStates.IN;
     private final CANSparkMax rightMotor = new CANSparkMax(31, MotorType.kBrushless);
     private final CANSparkMax leftMotor = new CANSparkMax(30, MotorType.kBrushless);
     private final TalonFX wheelsMotor = new TalonFX(38);
@@ -70,7 +70,6 @@ public class AmpBar {
         }
 
         leftMotor.set(controller.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
-        //System.out.println(pivotEncoder.getPosition());
     }
 
     public void checkFaults() {
@@ -87,5 +86,4 @@ public class AmpBar {
         SmartDashboard.putNumber("Right Motor", rightMotor.getEncoder().getPosition());
         SmartDashboard.putString("Amp Bar State", stateString);
     }
-
 }
