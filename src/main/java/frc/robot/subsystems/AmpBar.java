@@ -49,8 +49,8 @@ public class AmpBar {
     }
 
     public boolean atSetPoint() {
-        double motor1Vel = pivotEncoder.getPosition();
-        return Math.abs(motor1Vel - pivotMotorSetpoint) <= Constants.AmpBar.ERROR_OF_MARGIN;
+        double motorPosition = pivotEncoder.getPosition();
+        return Math.abs(motorPosition - pivotMotorSetpoint) <= Constants.AmpBar.ERROR_OF_MARGIN;
     }
 
     public void periodic() {
