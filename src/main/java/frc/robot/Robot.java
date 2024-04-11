@@ -177,8 +177,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         autoCommand = null;
-        climber.periodic();
         drive.periodic();
+        climber.periodic();
     }
 
     @Override

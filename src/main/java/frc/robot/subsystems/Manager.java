@@ -62,7 +62,6 @@ public class Manager {
 
         if (state == ManagerStates.IDLE) {
             resetIntakeTimer.start();
-            ampBar.setState(AmpBarStates.IN);
 
             if (resetIntakeTimer.get() > Constants.Shooter.RESET_INTAKE_TIME) {
                 intake.resetPivotMotor();
@@ -90,6 +89,8 @@ public class Manager {
                 reset();
                 state = ManagerStates.INTAKE_STUCK;
             }
+
+            ampBar.setState(AmpBarStates.IN);
 
             stateString = "Idle";
         } else if (state == ManagerStates.INTAKING) {

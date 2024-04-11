@@ -40,12 +40,12 @@ public class AmpBar {
     }
 
     public void setState(AmpBarStates state) {
-
-        if (robot.isClimbing()) {
-            state = AmpBarStates.OUT;
-        } else {
-            this.state = state;
-        }
+         if (robot.isClimbing()) {
+             this.state = AmpBarStates.OUT;
+             System.out.println("Amp bar not going out");
+         } else {
+             this.state = state;
+         }
     }
 
     public boolean atSetPoint() {
@@ -54,6 +54,7 @@ public class AmpBar {
     }
 
     public void periodic() {
+        System.out.println("periodic running");
         if (state == AmpBarStates.SHOOTING) {
             pivotMotorSetpoint = Constants.AmpBar.OUT;
             wheelsMotor.set(Constants.AmpBar.WHEEL_SPEED);
@@ -64,7 +65,7 @@ public class AmpBar {
             wheelsMotor.set(0);
             stateString = "Amp Bar In";
         } else if (state == AmpBarStates.OUT) {
-            pivotMotorSetpoint = Constants.AmpBar.IN;
+            pivotMotorSetpoint = Constants.AmpBar.OUT;
             wheelsMotor.set(0);
             stateString = "Amp Bar Out";
         }
