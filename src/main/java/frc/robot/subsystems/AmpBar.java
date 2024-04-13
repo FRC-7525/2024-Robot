@@ -42,7 +42,7 @@ public class AmpBar {
     public void setState(AmpBarStates state) {
          if (robot.isClimbing()) {
              this.state = AmpBarStates.OUT;
-             System.out.println("Amp bar not going out");
+             //System.out.println("Amp bar not going out");
          } else {
              this.state = state;
          }
@@ -54,7 +54,6 @@ public class AmpBar {
     }
 
     public void periodic() {
-        System.out.println("periodic running");
         if (state == AmpBarStates.SHOOTING) {
             pivotMotorSetpoint = Constants.AmpBar.OUT;
             wheelsMotor.set(Constants.AmpBar.WHEEL_SPEED);

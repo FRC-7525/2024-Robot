@@ -144,6 +144,8 @@ public class Manager {
                 shooterTimer.start();
 
                 if (shooterTimer.get() > Constants.AmpBar.AMP_SHOOTING_TIME) {
+                    shooterTimer.stop();
+                    shooterTimer.reset();
                     state = ManagerStates.IDLE;
                     reset();
                 }
@@ -168,6 +170,8 @@ public class Manager {
                 speedUpTimer.start();
                 intake.setState(IntakeStates.INTAKING);
                 if (speedUpTimer.get() > Constants.Intake.SPINNING_UP_INTAKE_TIME) {
+                    speedUpTimer.stop();
+                    speedUpTimer.reset();
                     intake.setState(IntakeStates.OFF);
                 }
             }
