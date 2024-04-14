@@ -114,7 +114,7 @@ public final class Constants {
         public static final double FEEDING_SPEED = -0.1;
         public static final double WHEEL_SPEED = -0.5;
         public static final double ERROR_OF_MARGIN = 0.1; // TODO: Tune, needs testing (0.05-1 is probably ideal)
-        public static final double AMP_SHOOTING_TIME = 2.0; // TODO: Tune, can be significantly shortened
+        public static final double AMP_SHOOTING_TIME = 1; // TODO: Tune, can be significantly shortened
         public static final double AMP_CURRENT_LIMIT = 2.5;
     }
   
