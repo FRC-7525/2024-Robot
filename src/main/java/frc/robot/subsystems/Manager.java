@@ -16,6 +16,7 @@ enum ManagerStates {
     START_SPINNING,
     INTAKE_STUCK,
     SPINNING_AND_INTAKING,
+    AMP_HOLDING,
     AMP_HANDOFF
 }
 
@@ -145,16 +146,19 @@ public class Manager {
             if (ampBar.atSetPoint()) {
                 intake.setState(IntakeStates.FEEDING);
                 if (ampBar.holdingNote()) {
-                    if (robot.controller.getYButtonPressed() || autoAmp) {
-                        state = ManagerStates.SCORING_AMP;
-                        autoAmp = false;
-                        reset();
-                    }
-                    shooter.setState(ShootingStates.OFF);
-                    intake.setState(IntakeStates.OFF);
+                    state = ManagerStates.AMP_HOLDING;
                 }
             }
             stateString = "Handoff to Amp Bar";
+        } else if (state == ManagerStates.AMP_HOLDING) {
+            ampBar.setState(AmpBarStates.HOLDING_NOTE);
+            if (robot.controller.getYButtonPressed() || autoAmp) {
+                state = ManagerStates.SCORING_AMP;
+                autoAmp = false;
+                reset();
+            }
+            shooter.setState(ShootingStates.OFF);
+            intake.setState(IntakeStates.OFF);
         } else if (state == ManagerStates.SCORING_AMP) {
             ampBar.setState(AmpBarStates.SHOOTING);
             shooterTimer.start();

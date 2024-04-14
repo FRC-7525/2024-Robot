@@ -18,6 +18,7 @@ public class AmpBar {
         SHOOTING,
         OUT,
         FEEDING,
+        HOLDING_NOTE
     }
 
     private AmpBarStates state = AmpBarStates.IN;
@@ -26,7 +27,7 @@ public class AmpBar {
     private final TalonFX wheelsMotor = new TalonFX(38);
 
     // Plug it into channel 7 or something terrible will happen
-    DigitalInput beamBreak = new DigitalInput(7);
+    DigitalInput beamBreak = new DigitalInput(9);
 
     RelativeEncoder pivotEncoder = leftMotor.getEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
@@ -47,7 +48,8 @@ public class AmpBar {
     }
 
     public boolean holdingNote() {
-        return beamBreak.get();
+        // return beamBreak.get();
+        return wheelsMotor.getSupplyCurrent().getValueAsDouble() > Constants.AmpBar.AMP_CURRENT_LIMIT;
     }
 
     public void setState(AmpBarStates state) {
@@ -86,6 +88,10 @@ public class AmpBar {
                 wheelMotorSpeedPoint = 0;
             }
             stateString = "Getting Fed";
+        } else if (state == AmpBarStates.HOLDING_NOTE) {
+            pivotMotorSetpoint = Constants.AmpBar.OUT_SHOOTING;
+            wheelMotorSpeedPoint = 0;
+            stateString = "Holding a Note";
         }
 
         leftMotor.set(controller.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
@@ -105,5 +111,6 @@ public class AmpBar {
         SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getPosition());
         SmartDashboard.putNumber("Right Motor", rightMotor.getEncoder().getPosition());
         SmartDashboard.putString("Amp Bar State", stateString);
+        SmartDashboard.putNumber("Amp Bar Current", wheelsMotor.getSupplyCurrent().getValueAsDouble());
     }
 }
