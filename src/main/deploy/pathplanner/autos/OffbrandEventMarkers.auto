@@ -94,44 +94,6 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SRC"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Spin and Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "5 Note RCS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot Near Speaker"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
                   "pathName": "5 Note SFL"
                 }
               },
@@ -167,6 +129,44 @@
           "type": "named",
           "data": {
             "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 Note SRC"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin and Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 Note RCS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Near Speaker"
+                }
+              }
+            ]
           }
         }
       ]
