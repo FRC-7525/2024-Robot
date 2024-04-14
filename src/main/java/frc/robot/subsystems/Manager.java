@@ -145,7 +145,6 @@ public class Manager {
             ampBar.setState(AmpBarStates.FEEDING);
             intake.setState(IntakeStates.OFF);
             shooter.setState(ShootingStates.SCORING_AMP);
-            // Probably a way not to have 2 nested if statements, not that serious tho
             if (ampBar.atSetPoint()) {
                 intake.setState(IntakeStates.FEEDING);
                 if (ampBar.holdingNote()) {
