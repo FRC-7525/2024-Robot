@@ -15,7 +15,8 @@ enum ManagerStates {
     SCORING_AMP,
     START_SPINNING,
     INTAKE_STUCK,
-    SPINNING_AND_INTAKING
+    SPINNING_AND_INTAKING,
+    AMP_HANDOFF
 }
 
 public class Manager {
@@ -83,7 +84,7 @@ public class Manager {
             } else if (robot.controller.getYButtonPressed()) {
                 shooterTimer.reset();
                 reset();
-                state = ManagerStates.SCORING_AMP;
+                state = ManagerStates.AMP_HANDOFF;
 
             } else if (robot.secondaryController.getBButtonPressed()) {
                 reset();
@@ -135,22 +136,31 @@ public class Manager {
                 reset();
             }
             stateString = "Shooting";
-        } else if (state == ManagerStates.SCORING_AMP) {
-            ampBar.setState(AmpBarStates.SHOOTING);
+        } else if (state == ManagerStates.AMP_HANDOFF) { 
+            ampBar.setState(AmpBarStates.FEEDING);
             intake.setState(IntakeStates.OFF);
             shooter.setState(ShootingStates.SCORING_AMP);
+            // Probably a way not to have 2 nested if statements, not that serious tho
             if (ampBar.atSetPoint()) {
                 intake.setState(IntakeStates.FEEDING);
-                shooterTimer.start();
-
-                if (shooterTimer.get() > Constants.AmpBar.AMP_SHOOTING_TIME) {
-                    shooterTimer.stop();
-                    shooterTimer.reset();
-                    state = ManagerStates.IDLE;
-                    reset();
+                if (ampBar.holdingNote()) {
+                    if (robot.controller.getYButtonPressed()) {
+                        state = ManagerStates.SCORING_AMP;
+                    }
+                    // See if this does bad stuff
+                    shooter.setState(ShootingStates.OFF);
+                    intake.setState(IntakeStates.OFF);
                 }
             }
-
+        } else if (state == ManagerStates.SCORING_AMP) {
+            ampBar.setState(AmpBarStates.SHOOTING);
+            shooterTimer.start();
+            if (shooterTimer.get() > Constants.AmpBar.AMP_SHOOTING_TIME) {
+                shooterTimer.stop();
+                shooterTimer.reset();
+                state = ManagerStates.IDLE;
+                reset();
+            }
             stateString = "Amp Scoring"; 
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);

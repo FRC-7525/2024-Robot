@@ -31,6 +31,7 @@ public class AmpBar {
     RelativeEncoder pivotEncoder = leftMotor.getEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
     double wheelMotorSpeedPoint = 0;
+    boolean holdingNote = false;
     String stateString = "";
     Robot robot = null;
 
@@ -45,10 +46,13 @@ public class AmpBar {
         rightMotor.setIdleMode(IdleMode.kCoast);
     }
 
+    public boolean holdingNote() {
+        return beamBreak.get();
+    }
+
     public void setState(AmpBarStates state) {
          if (robot.isClimbing()) {
              this.state = AmpBarStates.OUT;
-             //System.out.println("Amp bar not going out");
          } else {
              this.state = state;
          }
@@ -62,7 +66,10 @@ public class AmpBar {
     public void periodic() {
         if (state == AmpBarStates.SHOOTING) {
             pivotMotorSetpoint = Constants.AmpBar.OUT_SHOOTING;
-            wheelMotorSpeedPoint = Constants.AmpBar.WHEEL_SPEED;
+            wheelMotorSpeedPoint = 0;
+            if (atSetPoint()) {
+                wheelMotorSpeedPoint = Constants.AmpBar.WHEEL_SPEED;
+            }
             stateString = "Shooting Amp";
         } else if (state == AmpBarStates.IN) {
             pivotMotorSetpoint = Constants.AmpBar.IN;
@@ -75,7 +82,7 @@ public class AmpBar {
         } else if (state == AmpBarStates.FEEDING) {
             pivotMotorSetpoint = Constants.AmpBar.OUT;
             wheelMotorSpeedPoint = Constants.AmpBar.FEEDING_SPEED;
-            if (beamBreak.get()) {
+            if (holdingNote()) {
                 wheelMotorSpeedPoint = 0;
             }
             stateString = "Getting Fed";
