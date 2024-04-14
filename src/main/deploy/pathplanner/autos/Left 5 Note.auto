@@ -18,50 +18,6 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 Note SLC"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Spin and Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "5 Note LCS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Speeding Up"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
                   "pathName": "5 Note SMC"
                 }
               },
@@ -185,6 +141,44 @@
           "type": "named",
           "data": {
             "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 Note SLC"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin and Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 Note LCS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Near Speaker"
+                }
+              }
+            ]
           }
         }
       ]

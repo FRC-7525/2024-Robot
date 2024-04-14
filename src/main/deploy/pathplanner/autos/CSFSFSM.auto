@@ -18,50 +18,6 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "New Shoot to Right Note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Spin and Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "New Right Note to Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Speeding Up"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooting"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
                   "pathName": "SRF"
                 }
               },
@@ -126,6 +82,50 @@
                 "type": "path",
                 "data": {
                   "pathName": "FRIS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speeding Up"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Shoot to Right Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin and Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Right Note to Shoot"
                 }
               },
               {
