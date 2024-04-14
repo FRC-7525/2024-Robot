@@ -18,7 +18,7 @@ public class AmpBar {
         SHOOTING,
         OUT,
         FEEDING,
-        HOLDING_NOTE
+        HOLDING_NOTE,
     }
 
     private AmpBarStates state = AmpBarStates.IN;
@@ -82,7 +82,7 @@ public class AmpBar {
             wheelMotorSpeedPoint = 0;
             stateString = "Amp Bar Out";
         } else if (state == AmpBarStates.FEEDING) {
-            pivotMotorSetpoint = Constants.AmpBar.OUT;
+            pivotMotorSetpoint = Constants.AmpBar.OUT_FEEDING;
             wheelMotorSpeedPoint = Constants.AmpBar.FEEDING_SPEED;
             if (holdingNote()) {
                 wheelMotorSpeedPoint = 0;
@@ -93,7 +93,6 @@ public class AmpBar {
             wheelMotorSpeedPoint = 0;
             stateString = "Holding a Note";
         }
-
         leftMotor.set(controller.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
         wheelsMotor.set(wheelMotorSpeedPoint);
     }

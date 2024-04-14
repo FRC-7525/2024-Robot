@@ -52,7 +52,7 @@ public final class Constants {
 
         public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
-        public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
+        public static final PIDConstants alignmentRotationPID = new PIDConstants(4, 0, 0.1);
 
         public static final double translationErrorMargin = 0.05;
         public static final double rotationErrorMargin = Math.toRadians(3);
@@ -110,6 +110,7 @@ public final class Constants {
     public static final class AmpBar {
         public static final double IN = 0;
         public static final double OUT = -0.717;
+        public static final double OUT_FEEDING = -0.625;
         public static final double OUT_SHOOTING = -0.717; // TODO: Tune pls
         public static final double FEEDING_SPEED = -0.1;
         public static final double WHEEL_SPEED = -0.5;

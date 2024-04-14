@@ -199,6 +199,7 @@ public class Drive extends SubsystemBase {
         }
 
         if (driveStates != DriveStates.TELEOP_ALIGNING) {
+            setHeadingCorrection(robot.secondaryController.getRightStickButton());
             if (robot.controller.getStartButtonPressed()) {
                 swerveDrive.zeroGyro();
                 System.out.println("Gyro Zeroed");
@@ -216,6 +217,13 @@ public class Drive extends SubsystemBase {
                 xMovement *= Constants.Drive.fastTranslationMultiplier;
                 yMovement *= Constants.Drive.fastTranslationMultiplier;
                 rotation *= Constants.Drive.fastRotationMultiplier;
+            }
+
+            if (robot.controller.getRightStickButton()) {
+                rotation = alignmentRotationPID.calculate(
+                    swerveDrive.getPose().getRotation().getRadians(), 
+                    Constants.Drive.redAmpPose.getRotation().getRadians()
+                );
             }
             swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         }   

@@ -32,6 +32,7 @@ public class Manager {
     Timer shooterTimer = new Timer();
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
+    Timer ampTimer = new Timer();
     Timer speedUpTimer = new Timer();
     boolean autoShoot = false;
     boolean autoAmp = false;
@@ -50,6 +51,8 @@ public class Manager {
         robot.controller.getRightBumper();
         resetIntakeTimer.stop();
         resetIntakeTimer.reset();
+        ampTimer.stop();
+        ampTimer.reset();
     }
 
     public void resetSecondary() {
@@ -151,7 +154,13 @@ public class Manager {
             }
             stateString = "Handoff to Amp Bar";
         } else if (state == ManagerStates.AMP_HOLDING) {
-            ampBar.setState(AmpBarStates.HOLDING_NOTE);
+            ampTimer.start();
+            ampBar.setState(AmpBarStates.FEEDING);
+            if (ampTimer.get() > 0.33) {
+                ampBar.setState(AmpBarStates.HOLDING_NOTE);
+                ampTimer.stop();
+            }
+
             if (robot.controller.getYButtonPressed() || autoAmp) {
                 state = ManagerStates.SCORING_AMP;
                 autoAmp = false;
