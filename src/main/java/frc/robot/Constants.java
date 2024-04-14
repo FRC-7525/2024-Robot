@@ -110,6 +110,8 @@ public final class Constants {
     public static final class AmpBar {
         public static final double IN = 0;
         public static final double OUT = -0.625;
+        public static final double OUT_SHOOTING = -0.725; // TODO: Tune pls
+        public static final double FEEDING_SPEED = 0.1;
         public static final double WHEEL_SPEED = -0.5;
         public static final double ERROR_OF_MARGIN = 0.1; // TODO: Tune, needs testing (0.05-1 is probably ideal)
         public static final double AMP_SHOOTING_TIME = 2.0; // TODO: Tune, can be significantly shortened

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -16,6 +17,7 @@ public class AmpBar {
         IN,
         SHOOTING,
         OUT,
+        FEEDING,
     }
 
     private AmpBarStates state = AmpBarStates.IN;
@@ -23,8 +25,12 @@ public class AmpBar {
     private final CANSparkMax leftMotor = new CANSparkMax(30, MotorType.kBrushless);
     private final TalonFX wheelsMotor = new TalonFX(38);
 
+    // Plug it into channel 7 or something terrible will happen
+    DigitalInput beamBreak = new DigitalInput(7);
+
     RelativeEncoder pivotEncoder = leftMotor.getEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
+    double wheelMotorSpeedPoint = 0;
     String stateString = "";
     Robot robot = null;
 
@@ -55,21 +61,28 @@ public class AmpBar {
 
     public void periodic() {
         if (state == AmpBarStates.SHOOTING) {
-            pivotMotorSetpoint = Constants.AmpBar.OUT;
-            wheelsMotor.set(Constants.AmpBar.WHEEL_SPEED);
+            pivotMotorSetpoint = Constants.AmpBar.OUT_SHOOTING;
+            wheelMotorSpeedPoint = Constants.AmpBar.WHEEL_SPEED;
             stateString = "Shooting Amp";
-
         } else if (state == AmpBarStates.IN) {
             pivotMotorSetpoint = Constants.AmpBar.IN;
-            wheelsMotor.set(0);
+            wheelMotorSpeedPoint = 0;
             stateString = "Amp Bar In";
         } else if (state == AmpBarStates.OUT) {
             pivotMotorSetpoint = Constants.AmpBar.OUT;
-            wheelsMotor.set(0);
+            wheelMotorSpeedPoint = 0;
             stateString = "Amp Bar Out";
+        } else if (state == AmpBarStates.FEEDING) {
+            pivotMotorSetpoint = Constants.AmpBar.OUT;
+            wheelMotorSpeedPoint = Constants.AmpBar.FEEDING_SPEED;
+            if (beamBreak.get()) {
+                wheelMotorSpeedPoint = 0;
+            }
+            stateString = "Getting Fed";
         }
 
         leftMotor.set(controller.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
+        wheelsMotor.set(wheelMotorSpeedPoint);
     }
 
     public void checkFaults() {
