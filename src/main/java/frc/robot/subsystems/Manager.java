@@ -150,11 +150,11 @@ public class Manager {
                         autoAmp = false;
                         reset();
                     }
-                    // See if this does bad stuff
                     shooter.setState(ShootingStates.OFF);
                     intake.setState(IntakeStates.OFF);
                 }
             }
+            stateString = "Handoff to Amp Bar";
         } else if (state == ManagerStates.SCORING_AMP) {
             ampBar.setState(AmpBarStates.SHOOTING);
             shooterTimer.start();
