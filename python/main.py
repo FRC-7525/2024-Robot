@@ -122,6 +122,7 @@ def log_smart_dashboard():
 
     # front camera vision pose
     log.log_double_array("Front Pose")
+    log.log_double_array("Side Pose")
 
     # battery voltage
     log.log_double("Battery Voltage")
