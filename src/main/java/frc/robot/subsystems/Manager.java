@@ -156,7 +156,7 @@ public class Manager {
         } else if (state == ManagerStates.AMP_HOLDING) {
             ampTimer.start();
             ampBar.setState(AmpBarStates.FEEDING);
-            if (ampTimer.get() > 0.33) {
+            if (ampTimer.get() > Constants.AmpBar.FEEDING_TIME) {
                 ampBar.setState(AmpBarStates.HOLDING_NOTE);
                 ampTimer.stop();
             }
@@ -246,11 +246,6 @@ public class Manager {
         reset();
         state = ManagerStates.START_SPINNING;
         autoShoot = true;
-    }
-
-    public void scoreAmp() {
-        reset();
-        state = ManagerStates.AMP_HANDOFF;
     }
 
     public void spinningUp() {
