@@ -51,6 +51,8 @@ public class Manager {
         robot.controller.getRightBumper();
         resetIntakeTimer.stop();
         resetIntakeTimer.reset();
+        speedUpTimer.reset();
+        speedUpTimer.stop();
         ampTimer.stop();
         ampTimer.reset();
     }
@@ -196,7 +198,6 @@ public class Manager {
                 intake.setState(IntakeStates.INTAKING);
                 if (speedUpTimer.get() > Constants.Intake.SPINNING_UP_INTAKE_TIME) {
                     speedUpTimer.stop();
-                    speedUpTimer.reset();
                     intake.setState(IntakeStates.OFF);
                 }
             }
