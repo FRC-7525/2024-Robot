@@ -105,8 +105,6 @@ public class Robot extends TimedRobot {
         chooser.addOption("Start Source, Close Source, Far Source, FM Source", "CSFSFSM");
         chooser.addOption("3 Center Line", "3 Center Line");
         // 5 Note Auto
-        chooser.addOption("5 Note Auto", "Optimized 5 Note Auto");
-        chooser.addOption("Faster 5 Note Auto", "Event Marker 5 Note");
         chooser.addOption("Left 5 Note", "Left 5 Note");
         chooser.addOption("5 Note, all close, far middle", "All Close + FM");
         chooser.addOption("Center 5 Note", "Center 5 Note");
