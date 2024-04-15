@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
 
         // 3 Note Autos
         chooser.addOption("3: Start Source | FR, FMS", "2 Far Right");
-        chooser.addOption("3: Start Amp, | CL, CM", "CloseTwoLeft");
+        chooser.addOption("3: Start Amp | CL, CM", "CloseTwoLeft");
         chooser.addOption("3: Start Amp, | CL, FL", "All Left");
 
         // 4 Note Autos
