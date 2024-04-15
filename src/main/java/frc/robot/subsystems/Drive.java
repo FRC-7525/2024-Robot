@@ -49,9 +49,6 @@ public class Drive extends SubsystemBase {
     DriveStates lastDriveState = DriveStates.FIELD_RELATIVE;
     Pose2d targetPose = new Pose2d(0, 0, new Rotation2d(0, 0));
 
-    // Orchestra sans;
-    // String megalovania = "full.chrp";
-
     PIDController alignmentXTranslationPID = new PIDController(
         Constants.Drive.alignmentXTranslationPID.kP, 
         Constants.Drive.alignmentXTranslationPID.kI,

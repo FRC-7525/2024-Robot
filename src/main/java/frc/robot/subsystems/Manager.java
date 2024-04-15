@@ -161,12 +161,9 @@ public class Manager {
             intake.setState(IntakeStates.OFF);
             ampBar.setState(AmpBarStates.IN);
 
-            System.out.println("It be spinning");
             if (autoShoot) {
-                System.out.println("Auto shooting");
                 if (shooter.atSetPoint(Constants.Shooter.SPEED)) { // Ensures the shooter motors are at setpoint before shooting.
                     state = ManagerStates.SHOOTING;
-                    System.out.println("Leaving spinning");
                     reset();
                 }
             } else if (robot.controller.getAButtonPressed()) {
