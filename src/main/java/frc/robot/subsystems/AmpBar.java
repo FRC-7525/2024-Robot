@@ -94,9 +94,9 @@ public class AmpBar {
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("left ampbar motor good",
+        SmartDashboard.putBoolean("Left ampbar motor good",
                 leftMotor.getMotorTemperature() > 1 && leftMotor.getFaults() == 0);
-        SmartDashboard.putBoolean("right ampbar motor good",
+        SmartDashboard.putBoolean("Right ampbar motor good",
                 rightMotor.getMotorTemperature() > 1 && rightMotor.getFaults() == 0);
         SmartDashboard.putBoolean("amp wheel motor good", wheelsMotor.getFaultField().getValue() == 0 && wheelsMotor.getDeviceTemp().getValueAsDouble() > 0);
     }
