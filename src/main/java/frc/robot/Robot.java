@@ -2,8 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-// alex was here >:3
-
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -22,8 +20,6 @@ import frc.robot.subsystems.Manager;
 
 import java.util.Optional;
 
-import com.ctre.phoenix.music.Orchestra;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
