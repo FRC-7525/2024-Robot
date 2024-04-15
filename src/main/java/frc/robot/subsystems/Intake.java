@@ -22,7 +22,8 @@ enum IntakeStates {
     PUSH_OUT,
     AMP_SCORING,
     GOING_TO_AMP,
-    INTAKE_STUCK
+    INTAKE_STUCK,
+    AUTO_CENTERING
 }
 
 public class Intake {
@@ -108,6 +109,10 @@ public class Intake {
             pivotMotorSetpoint = Constants.Intake.OFF;
             intakeMotorSetpoint = Constants.Intake.ON;
             currentState = "INTAKING STUCK NOTE";
+        } else if (states == IntakeStates.AUTO_CENTERING) {
+            pivotMotorSetpoint = Constants.Intake.OFF;
+            intakeMotorSetpoint = Constants.Intake.SLOW_CENTERING;
+            currentState = "CENTERING NOTE AUTO";
         }
 
         if (robot.secondaryController.getBackButtonPressed()) {

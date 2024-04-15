@@ -75,6 +75,7 @@ public final class Constants {
         public static final double SUPPLY_CURRENT_MINIMUM = 25;
         public static final double CURRENT_SENSING_TIMER = 0.5;
         public static final double SPINNING_UP_INTAKE_TIME = 0.2;
+        public static final double SLOW_CENTERING = 0.2;
     }
 
     public static final class Shooter {
