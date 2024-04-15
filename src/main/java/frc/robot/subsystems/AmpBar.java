@@ -26,9 +26,6 @@ public class AmpBar {
     private final CANSparkMax leftMotor = new CANSparkMax(30, MotorType.kBrushless);
     private final TalonFX wheelsMotor = new TalonFX(38);
 
-    // Plug it into channel 7 or something terrible will happen
-    DigitalInput beamBreak = new DigitalInput(9);
-
     RelativeEncoder pivotEncoder = leftMotor.getEncoder();
     double pivotMotorSetpoint = Constants.AmpBar.IN;
     double wheelMotorSpeedPoint = 0;
@@ -48,7 +45,6 @@ public class AmpBar {
     }
 
     public boolean holdingNote() {
-        // return beamBreak.get();
         return wheelsMotor.getSupplyCurrent().getValueAsDouble() > Constants.AmpBar.AMP_CURRENT_LIMIT;
     }
 
