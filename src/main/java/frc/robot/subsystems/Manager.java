@@ -134,13 +134,20 @@ public class Manager {
             shooterTimer.start();
             intake.setState(IntakeStates.FEEDING);
             ampBar.setState(AmpBarStates.IN);
-
-            if (shooterTimer.get() > (DriverStation.isAutonomous() ? Constants.Shooter.AUTO_SHOOTER_TIME : Constants.Shooter.SHOOTER_TIME)) {
+            System.out.println("shooting");
+            if (DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.AUTO_SHOOTER_TIME) {
+                shooterTimer.stop();
+                shooterTimer.reset();
+                state = ManagerStates.IDLE;
+                autoShoot = false;
+                reset();
+            } else if (!DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
                 reset();
             }
+    
             stateString = "Shooting";
         } else if (state == ManagerStates.AMP_HANDOFF) { 
             ampBar.setState(AmpBarStates.FEEDING);
@@ -186,7 +193,7 @@ public class Manager {
                 if (shooter.atSetPoint(Constants.Shooter.SPEED)) { // Ensures the shooter motors are at setpoint before shooting.
                     state = ManagerStates.SHOOTING;
                     reset();
-                }  
+                }
             } else if (robot.controller.getAButtonPressed()) {
                 autoShoot = true;
                 reset();
@@ -236,6 +243,7 @@ public class Manager {
     // Functions for Auto Commands
     public void intakingWhileSpinning() {
         state = ManagerStates.SPINNING_AND_INTAKING;
+        autoShoot = true;
     }
 
     public void intaking() {
@@ -253,6 +261,10 @@ public class Manager {
         state = ManagerStates.START_SPINNING;
         speedUpTimer.reset();
         autoShoot = false;
+    }
+
+    public boolean currentlySpinningUp() {
+        return state == ManagerStates.START_SPINNING;
     }
 
     public void returnToIdle() {

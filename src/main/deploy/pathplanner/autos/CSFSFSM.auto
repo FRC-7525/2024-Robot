@@ -16,15 +16,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Spin and Intake"
+                  "pathName": "SRF"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "New Shoot to Left Note"
+                  "name": "Intaking"
                 }
               }
             ]
@@ -43,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "New Left note to Shoot"
+                  "pathName": "RFS"
                 }
               }
             ]
@@ -68,7 +68,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCenterFromLeft"
+                  "pathName": "SFRI"
                 }
               }
             ]
@@ -79,15 +79,59 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "FRIS"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Speeding Up"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCenterToLeftShoot"
+                  "pathName": "New Shoot to Right Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin and Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "New Right Note to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Speeding Up"
                 }
               }
             ]
@@ -102,6 +146,6 @@
       ]
     }
   },
-  "folder": "3 Notes",
+  "folder": "New Autos",
   "choreoAuto": false
 }

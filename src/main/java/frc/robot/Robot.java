@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.ShootNearSpeaker;
 import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
@@ -63,51 +64,36 @@ public class Robot extends TimedRobot {
         NamedCommands.registerCommand("Return To Idle", autoCommands.returnToIdle());
         NamedCommands.registerCommand("Speeding Up", autoCommands.startSpinningUp());
         NamedCommands.registerCommand("Spin and Intake", autoCommands.spinAndIntake());
-
-        // TODO: Score Drive Backwards (2-17)
-        // TODO: 2 note autos (score any close note) (2-21)
-        // TODO: 3 note autos (score any 2 close notes) (2-23)
-        // TODO: 3 note autos (score 1 close, 1 far) (2-24)
-        // TODO: 4 note auto (all 3 close) (2-28)
-        // TODO: 4 note auto (2 close and 1 far on the left) (2-28)
-        // TODO: 4 note auto (2 close and 1 far on the right) (2-28)
-        // TODO: 5 note auto (all 3 close and 1 far) (3-2)
+        NamedCommands.registerCommand("Shoot Near Speaker", new ShootNearSpeaker(this));
 
         // Misc Autos
-        chooser.addOption("0: start anywhere no vision, cross line", "Drive Forwards");
-        chooser.addOption("Do Nothing", "Do Nothing");
-        chooser.addOption("1: Start Mid, score preload, cross line", "Drive Backwards + Score");
-        // chooser.addOption("PID Tuning Auto", "PID Tuning Auto");
-        // Choreo Autos (not running these)
-        /*
-         * chooser.addOption("2 Note Choreo", "Optimized 2 Note");
-         * chooser.addOption("3 Note Choreo", "Optimized 3 Note");
-         * chooser.addOption("4 Note Choreo", "Optimized 4 Note");
-         */
+        chooser.addOption("0: Start Anywhere | Cross Line", "Drive Forwards");
+        chooser.addOption("0: Start Anywhere | Do Nothing", "Do Nothing");
+        
+        // 1 Note Autos
+        chooser.addOption("1: Start Middle | Preload", "Drive Backwards + Score");
+        
         // 2 Note Autos
-        chooser.addOption("2: Start Left (angled), Close Left", "Left Note");
-        chooser.addOption("2: Start Mid, Close Middle", "Middle Note");
-        chooser.addOption("2: Start Right (angled), Close Right", "Right Note");
+        chooser.addOption("2: Start Amp | CA", "Left Note");
+        chooser.addOption("2: Start Middle | CM", "Middle Note");
+        chooser.addOption("2: Start Source | CS", "Right Note");
+
         // 3 Note Autos
-        // chooser.addOption("Left + Mid", "Left + Mid"); (Un-used)
-        // chooser.addOption("Mid + Right", "Mid + Right"); (Un- used)
-        // chooser.addOption("Center Left + Left", "Center Left + Left"); (Un-used)
-        // chooser.addOption("Right + Center Right", "Right + Center Right"); (Un-used)
-        // chooser.addOption("Start Left", "Mid + Center Left"); (Un-used)
-        chooser.addOption("Start Right, Far Right, Far Right-ish", "2 Far Right");
-        chooser.addOption("Start Left, Left Close, Mid Close", "CloseTwoLeft");
-        chooser.addOption("Start Left, Close Left, Far Left", "All Left");
+        chooser.addOption("3: Start Source | FR, FMS", "2 Far Right");
+        chooser.addOption("3: Start Amp | CL, CM", "CloseTwoLeft");
+        chooser.addOption("3: Start Amp | CL, FL", "All Left");
 
         // 4 Note Autos
-        chooser.addOption("All Close", "All Close");
-        // chooser.addOption("2 Close + Right Far", "2 Close + Right Far"); (Impossible)
-        chooser.addOption("Start Mid, Left Close, Mid Close, Left Far", "2 Close + Left Far");
-        // chooser.addOption("Mid Note + 2 Center Line", "Mid Note + 2 Center Line");
-        // (Impossible)
-        chooser.addOption("Start Mid, Close left, Close Mid, Far Left", "Optimized 4 Note Auto");
+        chooser.addOption("4: Start Middle | All Close", "All Close");
+        chooser.addOption("4: Start Middle | CA, CM, FA", "Optimized 4 Note Auto");
+        chooser.addOption("4: Start Source | CS, FS, FMS", "CSFSFSM");
+        chooser.addOption("4: Start Source | FS, FMS, FM", "3 Center Line");
+
         // 5 Note Auto
-        chooser.addOption("5 Note Auto", "Optimized 5 Note Auto");
-        chooser.addOption("Faster 5 Note Auto", "Event Marker 5 Note");
+        chooser.addOption("5: Start Middle | CA, CM, FL, FMA", "Left 5 Note");
+        chooser.addOption("5: Start Middle | All Close, FM", "All Close + FM");
+        chooser.addOption("5: Start Middle | CS, MC, FM, FMA", "Center 5 Note");
+        chooser.addOption("5: Start Middle | All Close, FA", "OffbrandEventMarkers");
 
         SmartDashboard.putData("Path Chooser", chooser);
     }
