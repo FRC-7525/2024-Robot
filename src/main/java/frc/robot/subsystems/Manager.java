@@ -35,7 +35,6 @@ public class Manager {
     Timer ampTimer = new Timer();
     Timer speedUpTimer = new Timer();
     boolean autoShoot = false;
-    boolean autoAmp = false;
 
     public Manager(Robot robot) {
         this.robot = robot;
@@ -162,9 +161,8 @@ public class Manager {
                 ampTimer.stop();
             }
 
-            if (robot.controller.getYButtonPressed() || autoAmp) {
+            if (robot.controller.getYButtonPressed()) {
                 state = ManagerStates.SCORING_AMP;
-                autoAmp = false;
                 reset();
             }
             shooter.setState(ShootingStates.OFF);
@@ -252,7 +250,6 @@ public class Manager {
 
     public void scoreAmp() {
         reset();
-        autoAmp = true;
         state = ManagerStates.AMP_HANDOFF;
     }
 

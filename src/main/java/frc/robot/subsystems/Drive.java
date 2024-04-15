@@ -189,11 +189,7 @@ public class Drive extends SubsystemBase {
             driveToPosePID(targetPose);
             if (nearSetPose(targetPose)) {
                 System.out.println("near target pose");
-                if (targetPose == Constants.Drive.redAmpPose || targetPose == Constants.Drive.blueAmpPose) {
-                    robot.manager.scoreAmp();
-                } else {
-                    robot.manager.shooting();
-                }
+                robot.manager.shooting();
                 driveStates = lastDriveState;
             }
         }
@@ -227,16 +223,8 @@ public class Drive extends SubsystemBase {
             }
             swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         }   
-
-        if (robot.secondaryController.getStartButtonPressed()) {
-            robot.manager.returnToIdle();
-            targetPose = 
-                DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
-                Constants.Drive.redAmpPose : 
-                Constants.Drive.blueAmpPose;
-            cacheState();
-            teleopAlign();
-        }  else if (robot.secondaryController.getRightBumperPressed()) {
+        
+        if (robot.secondaryController.getRightBumperPressed()) {
             robot.manager.returnToIdle();
             targetPose = 
                 DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
