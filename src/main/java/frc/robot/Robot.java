@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
         // 5 Note Auto
         chooser.addOption("5: Start Middle | CA, CM, FL, FMA", "Left 5 Note");
         chooser.addOption("5: Start Middle | All Close, FM", "All Close + FM");
-        chooser.addOption("5: Start Middle | CA, MC, FM, FMA", "Center 5 Note");
+        chooser.addOption("5: Start Middle | CS, MC, FM, FMA", "Center 5 Note");
         chooser.addOption("5: Start Middle | All Close, FA", "OffbrandEventMarkers");
 
         SmartDashboard.putData("Path Chooser", chooser);
