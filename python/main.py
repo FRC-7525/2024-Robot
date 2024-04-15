@@ -6,7 +6,7 @@ import csv
 from pathlib import Path
 
 SLEEP_TIME = 0.1
-CSV_FOLDER = "C:\\Users\\Owner\\2024-Robot\\logs"
+CSV_FOLDER = "C:\\Code\\2024-Robot\\logs"
 
 class LogLevels:
     SILENT = 0

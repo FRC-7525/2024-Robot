@@ -54,7 +54,7 @@ public final class Constants {
 
         public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
-        public static final PIDConstants alignmentRotationPID = new PIDConstants(4, 0, 0.1);
+        public static final PIDConstants alignmentRotationPID = new PIDConstants(4.5, 0, 0.1);
 
         public static final double translationErrorMargin = 0.05; // In Meters
         public static final double rotationErrorMargin = Math.toRadians(3);
