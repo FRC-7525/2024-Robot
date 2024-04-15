@@ -85,7 +85,6 @@ public class Robot extends TimedRobot {
 
         // 4 Note Autos
         chooser.addOption("4: Start Middle | All Close", "All Close");
-        chooser.addOption("4: Start Middle | CA, CM, FA", "2 Close + Left Far");
         chooser.addOption("4: Start Middle | CA, CM, FA", "Optimized 4 Note Auto");
         chooser.addOption("4: Start Source | CS, FS, FMS", "CSFSFSM");
         chooser.addOption("4: Start Source | FS, FMS, FM", "3 Center Line");
