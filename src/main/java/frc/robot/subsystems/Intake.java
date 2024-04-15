@@ -94,16 +94,6 @@ public class Intake {
             pivotMotorSetpoint = Constants.Intake.DOWN;
             intakeMotorSetpoint = Constants.Intake.REVERSE;
             currentState = "OUTTAKING";
-        } else if (states == IntakeStates.PULL_IN) {
-            pivotController = inPIDController;
-            pivotMotorSetpoint = Constants.Intake.OFF;
-            intakeMotorSetpoint = Constants.Intake.ON_SLOW;
-            currentState = "PULL IN";
-        } else if (states == IntakeStates.PUSH_OUT) {
-            pivotController = inPIDController;
-            pivotMotorSetpoint = Constants.Intake.OFF;
-            intakeMotorSetpoint = Constants.Intake.REVERSE_SLOW;
-            currentState = "PUSH OUT";
         } else if (states == IntakeStates.GOING_TO_AMP) {
             pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;

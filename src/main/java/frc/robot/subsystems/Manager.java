@@ -1,14 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Robot;
 import frc.robot.subsystems.AmpBar.AmpBarStates;
 import frc.robot.Constants;
@@ -21,7 +15,9 @@ enum ManagerStates {
     SCORING_AMP,
     START_SPINNING,
     INTAKE_STUCK,
-    SPINNING_AND_INTAKING
+    SPINNING_AND_INTAKING,
+    AMP_HOLDING,
+    AMP_HANDOFF
 }
 
 public class Manager {
@@ -36,6 +32,7 @@ public class Manager {
     Timer shooterTimer = new Timer();
     Timer resetIntakeTimer = new Timer();
     Timer currentSensingTimer = new Timer();
+    Timer ampTimer = new Timer();
     Timer speedUpTimer = new Timer();
     boolean autoShoot = false;
 
@@ -53,6 +50,10 @@ public class Manager {
         robot.controller.getRightBumper();
         resetIntakeTimer.stop();
         resetIntakeTimer.reset();
+        speedUpTimer.reset();
+        speedUpTimer.stop();
+        ampTimer.stop();
+        ampTimer.reset();
     }
 
     public void resetSecondary() {
@@ -68,7 +69,6 @@ public class Manager {
 
         if (state == ManagerStates.IDLE) {
             resetIntakeTimer.start();
-            ampBar.setState(AmpBarStates.IN);
 
             if (resetIntakeTimer.get() > Constants.Shooter.RESET_INTAKE_TIME) {
                 intake.resetPivotMotor();
@@ -90,12 +90,14 @@ public class Manager {
             } else if (robot.controller.getYButtonPressed()) {
                 shooterTimer.reset();
                 reset();
-                state = ManagerStates.SCORING_AMP;
+                state = ManagerStates.AMP_HANDOFF;
 
             } else if (robot.secondaryController.getBButtonPressed()) {
                 reset();
                 state = ManagerStates.INTAKE_STUCK;
             }
+
+            ampBar.setState(AmpBarStates.IN);
 
             stateString = "Idle";
         } else if (state == ManagerStates.INTAKING) {
@@ -140,20 +142,40 @@ public class Manager {
                 reset();
             }
             stateString = "Shooting";
-        } else if (state == ManagerStates.SCORING_AMP) {
-            shooter.setState(ShootingStates.SCORING_AMP);
-            ampBar.setState(AmpBarStates.OUT);
+        } else if (state == ManagerStates.AMP_HANDOFF) { 
+            ampBar.setState(AmpBarStates.FEEDING);
             intake.setState(IntakeStates.OFF);
-            if (ampBar.nearSetpoint() && shooter.atSetPoint(Constants.Shooter.AMP_SPEED)) {
+            shooter.setState(ShootingStates.SCORING_AMP);
+            if (ampBar.atSetPoint()) {
                 intake.setState(IntakeStates.FEEDING);
-                shooterTimer.start();
-                if (shooterTimer.get() > Constants.Shooter.AMP_TIME) {
-                    shooterTimer.stop();
-                    shooterTimer.reset(); 
-                    state = ManagerStates.IDLE;
-                    reset();
+                if (ampBar.holdingNote()) {
+                    state = ManagerStates.AMP_HOLDING;
                 }
-            } 
+            }
+            stateString = "Handoff to Amp Bar";
+        } else if (state == ManagerStates.AMP_HOLDING) {
+            ampTimer.start();
+            ampBar.setState(AmpBarStates.FEEDING);
+            if (ampTimer.get() > Constants.AmpBar.FEEDING_TIME) {
+                ampBar.setState(AmpBarStates.HOLDING_NOTE);
+                ampTimer.stop();
+            }
+
+            if (robot.controller.getYButtonPressed()) {
+                state = ManagerStates.SCORING_AMP;
+                reset();
+            }
+            shooter.setState(ShootingStates.OFF);
+            intake.setState(IntakeStates.OFF);
+        } else if (state == ManagerStates.SCORING_AMP) {
+            ampBar.setState(AmpBarStates.SHOOTING);
+            shooterTimer.start();
+            if (shooterTimer.get() > Constants.AmpBar.AMP_SHOOTING_TIME) {
+                shooterTimer.stop();
+                shooterTimer.reset();
+                state = ManagerStates.IDLE;
+                reset();
+            }
             stateString = "Amp Scoring"; 
         } else if (state == ManagerStates.START_SPINNING) {
             shooter.setState(ShootingStates.SHOOTING);
@@ -173,6 +195,7 @@ public class Manager {
                 speedUpTimer.start();
                 intake.setState(IntakeStates.INTAKING);
                 if (speedUpTimer.get() > Constants.Intake.SPINNING_UP_INTAKE_TIME) {
+                    speedUpTimer.stop();
                     intake.setState(IntakeStates.OFF);
                 }
             }
@@ -223,11 +246,6 @@ public class Manager {
         reset();
         state = ManagerStates.START_SPINNING;
         autoShoot = true;
-    }
-
-    public void scoreAmp() {
-        reset();
-        state = ManagerStates.SCORING_AMP;
     }
 
     public void spinningUp() {

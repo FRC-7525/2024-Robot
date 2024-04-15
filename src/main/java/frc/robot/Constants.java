@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 
 public final class Constants {
     public static final int DPAD_UP = 0;
@@ -53,7 +52,7 @@ public final class Constants {
 
         public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
-        public static final PIDConstants alignmentRotationPID = new PIDConstants(3, 0, 0.1);
+        public static final PIDConstants alignmentRotationPID = new PIDConstants(4, 0, 0.1);
 
         public static final double translationErrorMargin = 0.05;
         public static final double rotationErrorMargin = Math.toRadians(3);
@@ -103,14 +102,22 @@ public final class Constants {
         public static final double MAX_SETPOINT = 120;
         public static final double ZEROING_SPEED = -0.15;
         public static final double RIGHT_CURRENT_MAX = 7;
-        public static final double LEFT_CURRENT_MAX = 12;
+        public static final double LEFT_CURRENT_MAX = 17;
         public static final double TRIGGER_DEADBAND = 0.1; // TODO: set
         public static final double DOWN = 13;
     }
 
     public static final class AmpBar {
-        public static final double IN = 0.45;
-        public static final double OUT = IN + 0.2506;
+        public static final double IN = 0;
+        public static final double OUT = -0.717;
+        public static final double OUT_FEEDING = -0.625;
+        public static final double OUT_SHOOTING = -0.717; // TODO: Tune pls
+        public static final double FEEDING_SPEED = -0.1;
+        public static final double WHEEL_SPEED = -0.5;
+        public static final double ERROR_OF_MARGIN = 0.1; // TODO: Tune, needs testing (0.05-1 is probably ideal)
+        public static final double AMP_SHOOTING_TIME = 1; // TODO: Tune, can be significantly shortened
+        public static final double AMP_CURRENT_LIMIT = 2.5;
+        public static final double FEEDING_TIME = 0.33;
     }
   
     public static final class Vision {

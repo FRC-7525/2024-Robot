@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -28,8 +27,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Robot extends TimedRobot {
@@ -37,7 +34,7 @@ public class Robot extends TimedRobot {
     public XboxController secondaryController = new XboxController(1);
     public Drive drive = new Drive(this);
     Vision vision = new Vision();
-    RGB rgb = new RGB(this);
+    //RGB rgb = new RGB(this);
     Climber climber = new Climber(this);
     AutoCommands autoCommands = new AutoCommands(this);
     public Manager manager = new Manager(this);
@@ -117,7 +114,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        rgb.periodic();
+        //rgb.periodic();
         manager.periodic();
         CommandScheduler.getInstance().run();
 
@@ -180,8 +177,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         autoCommand = null;
-        climber.periodic();
         drive.periodic();
+        climber.periodic();
     }
 
     @Override
@@ -191,6 +188,7 @@ public class Robot extends TimedRobot {
         manager.intake.setPivotMotorMode(IdleMode.kCoast);
         autoCommand = null;
         currentSelected = "";
+    
     }
 
     @Override
