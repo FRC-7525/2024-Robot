@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
         chooser.addOption("Left 5 Note", "Left 5 Note");
         chooser.addOption("5 Note, all close, far middle", "All Close + FM");
         chooser.addOption("Center 5 Note", "Center 5 Note");
-        chooser.addOption("Shoot Near Speaker 5 Note", "OffbrandEventMarkers");
+        chooser.addOption("Original 5 Note", "OffbrandEventMarkers");
 
         SmartDashboard.putData("Path Chooser", chooser);
     }
