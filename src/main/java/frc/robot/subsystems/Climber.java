@@ -55,8 +55,8 @@ public class Climber {
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Left Climb Motor Good", leftMotor.getFaults() == 0);
-        SmartDashboard.putBoolean("Right Climb Motor Good", rightMotor.getFaults() == 0);
+        SmartDashboard.putBoolean("Left Climb Motor Good", leftMotor.getFirmwareVersion() > 0 && leftMotor.getFaults() == 0);
+        SmartDashboard.putBoolean("Right Climb Motor Good", rightMotor.getFirmwareVersion() > 0 && rightMotor.getFaults() == 0);
     }
     
     //Positive power goes in, negative goes out

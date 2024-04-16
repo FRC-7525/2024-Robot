@@ -199,12 +199,7 @@ public class Manager {
                 reset();
             } 
             if (!autoShoot && DriverStation.isAutonomous()) {
-                speedUpTimer.start();
-                intake.setState(IntakeStates.INTAKING);
-                if (speedUpTimer.get() > Constants.Intake.SPINNING_UP_INTAKE_TIME) {
-                    speedUpTimer.stop();
-                    intake.setState(IntakeStates.OFF);
-                }
+                intake.setState(IntakeStates.AUTO_CENTERING);
             }
             stateString = "Spinning up";
         } else if (state == ManagerStates.INTAKE_STUCK) {

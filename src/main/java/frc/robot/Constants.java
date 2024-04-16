@@ -54,7 +54,7 @@ public final class Constants {
 
         public static final PIDConstants alignmentXTranslationPID = new PIDConstants(3, 0, 0);
         public static final PIDConstants alignmentYTranslationPID = new PIDConstants(3, 0, 0);
-        public static final PIDConstants alignmentRotationPID = new PIDConstants(4, 0, 0.1);
+        public static final PIDConstants alignmentRotationPID = new PIDConstants(4.5, 0, 0.1);
 
         public static final double translationErrorMargin = 0.05; // In Meters
         public static final double rotationErrorMargin = Math.toRadians(3);
@@ -75,6 +75,7 @@ public final class Constants {
         public static final double SUPPLY_CURRENT_MINIMUM = 25;
         public static final double CURRENT_SENSING_TIMER = 0.5;
         public static final double SPINNING_UP_INTAKE_TIME = 0.2;
+        public static final double SLOW_CENTERING = 0.2;
     }
 
     public static final class Shooter {
