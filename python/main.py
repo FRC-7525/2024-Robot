@@ -6,7 +6,7 @@ import csv
 from pathlib import Path
 
 SLEEP_TIME = 0.1
-CSV_FOLDER = "C:\\Code\\2024-Robot\\logs"
+CSV_FOLDER = Path.cwd() / 'logs'
 
 class LogLevels:
     SILENT = 0
@@ -131,6 +131,11 @@ def log_smart_dashboard():
     return log
 
 if __name__ == "__main__":
+    if not CSV_FOLDER.exists():
+        CSV_FOLDER.mkdir()
+
+    print(f"Log directory: {CSV_FOLDER}")
+
     smartDash = log_smart_dashboard()
     smartDash.initialize_csv()
 
