@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -12,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.subsystems.SparkUtils.Data;
+import frc.robot.subsystems.SparkUtils.Sensor;
 
 enum IntakeStates {
     OFF,
@@ -49,6 +54,12 @@ public class Intake {
         intakeMotor.setInverted(true);
         pivotEncoder.setPosition(0);
         pivotMotor.setIdleMode(IdleMode.kBrake);
+
+        Set<Data> data = new HashSet<Data>();
+        data.add(Data.POSITION);
+        Set<Sensor> sensors = new HashSet<Sensor>();
+        sensors.add(Sensor.INTEGRATED);
+        SparkUtils.configureFrameStrategy(pivotMotor, data, sensors, false);
     }
     public void setState(IntakeStates state) {
         this.states = state;
@@ -125,10 +136,8 @@ public class Intake {
     public void putSmartDashValues() {
         SmartDashboard.putString("Intake State", currentState);
         SmartDashboard.putNumber("pivot motor position", pivotEncoder.getPosition());
-        SmartDashboard.putNumber("intake motor position", intakeMotor.getPosition().getValue());
         SmartDashboard.putNumber("pivot motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
-        SmartDashboard.putNumber("Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putBoolean("Current Sensing Enabled?", currentSensingOn);
     }
 
