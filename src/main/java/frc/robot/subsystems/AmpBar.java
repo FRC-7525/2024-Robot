@@ -48,6 +48,7 @@ public class AmpBar {
         Set<Sensor> sensors = new HashSet<Sensor>();
         sensors.add(Sensor.INTEGRATED);
         SparkUtils.configureFrameStrategy(leftMotor, data, sensors, true);
+        SparkUtils.configureNothingFrameStrategy(rightMotor);
 
         leftMotor.setInverted(false);
         rightMotor.follow(leftMotor, true);
