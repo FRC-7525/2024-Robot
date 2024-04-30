@@ -14,7 +14,6 @@ import frc.robot.commands.ShootNearSpeaker;
 import frc.robot.commands.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Manager;
 
@@ -69,10 +68,10 @@ public class Robot extends TimedRobot {
         // Misc Autos
         chooser.addOption("0: Start Anywhere | Cross Line", "Drive Forwards");
         chooser.addOption("0: Start Anywhere | Do Nothing", "Do Nothing");
-        
+
         // 1 Note Autos
         chooser.addOption("1: Start Middle | Preload", "Drive Backwards + Score");
-        
+
         // 2 Note Autos
         chooser.addOption("2: Start Amp | CA", "Left Note");
         chooser.addOption("2: Start Middle | CM", "Middle Note");
@@ -106,7 +105,7 @@ public class Robot extends TimedRobot {
         manager.periodic();
         CommandScheduler.getInstance().run();
 
-        if (Constants.Vision.VISION_ENABLED) { 
+        if (Constants.Vision.VISION_ENABLED) {
             vision.periodic();
             Optional<Pose2d> frontPoseOption = vision.getFrontPose2d();
             Optional<Pose2d> sidePoseOption = vision.getSidePose2d();
@@ -176,7 +175,7 @@ public class Robot extends TimedRobot {
         manager.intake.setPivotMotorMode(IdleMode.kCoast);
         autoCommand = null;
         currentSelected = "";
-    
+
     }
 
     @Override

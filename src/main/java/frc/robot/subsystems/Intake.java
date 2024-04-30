@@ -99,7 +99,7 @@ public class Intake {
             pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;
             intakeMotorSetpoint = Constants.Intake.OFF;
-            currentState = "AMP SCORING SETUP";            
+            currentState = "AMP SCORING SETUP";
         } else if (states == IntakeStates.AMP_SCORING) {
             pivotController = inPIDController;
             pivotMotorSetpoint = Constants.Intake.AMP_SCORING;

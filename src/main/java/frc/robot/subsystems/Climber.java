@@ -58,14 +58,14 @@ public class Climber {
         SmartDashboard.putBoolean("Left Climb Motor Good", leftMotor.getFirmwareVersion() > 0 && leftMotor.getFaults() == 0);
         SmartDashboard.putBoolean("Right Climb Motor Good", rightMotor.getFirmwareVersion() > 0 && rightMotor.getFaults() == 0);
     }
-    
+
     //Positive power goes in, negative goes out
 
     public void periodic() {
         int dPad = this.robot.controller.getPOV();
         double leftTriggerAxis = this.robot.controller.getLeftTriggerAxis();
         double rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
-        
+
         if (state == ClimberStates.ZEROING) {
             double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
             double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
@@ -114,7 +114,7 @@ public class Climber {
             } else if (isExtended && MathUtil.applyDeadband(rightTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
                 leftMotorSetpoint -= rightTriggerAxis;
             }
-            
+
             rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
             leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
 
@@ -122,7 +122,7 @@ public class Climber {
                 isExtended = false;
             }
             rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
-            leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint)); 
+            leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint));
         }
 
         SmartDashboard.putString("Climber State", stateString);

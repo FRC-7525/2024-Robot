@@ -50,7 +50,7 @@ public class Shooter {
         if (states == ShootingStates.OFF) {
             bangBangEnabled = false;
             shooterMotor1.set(0);
-            shooterMotor2.set(0);            
+            shooterMotor2.set(0);
             stateString = "Off";
         } else if (states == ShootingStates.SHOOTING) {
             bangBangEnabled = true;

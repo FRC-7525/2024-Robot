@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.proto.Trajectory;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -22,8 +21,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import org.photonvision.PhotonPoseEstimator;
@@ -138,8 +135,8 @@ public class Vision {
             if (tagPose.isEmpty())
                 continue;
             numTags++;
-            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation()); // distance from bot to what tag should be 
-                                                                                                    
+            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation()); // distance from bot to what tag should be
+
             avgWeight += Constants.Vision.TAG_WEIGHTS[itag.getFiducialId() - 1];
         }
         if (numTags == 0)
@@ -160,11 +157,11 @@ public class Vision {
                                                                          // distance important but we have consistent i
                                                                          // think
         }
-        
+
         estStdDevs = estStdDevs.times(avgWeight); // dynamic portion where matrix is updated based on how confident we
                                                   // are in the tags we can see
 
         return estStdDevs;
-                           
+
     }
 }

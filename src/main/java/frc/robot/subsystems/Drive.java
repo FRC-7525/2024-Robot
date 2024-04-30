@@ -50,17 +50,17 @@ public class Drive extends SubsystemBase {
     Pose2d targetPose = new Pose2d(0, 0, new Rotation2d(0, 0));
 
     PIDController alignmentXTranslationPID = new PIDController(
-        Constants.Drive.alignmentXTranslationPID.kP, 
+        Constants.Drive.alignmentXTranslationPID.kP,
         Constants.Drive.alignmentXTranslationPID.kI,
         Constants.Drive.alignmentXTranslationPID.kD
     );
     PIDController alignmentRotationPID = new PIDController(
-        Constants.Drive.alignmentRotationPID.kP, 
+        Constants.Drive.alignmentRotationPID.kP,
         Constants.Drive.alignmentRotationPID.kI,
         Constants.Drive.alignmentRotationPID.kD
     );
     PIDController alignmentYTranslationPID = new PIDController(
-        Constants.Drive.alignmentYTranslationPID.kP, 
+        Constants.Drive.alignmentYTranslationPID.kP,
         Constants.Drive.alignmentYTranslationPID.kI,
         Constants.Drive.alignmentYTranslationPID.kD
     );
@@ -78,8 +78,8 @@ public class Drive extends SubsystemBase {
         try {
             SwerveParser swerveParser = new SwerveParser(new File(Filesystem.getDeployDirectory(), Constants.Drive.pathPlannerFile));
             swerveDrive = swerveParser.createSwerveDrive(Constants.Drive.maxSpeed, angleConversionFactor, driveConversionFactor);
-            modules = swerveDrive.getModules();  
-            
+            modules = swerveDrive.getModules();
+
             pathPlannerInit();
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,17 +93,17 @@ public class Drive extends SubsystemBase {
     public void zeroGyro() {
         swerveDrive.zeroGyro();
     }
-    
+
     public void driveToPosePID(Pose2d targetPose) {
         Pose2d currentPose = swerveDrive.getPose();
         swerveDrive.drive(
             new Translation2d(
-                alignmentXTranslationPID.calculate(currentPose.getX(), targetPose.getX()), 
-                alignmentYTranslationPID.calculate(currentPose.getY(), targetPose.getY())),       
+                alignmentXTranslationPID.calculate(currentPose.getX(), targetPose.getX()),
+                alignmentYTranslationPID.calculate(currentPose.getY(), targetPose.getY())),
                 alignmentRotationPID.calculate(
-                    currentPose.getRotation().getRadians(), 
-                    targetPose.getRotation().getRadians()), 
-                true, 
+                    currentPose.getRotation().getRadians(),
+                    targetPose.getRotation().getRadians()),
+                true,
                 false);
     }
 
@@ -114,7 +114,7 @@ public class Drive extends SubsystemBase {
     public void cacheState() {
         lastDriveState = driveStates;
     }
- 
+
     public void pathPlannerInit() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose, // Robot pose supplier
@@ -134,7 +134,7 @@ public class Drive extends SubsystemBase {
                 // This will flip the path being followed to the red side of the field.
                 // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                 var alliance = DriverStation.getAlliance();
-                return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false; 
+                return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
             },
             this // Reference to this subsystem to set requirements
         );
@@ -144,12 +144,12 @@ public class Drive extends SubsystemBase {
         Pose2d currentPose = swerveDrive.getPose();
         Translation2d translationDifference = currentPose.minus(targetPose).getTranslation();
         Rotation2d rotationDifference = currentPose.minus(targetPose).getRotation();
-        return 
+        return
             Math.abs(translationDifference.getX()) < translationErrorMargin &&
             Math.abs(translationDifference.getY()) < translationErrorMargin &&
-            Math.abs(rotationDifference.getRadians()) < rotationErrorMargin; 
+            Math.abs(rotationDifference.getRadians()) < rotationErrorMargin;
     }
-    
+
     public void checkFaults() {
         for (int i = 0; i < modules.length; i++) {
             TalonFX driveMotor = (TalonFX) modules[i].getDriveMotor().getMotor();
@@ -171,7 +171,7 @@ public class Drive extends SubsystemBase {
             xMovement *= -1;
             yMovement *= -1;
         }
-        
+
         if (driveStates == DriveStates.FIELD_ABSOLUTE) {
             state = "Field Absolute";
             fieldRelative = false;
@@ -204,10 +204,10 @@ public class Drive extends SubsystemBase {
                 swerveDrive.zeroGyro();
                 System.out.println("Gyro Zeroed");
             }
-            
+
             if (robot.controller.getBackButton()) {
                 swerveDrive.lockPose();
-            } 
+            }
 
             if (robot.controller.getLeftBumper()) {
                 xMovement *= Constants.Drive.slowTranslationMultiplier;
@@ -221,26 +221,26 @@ public class Drive extends SubsystemBase {
 
             if (robot.controller.getRightStickButton()) {
                 rotation = alignmentRotationPID.calculate(
-                    swerveDrive.getPose().getRotation().getRadians(), 
+                    swerveDrive.getPose().getRotation().getRadians(),
                     Constants.Drive.redAmpPose.getRotation().getRadians()
                 );
             }
             swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
-        }   
-        
+        }
+
         if (robot.secondaryController.getRightBumperPressed()) {
             robot.manager.returnToIdle();
-            targetPose = 
+            targetPose =
                 DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
-                Constants.Drive.redAmpSpeakerPose : 
+                Constants.Drive.redAmpSpeakerPose :
                 Constants.Drive.blueSourceSpeakerPose;
             cacheState();
             teleopAlign();
         } else if (robot.secondaryController.getLeftBumperPressed()) {
             robot.manager.returnToIdle();
-            targetPose = 
+            targetPose =
                 DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
-                Constants.Drive.redSourceSpeakerPose : 
+                Constants.Drive.redSourceSpeakerPose :
                 Constants.Drive.blueAmpSpeakerPose;
             cacheState();
             teleopAlign();
@@ -275,7 +275,7 @@ public class Drive extends SubsystemBase {
         double x = velocity.vxMetersPerSecond;
         double y = velocity.vyMetersPerSecond;
         return Math.sqrt(
-            Math.pow(x, 2) + 
+            Math.pow(x, 2) +
             Math.pow(y, 2)
         );
     }

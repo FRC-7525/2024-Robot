@@ -16,7 +16,7 @@ public class ShootNearSpeaker extends Command {
     @Override
     public void initialize() {
         robot.manager.spinningUp();
-        shot = false; 
+        shot = false;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ShootNearSpeaker extends Command {
         if (robot.drive.nearSetPose(
                 (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? Constants.Drive.blueSpeakerPose
                         : Constants.Drive.redSpeakerPose),
-                Constants.Drive.autoTranslationErrorMargin, Constants.Drive.autoTranslationErrorMargin) 
+                Constants.Drive.autoTranslationErrorMargin, Constants.Drive.autoTranslationErrorMargin)
                 && !shot
                 && robot.manager.intake.nearSetpoint()
             ) {

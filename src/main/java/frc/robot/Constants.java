@@ -15,8 +15,8 @@ public final class Constants {
     public static final int DPAD_DOWN = 180;
     public static final int DPAD_LEFT = 270;
     public static final int DPAD_RIGHT = 90;
-    public static final double STICK_DEADBAND = 0.1; 
-  
+    public static final double STICK_DEADBAND = 0.1;
+
     public static final class Drive {
         // Drive Constants
         public static final int wheelDiameter = 4;
@@ -42,7 +42,7 @@ public final class Constants {
         public static final double fastRotationMultiplier = Units.feetToMeters(25);
 
         public static final Pose2d redAmpSpeakerPose = new Pose2d(15.59, 6.644, new Rotation2d(Math.toRadians(120.5)));
-        public static final Pose2d blueAmpSpeakerPose = new Pose2d(0.909, 6.644, new Rotation2d(Math.toRadians(55.5))); 
+        public static final Pose2d blueAmpSpeakerPose = new Pose2d(0.909, 6.644, new Rotation2d(Math.toRadians(55.5)));
         public static final Pose2d redSourceSpeakerPose = new Pose2d(15.636, 4.39, new Rotation2d(Math.toRadians(-122.5)));
         public static final Pose2d blueSourceSpeakerPose = new Pose2d(0.864, 4.39, new Rotation2d(Math.toRadians(-62.5)));
         public static final Pose2d redAmpPose = new Pose2d(14.7, 7.72, new Rotation2d(Math.toRadians(-90)));
@@ -58,7 +58,7 @@ public final class Constants {
 
         public static final double translationErrorMargin = 0.05; // In Meters
         public static final double rotationErrorMargin = Math.toRadians(3);
-        
+
         public static final double autoTranslationErrorMargin = 0.4; // In Meters
         public static final double autoRotationErrorMargin = Math.toRadians(10);
     }
@@ -81,7 +81,7 @@ public final class Constants {
     public static final class Shooter {
         public static final double SPEED = 80;
         public static final double SLOW_SPEED = 20;
-        public static final double RESET_INTAKE_TIME = 3; 
+        public static final double RESET_INTAKE_TIME = 3;
         public static final double PULL_CENTER_NOTE_TIME = 0.5;
         public static final double PUSH_CENTER_NOTE_TIME = 0.5;
         public static final double RETURN_CENTER_NOTE_TIME = 1.0;
@@ -103,7 +103,7 @@ public final class Constants {
         public static final double LED_MODE_GREEN = 0.77;
         public static final double LED_MODE_WHITE = 0.93;
     }
-    
+
     public static final class Climber {
         public static final double MAX_SETPOINT = 120;
         public static final double ZEROING_SPEED = -0.15;
@@ -125,7 +125,7 @@ public final class Constants {
         public static final double AMP_CURRENT_LIMIT = 2.5;
         public static final double FEEDING_TIME = 0.33;
     }
-  
+
     public static final class Vision {
         public static final double LAST_VISION_MEASURMENT_TIMER = 0.5;
         public static final boolean VISION_ENABLED = true;
