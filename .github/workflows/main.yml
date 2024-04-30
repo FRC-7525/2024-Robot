@@ -1,0 +1,31 @@
+# this is basically just copied from https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/robot-code-ci.html
+# i wouldve copied it normally but firefox kept crashing when i copied it over here
+
+name: CI
+
+# triggers the workflow only on push or pull request events on the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container: wpilib/roborio-cross-ubuntu:2024-22.04
+
+    steps:
+
+    - uses: actions/checkout@v4
+
+    # tells git that the repository is safe
+    - name: Add respository to git safe directories
+      run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+    - name: Grant execute permissions for gradlew
+      run: chmod +x gradlew
+
+    - name: Compile robot vcode
+      run: ./gradlew build
