@@ -5,11 +5,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -50,6 +48,7 @@ public class Intake {
         pivotEncoder.setPosition(0);
         pivotMotor.setIdleMode(IdleMode.kBrake);
     }
+
     public void setState(IntakeStates state) {
         this.states = state;
     }
@@ -61,14 +60,17 @@ public class Intake {
     public void resetPivotMotor() {
         pivotEncoder.setPosition(0);
     }
+
     public boolean nearSetpoint() {
         return Math.abs(pivotEncoder.getPosition() - pivotMotorSetpoint) < 1;
     }
 
     public boolean overCurrentLimit() {
-        double currentCurrent = currentFilter.calculate(intakeMotor.getSupplyCurrent().getValueAsDouble());
+        double currentCurrent =
+                currentFilter.calculate(intakeMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Current Intake Current", currentCurrent);
-        return currentCurrent > (currentSensingOn ? Constants.Intake.SUPPLY_CURRENT_MINIMUM : 10000);
+        return currentCurrent
+                > (currentSensingOn ? Constants.Intake.SUPPLY_CURRENT_MINIMUM : 10000);
     }
 
     String currentState = "State not set.";
@@ -122,18 +124,25 @@ public class Intake {
         pivotMotor.set(pivotController.calculate(pivotEncoder.getPosition(), pivotMotorSetpoint));
         intakeMotor.set(intakeMotorSetpoint);
     }
+
     public void putSmartDashValues() {
         SmartDashboard.putString("Intake State", currentState);
         SmartDashboard.putNumber("pivot motor position", pivotEncoder.getPosition());
         SmartDashboard.putNumber("intake motor position", intakeMotor.getPosition().getValue());
         SmartDashboard.putNumber("pivot motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("intake motor setpoint", intakeMotorSetpoint);
-        SmartDashboard.putNumber("Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber(
+                "Intake motor current", intakeMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putBoolean("Current Sensing Enabled?", currentSensingOn);
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Intake Motor good", intakeMotor.getFaultField().getValue() == 0 && intakeMotor.getDeviceTemp().getValue() > 1);
-        SmartDashboard.putBoolean("Pivot Intake Motor Good", pivotMotor.getMotorTemperature() > 1 && pivotMotor.getFaults() == 0);
+        SmartDashboard.putBoolean(
+                "Intake Motor good",
+                intakeMotor.getFaultField().getValue() == 0
+                        && intakeMotor.getDeviceTemp().getValue() > 1);
+        SmartDashboard.putBoolean(
+                "Pivot Intake Motor Good",
+                pivotMotor.getMotorTemperature() > 1 && pivotMotor.getFaults() == 0);
     }
 }

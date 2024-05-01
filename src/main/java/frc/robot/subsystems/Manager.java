@@ -3,9 +3,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.AmpBar.AmpBarStates;
-import frc.robot.Constants;
 
 enum ManagerStates {
     IDLE,
@@ -107,7 +107,9 @@ public class Manager {
             ampBar.setState(AmpBarStates.IN);
 
             if (currentSensingTimer.get() > Constants.Intake.CURRENT_SENSING_TIMER) {
-                if ((intake.overCurrentLimit() && !DriverStation.isAutonomous()) || robot.controller.getBButtonPressed()) { // Current sensing to detect when we have the note.
+                // Current sensing to detect when we have the note.
+                if ((intake.overCurrentLimit() && !DriverStation.isAutonomous())
+                        || robot.controller.getBButtonPressed()) {
                     System.out.println("Intake Current Sensing Occured");
                     state = ManagerStates.IDLE;
                     reset();
@@ -135,13 +137,15 @@ public class Manager {
             intake.setState(IntakeStates.FEEDING);
             ampBar.setState(AmpBarStates.IN);
             System.out.println("shooting");
-            if (DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.AUTO_SHOOTER_TIME) {
+            if (DriverStation.isAutonomous()
+                    && shooterTimer.get() > Constants.Shooter.AUTO_SHOOTER_TIME) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
                 autoShoot = false;
                 reset();
-            } else if (!DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
+            } else if (!DriverStation.isAutonomous()
+                    && shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
@@ -190,7 +194,8 @@ public class Manager {
             ampBar.setState(AmpBarStates.IN);
 
             if (autoShoot) {
-                if (shooter.atSetPoint(Constants.Shooter.SPEED)) { // Ensures the shooter motors are at setpoint before shooting.
+                // Ensures the shooter motor are at setpoint before shooting.
+                if (shooter.atSetPoint(Constants.Shooter.SPEED)) {
                     state = ManagerStates.SHOOTING;
                     reset();
                 }
@@ -207,7 +212,8 @@ public class Manager {
             shooter.setState(ShootingStates.OFF);
             ampBar.setState(AmpBarStates.IN);
 
-            if (robot.controller.getBButtonPressed() || robot.secondaryController.getBButtonPressed()) {
+            if (robot.controller.getBButtonPressed()
+                    || robot.secondaryController.getBButtonPressed()) {
                 state = ManagerStates.IDLE;
                 reset();
             }

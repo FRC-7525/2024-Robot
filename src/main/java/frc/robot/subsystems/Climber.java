@@ -1,15 +1,14 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 enum ClimberStates {
     ZEROING,
@@ -22,8 +21,9 @@ public class Climber {
     CANSparkMax rightMotor = new CANSparkMax(34, MotorType.kBrushless);
     CANSparkMax leftMotor = new CANSparkMax(33, MotorType.kBrushless);
 
-    PIDController rightMotorPID = new PIDController(0.2, 0, 0); // TODO: tune
-    PIDController leftMotorPID = new PIDController(0.2, 0, 0); // TODO: tune
+    // TODO: tune
+    PIDController rightMotorPID = new PIDController(0.2, 0, 0);
+    PIDController leftMotorPID = new PIDController(0.2, 0, 0);
 
     double rightMotorSetpoint = 0.0;
     double leftMotorSetpoint = 0.0;
@@ -55,11 +55,13 @@ public class Climber {
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Left Climb Motor Good", leftMotor.getFirmwareVersion() > 0 && leftMotor.getFaults() == 0);
-        SmartDashboard.putBoolean("Right Climb Motor Good", rightMotor.getFirmwareVersion() > 0 && rightMotor.getFaults() == 0);
+        SmartDashboard.putBoolean(
+                "Left Climb Motor Good",
+                leftMotor.getFirmwareVersion() > 0 && leftMotor.getFaults() == 0);
+        SmartDashboard.putBoolean(
+                "Right Climb Motor Good",
+                rightMotor.getFirmwareVersion() > 0 && rightMotor.getFaults() == 0);
     }
-
-    //Positive power goes in, negative goes out
 
     public void periodic() {
         int dPad = this.robot.controller.getPOV();
@@ -71,19 +73,22 @@ public class Climber {
             double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
             SmartDashboard.putNumber("right climber current", rightCurrent);
             SmartDashboard.putNumber("left climber current", leftCurrent);
-            if (leftCurrent > Constants.Climber.LEFT_CURRENT_MAX) { // Current sensing to automatically shut off the left motor.
+            // Current sensing to automatically shut off the left motors.
+            if (leftCurrent > Constants.Climber.LEFT_CURRENT_MAX) {
                 leftMotor.getEncoder().setPosition(0);
                 leftSpeed = 0;
                 System.out.println("LEFT SPEED ZERO");
             }
 
-            if (rightCurrent > Constants.Climber.RIGHT_CURRENT_MAX) { // Current sensing to automatically shut off the right motor.
+            // Current sensing to automatically shut off the right motor.
+            if (rightCurrent > Constants.Climber.RIGHT_CURRENT_MAX) {
                 rightMotor.getEncoder().setPosition(0);
                 rightSpeed = 0;
                 System.out.println("RIGHT SPEED ZERO");
             }
 
-            if (rightSpeed == 0 && leftSpeed == 0) { // Hacky solution to switch to the climbing state when both are zeroed.
+            // Hacky solutionb to switch to the climbing state when both are zeroed.
+            if (rightSpeed == 0 && leftSpeed == 0) {
                 System.out.println("TRANSITION");
                 state = ClimberStates.CLIMB_READY;
             }
@@ -105,24 +110,44 @@ public class Climber {
                 stateString = "Climber contracted";
             }
 
-            if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN && leftMotorSetpoint == Constants.Climber.DOWN && rightMotorSetpoint == Constants.Climber.DOWN) {
+            if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN
+                    && leftMotorSetpoint == Constants.Climber.DOWN
+                    && rightMotorSetpoint == Constants.Climber.DOWN) {
                 climbingInProgress = false;
             }
 
-            if (isExtended && MathUtil.applyDeadband(leftTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
-                rightMotorSetpoint -= leftTriggerAxis; // possibly reduce intensity of axis value (with division by number)?
-            } else if (isExtended && MathUtil.applyDeadband(rightTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
+            if (isExtended
+                    && MathUtil.applyDeadband(leftTriggerAxis, Constants.Climber.TRIGGER_DEADBAND)
+                            != 0) {
+                // possible reduce intensity of axis value (with division by number)?
+                rightMotorSetpoint -= leftTriggerAxis;
+            } else if (isExtended
+                    && MathUtil.applyDeadband(rightTriggerAxis, Constants.Climber.TRIGGER_DEADBAND)
+                            != 0) {
                 leftMotorSetpoint -= rightTriggerAxis;
             }
 
-            rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
-            leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
+            rightMotorSetpoint =
+                    MathUtil.clamp(
+                            rightMotorSetpoint,
+                            Constants.Climber.DOWN,
+                            Constants.Climber.MAX_SETPOINT);
+            leftMotorSetpoint =
+                    MathUtil.clamp(
+                            leftMotorSetpoint,
+                            Constants.Climber.DOWN,
+                            Constants.Climber.MAX_SETPOINT);
 
-            if (rightMotorSetpoint == Constants.Climber.DOWN && leftMotorSetpoint == Constants.Climber.DOWN) {
+            if (rightMotorSetpoint == Constants.Climber.DOWN
+                    && leftMotorSetpoint == Constants.Climber.DOWN) {
                 isExtended = false;
             }
-            rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
-            leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint));
+            rightMotor.set(
+                    rightMotorPID.calculate(
+                            rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
+            leftMotor.set(
+                    leftMotorPID.calculate(
+                            leftMotor.getEncoder().getPosition(), leftMotorSetpoint));
         }
 
         SmartDashboard.putString("Climber State", stateString);

@@ -9,6 +9,7 @@ public class Intaking extends Command {
     public Intaking(Robot robot) {
         this.robot = robot;
     }
+
     @Override
     public void initialize() {
         robot.manager.intaking();

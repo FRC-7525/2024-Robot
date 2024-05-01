@@ -1,13 +1,12 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -32,7 +31,8 @@ public class AmpBar {
     String stateString = "";
     Robot robot = null;
 
-    PIDController controller = new PIDController(1, 0, 0); // TODO: tune PID
+    // TODO: tune PID
+    PIDController controller = new PIDController(1, 0, 0);
 
     public AmpBar(Robot robot) {
         this.robot = robot;
@@ -44,15 +44,16 @@ public class AmpBar {
     }
 
     public boolean holdingNote() {
-        return wheelsMotor.getSupplyCurrent().getValueAsDouble() > Constants.AmpBar.AMP_CURRENT_LIMIT;
+        return wheelsMotor.getSupplyCurrent().getValueAsDouble()
+                > Constants.AmpBar.AMP_CURRENT_LIMIT;
     }
 
     public void setState(AmpBarStates state) {
-         if (robot.isClimbing()) {
-             this.state = AmpBarStates.OUT;
-         } else {
-             this.state = state;
-         }
+        if (robot.isClimbing()) {
+            this.state = AmpBarStates.OUT;
+        } else {
+            this.state = state;
+        }
     }
 
     public boolean atSetPoint() {
@@ -93,11 +94,16 @@ public class AmpBar {
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Left ampbar motor good",
+        SmartDashboard.putBoolean(
+                "Left ampbar motor good",
                 leftMotor.getMotorTemperature() > 1 && leftMotor.getFaults() == 0);
-        SmartDashboard.putBoolean("Right ampbar motor good",
+        SmartDashboard.putBoolean(
+                "Right ampbar motor good",
                 rightMotor.getMotorTemperature() > 1 && rightMotor.getFaults() == 0);
-        SmartDashboard.putBoolean("amp wheel motor good", wheelsMotor.getFaultField().getValue() == 0 && wheelsMotor.getDeviceTemp().getValueAsDouble() > 0);
+        SmartDashboard.putBoolean(
+                "amp wheel motor good",
+                wheelsMotor.getFaultField().getValue() == 0
+                        && wheelsMotor.getDeviceTemp().getValueAsDouble() > 0);
     }
 
     public void putSmartDashValues() {
@@ -105,6 +111,7 @@ public class AmpBar {
         SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getPosition());
         SmartDashboard.putNumber("Right Motor", rightMotor.getEncoder().getPosition());
         SmartDashboard.putString("Amp Bar State", stateString);
-        SmartDashboard.putNumber("Amp Bar Current", wheelsMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber(
+                "Amp Bar Current", wheelsMotor.getSupplyCurrent().getValueAsDouble());
     }
 }
