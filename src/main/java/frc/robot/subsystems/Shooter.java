@@ -2,10 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -50,7 +48,7 @@ public class Shooter {
         if (states == ShootingStates.OFF) {
             bangBangEnabled = false;
             shooterMotor1.set(0);
-            shooterMotor2.set(0);            
+            shooterMotor2.set(0);
             stateString = "Off";
         } else if (states == ShootingStates.SHOOTING) {
             bangBangEnabled = true;
@@ -72,21 +70,31 @@ public class Shooter {
         }
 
         if (bangBangEnabled) {
-            shooterMotor1
-                    .set(bangController.calculate(shooterMotor1.getVelocity().getValueAsDouble(), speedPoint));
-            shooterMotor2
-                    .set(bangController.calculate(shooterMotor2.getVelocity().getValueAsDouble(), speedPoint));
+            shooterMotor1.set(
+                    bangController.calculate(
+                            shooterMotor1.getVelocity().getValueAsDouble(), speedPoint));
+            shooterMotor2.set(
+                    bangController.calculate(
+                            shooterMotor2.getVelocity().getValueAsDouble(), speedPoint));
         }
     }
 
     public void putSmartDashValues() {
-        SmartDashboard.putNumber("Shooter Motor 1 velocity", shooterMotor1.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter Motor 2 velocity", shooterMotor2.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber(
+                "Shooter Motor 1 velocity", shooterMotor1.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber(
+                "Shooter Motor 2 velocity", shooterMotor2.getVelocity().getValueAsDouble());
         SmartDashboard.putString("Shooting States", stateString);
     }
 
     public void checkFaults() {
-        SmartDashboard.putBoolean("Shooter Motor 1 working", shooterMotor1.getDeviceTemp().getValueAsDouble() > 0 && shooterMotor1.getFaultField().getValue() == 0);
-        SmartDashboard.putBoolean("Shooter Motor 2 working", shooterMotor2.getDeviceTemp().getValueAsDouble() > 0 && shooterMotor2.getFaultField().getValue() == 0);
+        SmartDashboard.putBoolean(
+                "Shooter Motor 1 working",
+                shooterMotor1.getDeviceTemp().getValueAsDouble() > 0
+                        && shooterMotor1.getFaultField().getValue() == 0);
+        SmartDashboard.putBoolean(
+                "Shooter Motor 2 working",
+                shooterMotor2.getDeviceTemp().getValueAsDouble() > 0
+                        && shooterMotor2.getFaultField().getValue() == 0);
     }
 }

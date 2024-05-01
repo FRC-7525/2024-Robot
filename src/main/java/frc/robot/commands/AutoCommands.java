@@ -13,18 +13,15 @@ public class AutoCommands {
     }
 
     public Command intaking() {
-        return Commands.sequence(
-                new InstantCommand(robot.manager::intaking));
+        return Commands.sequence(new InstantCommand(robot.manager::intaking));
     }
 
     public Command shooting() {
-        return Commands.sequence(
-                new InstantCommand(robot.manager::shooting));
+        return Commands.sequence(new InstantCommand(robot.manager::shooting));
     }
 
     public Command returnToIdle() {
-        return Commands.sequence(
-                new InstantCommand(robot.manager::returnToIdle));
+        return Commands.sequence(new InstantCommand(robot.manager::returnToIdle));
     }
 
     public Command startSpinningUp() {
