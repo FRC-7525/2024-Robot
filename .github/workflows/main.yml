@@ -27,7 +27,7 @@ jobs:
     - name: Grant execute permissions for gradlew
       run: chmod +x gradlew
 
-    - name: Compile robot vcode
+    - name: Compile robot code
       run: ./gradlew build
 
   spotless:
