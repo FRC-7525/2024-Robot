@@ -134,7 +134,6 @@ public class Manager {
             shooterTimer.start();
             intake.setState(IntakeStates.FEEDING);
             ampBar.setState(AmpBarStates.IN);
-            System.out.println("shooting");
             if (DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.AUTO_SHOOTER_TIME) {
                 shooterTimer.stop();
                 shooterTimer.reset();

@@ -4,6 +4,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -11,6 +14,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.subsystems.SparkUtils.Data;
+import frc.robot.subsystems.SparkUtils.Sensor;
 
 public class AmpBar {
     public enum AmpBarStates {
@@ -37,6 +42,14 @@ public class AmpBar {
 
     public AmpBar(Robot robot) {
         this.robot = robot;
+        Set<Data> data = new HashSet<Data>();
+        data.add(Data.POSITION);
+        data.add(Data.APPLIED_OUTPUT);
+        Set<Sensor> sensors = new HashSet<Sensor>();
+        sensors.add(Sensor.INTEGRATED);
+        SparkUtils.configureFrameStrategy(leftMotor, data, sensors, true);
+        SparkUtils.configureNothingFrameStrategy(rightMotor);
+
         leftMotor.setInverted(false);
         rightMotor.follow(leftMotor, true);
         pivotEncoder.setPosition(0);
@@ -104,8 +117,6 @@ public class AmpBar {
     public void putSmartDashValues() {
         SmartDashboard.putNumber("Amp motor setpoint", pivotMotorSetpoint);
         SmartDashboard.putNumber("Current Amp motor postition", pivotEncoder.getPosition());
-        SmartDashboard.putNumber("Right Motor", rightMotor.getEncoder().getPosition());
         SmartDashboard.putString("Amp Bar State", stateString);
-        SmartDashboard.putNumber("Amp Bar Current", wheelsMotor.getSupplyCurrent().getValueAsDouble());
     }
 }

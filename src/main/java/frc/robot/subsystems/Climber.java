@@ -2,6 +2,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
@@ -9,6 +13,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.subsystems.SparkUtils.Data;
+import frc.robot.subsystems.SparkUtils.Sensor;
 import frc.robot.Constants;
 
 enum ClimberStates {
@@ -44,6 +50,14 @@ public class Climber {
         leftMotor.setInverted(false);
         rightMotor.setIdleMode(IdleMode.kBrake);
         leftMotor.setIdleMode(IdleMode.kBrake);
+
+        Set<Data> data = new HashSet<Data>();
+        data.add(Data.POSITION);
+        data.add(Data.CURRENT);
+        Set<Sensor> sensors = new HashSet<Sensor>();
+        sensors.add(Sensor.INTEGRATED);
+        SparkUtils.configureFrameStrategy(leftMotor, data, sensors, false);
+        SparkUtils.configureFrameStrategy(rightMotor, data, sensors, false);
     }
 
     public void zeroClimber() {
