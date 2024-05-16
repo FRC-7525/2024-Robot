@@ -219,7 +219,7 @@ public class Drive extends SubsystemBase {
                 rotation *= Constants.Drive.fastRotationMultiplier;
             }
 
-            if (robot.controller.getRightStickButton()) {
+            if (robot.controller.getRightStickButton() && Constants.Drive.AUTOALIGN) {
                 rotation = alignmentRotationPID.calculate(
                     swerveDrive.getPose().getRotation().getRadians(), 
                     Constants.Drive.redAmpPose.getRotation().getRadians()
@@ -228,7 +228,7 @@ public class Drive extends SubsystemBase {
             swerveDrive.drive(new Translation2d(xMovement, yMovement), rotation, fieldRelative, false);
         }   
         
-        if (robot.secondaryController.getRightBumperPressed()) {
+        if (robot.secondaryController.getRightBumperPressed() && Constants.Drive.AUTOALIGN) {
             robot.manager.returnToIdle();
             targetPose = 
                 DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?
@@ -236,7 +236,7 @@ public class Drive extends SubsystemBase {
                 Constants.Drive.blueSourceSpeakerPose;
             cacheState();
             teleopAlign();
-        } else if (robot.secondaryController.getLeftBumperPressed()) {
+        } else if (robot.secondaryController.getLeftBumperPressed() && Constants.Drive.AUTOALIGN) {
             robot.manager.returnToIdle();
             targetPose = 
                 DriverStation.getAlliance().get() == DriverStation.Alliance.Red ?

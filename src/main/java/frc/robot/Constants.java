@@ -61,6 +61,9 @@ public final class Constants {
         
         public static final double autoTranslationErrorMargin = 0.4; // In Meters
         public static final double autoRotationErrorMargin = Math.toRadians(10);
+
+        // Leif autotargeting 
+        public static final boolean AUTOALIGN = false;
     }
     public static final class Intake {
         // Motor setpoints for the intake motors.
@@ -132,8 +135,8 @@ public final class Constants {
 
         public static final double STD_TRUSTABLE_DISTANCE = 6;
 
-  public static final Matrix<N3, N1> SINGLE_STD = VecBuilder.fill(1.5, 1.5, 6.24); //stds, if you only see one tag, ie less accuracy/trust so higher values bc we don't trust it
-  public static final Matrix<N3, N1> MULTI_STD = VecBuilder.fill(1.5, 1.5, 6.24); //stds,  if you see multiple tags, ie more accuracy/trust so lower values bc we trust it
+        public static final Matrix<N3, N1> SINGLE_STD = VecBuilder.fill(1.5, 1.5, 6.24); //stds, if you only see one tag, ie less accuracy/trust so higher values bc we don't trust it
+        public static final Matrix<N3, N1> MULTI_STD = VecBuilder.fill(1.5, 1.5, 6.24); //stds,  if you see multiple tags, ie more accuracy/trust so lower values bc we trust it
 
         public static final double[] TAG_WEIGHTS = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // how significantly important each tag is
 
