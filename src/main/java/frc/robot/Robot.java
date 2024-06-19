@@ -145,8 +145,8 @@ public class Robot extends TimedRobot {
             drive.resetOdometry();
         }
 
-        CommandScheduler.getInstance().cancelAll();
-        autoCommand.schedule();
+        // CommandScheduler.getInstance().cancelAll();
+        // autoCommand.schedule();
     }
 
     @Override
@@ -187,11 +187,11 @@ public class Robot extends TimedRobot {
         climber.checkFaults();
         drive.checkFaults();
 
-        if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs
-                                                                                               // to be made
-            autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
-            currentSelected = chooser.getSelected();
-        }
+        // if (chooser.getSelected() != null && !currentSelected.equals(chooser.getSelected())) { // sees if a change needs
+        //                                                                                        // to be made
+        //     autoCommand = getAutonomousCommand((chooser.getSelected() != null) ? chooser.getSelected() : "Do Nothing");
+        //     currentSelected = chooser.getSelected();
+        // }
     }
 
     @Override

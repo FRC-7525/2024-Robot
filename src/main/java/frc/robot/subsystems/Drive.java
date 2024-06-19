@@ -190,12 +190,12 @@ public class Drive extends SubsystemBase {
             }
         } else if (driveStates == DriveStates.TELEOP_ALIGNING) {
             state = "Teleop Aligning";
-            driveToPosePID(targetPose);
-            if (nearSetPose(targetPose, Constants.Drive.rotationErrorMargin, Constants.Drive.rotationErrorMargin)) {
-                System.out.println("near target pose");
-                robot.manager.shooting();
-                driveStates = lastDriveState;
-            }
+            // driveToPosePID(targetPose);
+            // if (nearSetPose(targetPose, Constants.Drive.rotationErrorMargin, Constants.Drive.rotationErrorMargin)) {
+            //     System.out.println("near target pose");
+            //     robot.manager.shooting();
+            //     driveStates = lastDriveState;
+            // }
         }
 
         if (driveStates != DriveStates.TELEOP_ALIGNING) {

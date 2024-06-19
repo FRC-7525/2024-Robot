@@ -45,27 +45,27 @@ public class Climber {
     public boolean climbingInProgress = false;
 
     public Climber(Robot robot) {
-        this.robot = robot;
-        rightMotor.setInverted(true);
-        leftMotor.setInverted(false);
-        rightMotor.setIdleMode(IdleMode.kBrake);
-        leftMotor.setIdleMode(IdleMode.kBrake);
+        // this.robot = robot;
+        // rightMotor.setInverted(true);
+        // leftMotor.setInverted(false);
+        // rightMotor.setIdleMode(IdleMode.kBrake);
+        // leftMotor.setIdleMode(IdleMode.kBrake);
 
-        Set<Data> data = new HashSet<Data>();
-        data.add(Data.POSITION);
-        data.add(Data.CURRENT);
-        Set<Sensor> sensors = new HashSet<Sensor>();
-        sensors.add(Sensor.INTEGRATED);
-        SparkUtils.configureFrameStrategy(leftMotor, data, sensors, false);
-        SparkUtils.configureFrameStrategy(rightMotor, data, sensors, false);
+        // Set<Data> data = new HashSet<Data>();
+        // data.add(Data.POSITION);
+        // data.add(Data.CURRENT);
+        // Set<Sensor> sensors = new HashSet<Sensor>();
+        // sensors.add(Sensor.INTEGRATED);
+        // SparkUtils.configureFrameStrategy(leftMotor, data, sensors, false);
+        // SparkUtils.configureFrameStrategy(rightMotor, data, sensors, false);
     }
 
     public void zeroClimber() {
         state = ClimberStates.ZEROING;
-        leftSpeed = Constants.Climber.ZEROING_SPEED;
-        rightSpeed = Constants.Climber.ZEROING_SPEED;
-        leftFilter.reset();
-        rightFilter.reset();
+        // leftSpeed = Constants.Climber.ZEROING_SPEED;
+        // rightSpeed = Constants.Climber.ZEROING_SPEED;
+        // leftFilter.reset();
+        // rightFilter.reset();
     }
 
     public void checkFaults() {
@@ -76,76 +76,76 @@ public class Climber {
     //Positive power goes in, negative goes out
 
     public void periodic() {
-        int dPad = this.robot.controller.getPOV();
-        double leftTriggerAxis = this.robot.controller.getLeftTriggerAxis();
-        double rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
+        // int dPad = this.robot.controller.getPOV();
+        // double leftTriggerAxis = this.robot.controller.getLeftTriggerAxis();
+        // double rightTriggerAxis = this.robot.controller.getRightTriggerAxis();
         
-        if (state == ClimberStates.ZEROING) {
-            double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
-            double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
-            SmartDashboard.putNumber("right climber current", rightCurrent);
-            SmartDashboard.putNumber("left climber current", leftCurrent);
-            if (leftCurrent > Constants.Climber.LEFT_CURRENT_MAX) { // Current sensing to automatically shut off the left motor.
-                leftMotor.getEncoder().setPosition(0);
-                leftSpeed = 0;
-                System.out.println("LEFT SPEED ZERO");
-            }
+        // if (state == ClimberStates.ZEROING) {
+        //     double rightCurrent = rightFilter.calculate(rightMotor.getOutputCurrent());
+        //     double leftCurrent = leftFilter.calculate(leftMotor.getOutputCurrent());
+        //     SmartDashboard.putNumber("right climber current", rightCurrent);
+        //     SmartDashboard.putNumber("left climber current", leftCurrent);
+        //     if (leftCurrent > Constants.Climber.LEFT_CURRENT_MAX) { // Current sensing to automatically shut off the left motor.
+        //         leftMotor.getEncoder().setPosition(0);
+        //         leftSpeed = 0;
+        //         System.out.println("LEFT SPEED ZERO");
+        //     }
 
-            if (rightCurrent > Constants.Climber.RIGHT_CURRENT_MAX) { // Current sensing to automatically shut off the right motor.
-                rightMotor.getEncoder().setPosition(0);
-                rightSpeed = 0;
-                System.out.println("RIGHT SPEED ZERO");
-            }
+        //     if (rightCurrent > Constants.Climber.RIGHT_CURRENT_MAX) { // Current sensing to automatically shut off the right motor.
+        //         rightMotor.getEncoder().setPosition(0);
+        //         rightSpeed = 0;
+        //         System.out.println("RIGHT SPEED ZERO");
+        //     }
 
-            if (rightSpeed == 0 && leftSpeed == 0) { // Hacky solution to switch to the climbing state when both are zeroed.
-                System.out.println("TRANSITION");
-                state = ClimberStates.CLIMB_READY;
-            }
-            stateString = "Zeroing";
-            rightMotor.set(rightSpeed);
-            leftMotor.set(leftSpeed);
-        } else if (state == ClimberStates.CLIMB_READY) {
-            stateString = "Climber ready";
-            if (dPad == Constants.DPAD_UP) {
-                climbingInProgress = true;
-                rightMotorSetpoint = Constants.Climber.MAX_SETPOINT;
-                leftMotorSetpoint = Constants.Climber.MAX_SETPOINT;
-                isExtended = true;
-                stateString = "Climber extended";
-            } else if (dPad == Constants.DPAD_DOWN) {
-                rightMotorSetpoint = Constants.Climber.DOWN;
-                leftMotorSetpoint = Constants.Climber.DOWN;
-                isExtended = false;
-                stateString = "Climber contracted";
-            }
+        //     if (rightSpeed == 0 && leftSpeed == 0) { // Hacky solution to switch to the climbing state when both are zeroed.
+        //         System.out.println("TRANSITION");
+        //         state = ClimberStates.CLIMB_READY;
+        //     }
+        //     stateString = "Zeroing";
+        //     rightMotor.set(rightSpeed);
+        //     leftMotor.set(leftSpeed);
+        // } else if (state == ClimberStates.CLIMB_READY) {
+        //     stateString = "Climber ready";
+        //     if (dPad == Constants.DPAD_UP) {
+        //         climbingInProgress = true;
+        //         rightMotorSetpoint = Constants.Climber.MAX_SETPOINT;
+        //         leftMotorSetpoint = Constants.Climber.MAX_SETPOINT;
+        //         isExtended = true;
+        //         stateString = "Climber extended";
+        //     } else if (dPad == Constants.DPAD_DOWN) {
+        //         rightMotorSetpoint = Constants.Climber.DOWN;
+        //         leftMotorSetpoint = Constants.Climber.DOWN;
+        //         isExtended = false;
+        //         stateString = "Climber contracted";
+        //     }
 
-            if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN && leftMotorSetpoint == Constants.Climber.DOWN && rightMotorSetpoint == Constants.Climber.DOWN) {
-                climbingInProgress = false;
-            }
+        //     if (robot.secondaryController.getPOV() == Constants.DPAD_DOWN && leftMotorSetpoint == Constants.Climber.DOWN && rightMotorSetpoint == Constants.Climber.DOWN) {
+        //         climbingInProgress = false;
+        //     }
 
-            if (isExtended && MathUtil.applyDeadband(leftTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
-                rightMotorSetpoint -= leftTriggerAxis; // possibly reduce intensity of axis value (with division by number)?
-            } else if (isExtended && MathUtil.applyDeadband(rightTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
-                leftMotorSetpoint -= rightTriggerAxis;
-            }
+        //     if (isExtended && MathUtil.applyDeadband(leftTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
+        //         rightMotorSetpoint -= leftTriggerAxis; // possibly reduce intensity of axis value (with division by number)?
+        //     } else if (isExtended && MathUtil.applyDeadband(rightTriggerAxis, Constants.Climber.TRIGGER_DEADBAND) != 0) {
+        //         leftMotorSetpoint -= rightTriggerAxis;
+        //     }
             
-            rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
-            leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
+        //     rightMotorSetpoint = MathUtil.clamp(rightMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
+        //     leftMotorSetpoint = MathUtil.clamp(leftMotorSetpoint, Constants.Climber.DOWN, Constants.Climber.MAX_SETPOINT);
 
-            if (rightMotorSetpoint == Constants.Climber.DOWN && leftMotorSetpoint == Constants.Climber.DOWN) {
-                isExtended = false;
-            }
-            rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
-            leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint)); 
-        }
+        //     if (rightMotorSetpoint == Constants.Climber.DOWN && leftMotorSetpoint == Constants.Climber.DOWN) {
+        //         isExtended = false;
+        //     }
+        //     rightMotor.set(rightMotorPID.calculate(rightMotor.getEncoder().getPosition(), rightMotorSetpoint));
+        //     leftMotor.set(leftMotorPID.calculate(leftMotor.getEncoder().getPosition(), leftMotorSetpoint)); 
+        // }
 
-        SmartDashboard.putString("Climber State", stateString);
-        SmartDashboard.putNumber("Left Climber Current", leftMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Right Climber Current", rightMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Right Encoder Position", rightMotor.getEncoder().getPosition());
-        SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
-        SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
-        SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
-        SmartDashboard.putBoolean("Climb In Progress", climbingInProgress);
+        // SmartDashboard.putString("Climber State", stateString);
+        // SmartDashboard.putNumber("Left Climber Current", leftMotor.getOutputCurrent());
+        // SmartDashboard.putNumber("Right Climber Current", rightMotor.getOutputCurrent());
+        // SmartDashboard.putNumber("Right Encoder Position", rightMotor.getEncoder().getPosition());
+        // SmartDashboard.putNumber("Left Encoder Position", leftMotor.getEncoder().getPosition());
+        // SmartDashboard.putNumber("Left Encoder Setpoint", leftMotorSetpoint);
+        // SmartDashboard.putNumber("Right Encoder Setpoint", rightMotorSetpoint);
+        // SmartDashboard.putBoolean("Climb In Progress", climbingInProgress);
     }
 }

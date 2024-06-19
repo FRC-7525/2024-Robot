@@ -30,7 +30,7 @@ public final class Constants {
         public static final String pathPlannerFile = isKraken ? "swerve/neokraken" : "swerve/falcon";
         public static final double driveGearRatio = isKraken ? krakenDriveGearRatio : falconDriveGearRatio;
         public static final double maxModuleSpeed = 6.0;
-        public static final double maxSpeed = Units.feetToMeters(19.6);// Change Units.feetToMeters(x) to have a smaller x for faster robot
+        public static final double maxSpeed = Units.feetToMeters(3);// Change Units.feetToMeters(x) to have a smaller x for faster robot
         public static final double maxAlignmentSpeed = Units.feetToMeters(14);
 
         public static final PIDConstants translationPID = new PIDConstants(7, 0, 0.25);
@@ -79,7 +79,7 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final double SPEED = 80;
+        public static final double SPEED = 40;
         public static final double SLOW_SPEED = 20;
         public static final double RESET_INTAKE_TIME = 3; 
         public static final double PULL_CENTER_NOTE_TIME = 0.5;

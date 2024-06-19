@@ -140,7 +140,7 @@ public class Manager {
                 state = ManagerStates.IDLE;
                 autoShoot = false;
                 reset();
-            } else if (!DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) {
+            } else if ((!DriverStation.isAutonomous() && shooterTimer.get() > Constants.Shooter.SHOOTER_TIME) || robot.controller.getAButtonPressed()) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
@@ -152,9 +152,9 @@ public class Manager {
             ampBar.setState(AmpBarStates.FEEDING);
             intake.setState(IntakeStates.OFF);
             shooter.setState(ShootingStates.SCORING_AMP);
-            if (ampBar.atSetPoint()) {
+            if (ampBar.atSetPoint() || robot.controller.getYButton()) {
                 intake.setState(IntakeStates.FEEDING);
-                if (ampBar.holdingNote()) {
+                if (ampBar.holdingNote() || true) {
                     state = ManagerStates.AMP_HOLDING;
                 }
             }
@@ -176,7 +176,7 @@ public class Manager {
         } else if (state == ManagerStates.SCORING_AMP) {
             ampBar.setState(AmpBarStates.SHOOTING);
             shooterTimer.start();
-            if (shooterTimer.get() > Constants.AmpBar.AMP_SHOOTING_TIME) {
+            if (shooterTimer.get() > Constants.AmpBar.AMP_SHOOTING_TIME || robot.controller.getYButtonPressed()) {
                 shooterTimer.stop();
                 shooterTimer.reset();
                 state = ManagerStates.IDLE;
